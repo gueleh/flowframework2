@@ -45,3 +45,4 @@ Most of the documentation you can find directly in the code.
 
 #### Class Modules
 * fclsSettings: The class with the framework settings
+	
