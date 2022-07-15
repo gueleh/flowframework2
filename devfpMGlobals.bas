@@ -7,7 +7,7 @@ Attribute VB_Name = "devfmGlobals"
 '   Purpose:  the core globals when developing, can be removed along with all other modules when deploying
 '   Access:   Private
 '   Type:     Module
-'   Author:   Günther Lehner
+'   Author:   GÃ¼nther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
