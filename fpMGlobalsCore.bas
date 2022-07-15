@@ -7,7 +7,7 @@ Attribute VB_Name = "fmGlobalsCore"
 '   Purpose:  the globals for the core part of the framework
 '   Access:   Private
 '   Type:     Module
-'   Author:   Günther Lehner
+'   Author:   GÃ¼nther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
