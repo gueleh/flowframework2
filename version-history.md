@@ -1,4 +1,6 @@
 # Version History of Flow Framework 2
+## 0.5.0, 220715
+* refactored codebase, see commit changes
 ## 0.4.0, 220715
 * refactored, mostly changing names to new syntax allowing MZ Tools code review
 ## 0.3.0, 220715

@@ -34,10 +34,10 @@ Option Explicit
 
 Private Const smCOMPONENT_NAME As String = "devfCUnitTest"
 
-Private bmExecutionError As Boolean
-Private omCCallParams As fCCallParams
+Private bmExecutionError As Boolean 'indicates whether the unit has executed successfully
+Private omCCallParams As fCCallParams 'stores the call parameters of the tested unit
 
-' Purpose: initializes class for a unit test
+' Purpose: initializes class instance for a unit test
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub InitializeUnitTest(ByRef oCCallParams As fCCallParams)
    Set omCCallParams = oCCallParams
@@ -47,5 +47,5 @@ End Sub
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub RegisterExecutionError(ByRef oCCallParams As fCCallParams)
    bmExecutionError = True
-   omCCallParams.SetError oCCallParams.oCError
+   omCCallParams.SetoCError oCCallParams.oCError
 End Sub

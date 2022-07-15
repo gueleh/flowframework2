@@ -66,7 +66,7 @@ Public Sub fRegisterError( _
       .lErrorNumber = lErrorNumber
       .sErrorDescription = sErrorDescription
    End With
-   oCParams.SetError oCError
+   oCParams.SetoCError oCError
    If oColfgErrors.Count > 0 Then
       oColfgErrors.Add oCParams, , 1
    Else
