@@ -7,7 +7,7 @@ Attribute VB_Name = "fmErrorHandling"
 '   Purpose:  error handling
 '   Access:   Private
 '   Type:     Module
-'   Author:   Günther Lehner
+'   Author:   GÃ¼nther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
