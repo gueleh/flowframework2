@@ -1,13 +1,13 @@
-Attribute VB_Name = "afmErrorHandling"
+Attribute VB_Name = "afpMErrorHandling"
 ' -------------------------------------------------------------------------------------------
 ' APP-SPECIFIC CORE MODULE - you have to migrate app contents manually in case of a template update
 '============================================================================================
-'   NAME:     afmErrorHandling
+'   NAME:     afpMErrorHandling
 '============================================================================================
 '   Purpose:  application-specific error handling
 '   Access:   Private
 '   Type:     Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -25,11 +25,11 @@ Attribute VB_Name = "afmErrorHandling"
 Option Explicit
 Option Private Module
 
-Private Const msCOMPONENT_NAME As String = "afmErrorHandling"
+Private Const smCOMPONENT_NAME As String = "afpMErrorHandling"
 
 ' the app-specific error cases
-Public Enum afHandledErrors
-   afHandledErrorGeneralError = 19999
+Public Enum eafHandledErrors
+   eafHandledErrorGeneralError = 19999
 '>>>>>>> Add your error enum cases here
 
 '<<<<<<<
@@ -38,10 +38,10 @@ End Enum
 ' Purpose: returns the error description based on the provided error number
 ' Template Versions:
 ' 0.1.0    20220709    gueleh    Initially created
-Public Function afsHandledErrorDescription(ByVal afeHandledError As afHandledErrors) As String
+Public Function safHandledErrorDescription(ByVal eafHandledError As eafHandledErrors) As String
    Dim sDesc As String
-   Select Case afeHandledError
-      Case afHandledErrorGeneralError
+   Select Case eafHandledError
+      Case eafHandledErrorGeneralError
          sDesc = "The app-specific error was not further specified."
 '>>>>>>> Add your error description cases here
       'Case afHandledErrorYourValue
@@ -50,7 +50,7 @@ Public Function afsHandledErrorDescription(ByVal afeHandledError As afHandledErr
       Case Else
          sDesc = "No description defined for this error. You can do this in Function afsHandledErrorDescription in module afmErrorHandling."
    End Select
-   afsHandledErrorDescription = sDesc
+   safHandledErrorDescription = sDesc
 End Function
 
 

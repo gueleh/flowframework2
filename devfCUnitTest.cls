@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "devfclsUnitTest"
+Attribute VB_Name = "devfCUnitTest"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -10,12 +10,12 @@ Attribute VB_Exposed = False
 ' -------------------------------------------------------------------------------------------
 ' CORE-DEV, do not change
 '============================================================================================
-'   NAME:     devfclsUnitTest
+'   NAME:     devfCUnitTest
 '============================================================================================
 '   Purpose:  a unit test
 '   Access:   Public
 '   Type:     Class Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -32,20 +32,20 @@ Attribute VB_Exposed = False
 '============================================================================================
 Option Explicit
 
-Private Const msCOMPONENT_NAME As String = "devfclsUnitTest"
+Private Const smCOMPONENT_NAME As String = "devfCUnitTest"
 
-Private mbExecutionError As Boolean
-Private mclsCallParams As fclsCallParams
+Private bmExecutionError As Boolean
+Private omCCallParams As fCCallParams
 
 ' Purpose: initializes class for a unit test
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub InitializeUnitTest(ByRef clsCallParams As fclsCallParams)
-   Set mclsCallParams = clsCallParams
+Public Sub InitializeUnitTest(ByRef oCCallParams As fCCallParams)
+   Set omCCallParams = oCCallParams
 End Sub
 
 ' Purpose: registers an execution error for a unit test
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub RegisterExecutionError(ByRef clsCallParams As fclsCallParams)
-   mbExecutionError = True
-   mclsCallParams.SetError clsCallParams.clsError
+Public Sub RegisterExecutionError(ByRef oCCallParams As fCCallParams)
+   bmExecutionError = True
+   omCCallParams.SetError oCCallParams.oCError
 End Sub

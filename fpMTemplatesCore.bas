@@ -1,13 +1,13 @@
-Attribute VB_Name = "fmTemplatesCore"
+Attribute VB_Name = "fpMTemplatesCore"
 ' -------------------------------------------------------------------------------------------
 ' CORE, do not change
 '============================================================================================
-'   NAME:     fmTemplatesCore
+'   NAME:     fpMTemplatesCore
 '============================================================================================
 '   Purpose:  contains declaration and procedure templates
 '   Access:   Private
 '   Type:     Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -25,21 +25,21 @@ Attribute VB_Name = "fmTemplatesCore"
 Option Explicit
 Option Private Module
 
-Private Const msCOMPONENT_NAME As String = "fmTemplatesCore"
+Private Const smCOMPONENT_NAME As String = "fpMTemplatesCore"
 
 ' Purpose: template for an entry level sub
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub fTemplateSubEntryLevel()
 
 'Fixed, don't change
-   Dim clsMe As New fclsCallParams
-   clsMe.sComponentName = msCOMPONENT_NAME
+   Dim oCMe As New fCCallParams
+   oCMe.sComponentName = smCOMPONENT_NAME
    
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
    'Consult the manual for learning about the options for fStartProcessing
    fStartProcessing 'calling without args only inits the globals
-   With clsMe
+   With oCMe
       .sProcedureName = "fTemplateSubEntryLevel" 'Name of the sub
       .bSilentError = False 'False will display a message box - you should only do this on entry level
       .sErrorMessage = "Your message here." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
@@ -48,7 +48,7 @@ Public Sub fTemplateSubEntryLevel()
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 'Fixed, don't change
-   If fgclsFrameworkSettings.bThisIsATestRun Then fRegisterUnitTest clsMe
+   If ofgCFrameworkSettings.bThisIsATestRun Then fRegisterUnitTest oCMe
 Try:
    On Error GoTo Catch
    
@@ -59,10 +59,10 @@ Try:
    'The intendation below is supposed to make it easier to discern these calls from other if blocks
    'The params of Err.Raise are the default for execution errors, you may define your own cases in module afmErrorHandling
       If Not _
-   fbTemplateLowerLevel() _
+   bfTemplateLowerLevel() _
       Then Err.Raise _
-         fHandledErrorExecutionOfLowerLevelFunction, , _
-         fsHandledErrorDescription(fHandledErrorExecutionOfLowerLevelFunction)
+         efHandledErrorExecutionOfLowerLevelFunction, , _
+         sfHandledErrorDescription(efHandledErrorExecutionOfLowerLevelFunction)
    
 'End of your code <<<<<<<
    
@@ -83,30 +83,30 @@ Finally:
 'Fixed, don't change
    Exit Sub
 Catch:
-   If clsMe.clsError Is Nothing _
-   Then fRegisterError clsMe, Err.Number, Err.Description
-   If fgclsFrameworkSettings.bThisIsATestRun Then fRegisterExecutionError clsMe
-   If fgclsFrameworkSettings.bDebugModeIsOn And Not clsMe.bResumedOnce Then
-      clsMe.bResumedOnce = True: Stop: Resume
+   If oCMe.oCError Is Nothing _
+   Then fRegisterError oCMe, Err.Number, Err.Description
+   If ofgCFrameworkSettings.bThisIsATestRun Then fRegisterExecutionError oCMe
+   If ofgCFrameworkSettings.bDebugModeIsOn And Not oCMe.bResumedOnce Then
+      oCMe.bResumedOnce = True: Stop: Resume
    Else
-      fHandleError clsMe: Resume Finally
+      fHandleError oCMe: Resume Finally
    End If
 End Sub
 
 ' Purpose: template for a non-trivial lower level procedure with error handling and execution control
 ' 0.1.0    20220709    gueleh    Initially created
 ' Usage: if you need to return one or more values then declare these as ByRef args as in the template below, e.g. ByRef sReturnValue As String
-Public Function fbTemplateLowerLevel() As Boolean
+Public Function bfTemplateLowerLevel() As Boolean
 
 'Fixed, don't change
-   Dim clsMe As New fclsCallParams
-   clsMe.sComponentName = msCOMPONENT_NAME
-   If fgclsFrameworkSettings.bThisIsATestRun Then fRegisterUnitTest clsMe
+   Dim oCMe As New fCCallParams
+   oCMe.sComponentName = smCOMPONENT_NAME
+   If ofgCFrameworkSettings.bThisIsATestRun Then fRegisterUnitTest oCMe
 
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
-   With clsMe
-      .sProcedureName = "fbTemplateLowerLevel" 'Name of the function
+   With oCMe
+      .sProcedureName = "bfTemplateLowerLevel" 'Name of the function
       .bSilentError = True 'False will display a message box - you should only do this on entry level
       .sErrorMessage = "Your message here." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
       .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
@@ -118,7 +118,7 @@ Try:
    On Error GoTo Catch
 
 '>>>>>>> Your code here
-'TODO: Write fbTemplateLowerLevel
+'TODO: Write bfTemplateLowerLevel
    Debug.Print 1 / 0
 'End of your code <<<<<<<
 
@@ -133,19 +133,19 @@ Finally:
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
 'MAKE SURE TO REPLACE fbTemplateLowerLevel WITH THE NAME OF YOUR FUNCTION
-   If clsMe.clsError Is Nothing Then fbTemplateLowerLevel = True 'reports execution as successful to caller
+   If oCMe.oCError Is Nothing Then bfTemplateLowerLevel = True 'reports execution as successful to caller
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 'Fixed, don't change
    Exit Function
 Catch:
-   If clsMe.clsError Is Nothing _
-   Then fRegisterError clsMe, Err.Number, Err.Description
-   If fgclsFrameworkSettings.bThisIsATestRun Then fRegisterExecutionError clsMe
-   If fgclsFrameworkSettings.bDebugModeIsOn And Not clsMe.bResumedOnce Then
-      clsMe.bResumedOnce = True: Stop: Resume
+   If oCMe.oCError Is Nothing _
+   Then fRegisterError oCMe, Err.Number, Err.Description
+   If ofgCFrameworkSettings.bThisIsATestRun Then fRegisterExecutionError oCMe
+   If ofgCFrameworkSettings.bDebugModeIsOn And Not oCMe.bResumedOnce Then
+      oCMe.bResumedOnce = True: Stop: Resume
    Else
-      fHandleError clsMe: Resume Finally
+      fHandleError oCMe: Resume Finally
    End If
 
 End Function

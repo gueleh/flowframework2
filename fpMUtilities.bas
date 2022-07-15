@@ -1,13 +1,13 @@
-Attribute VB_Name = "fmUtilities"
+Attribute VB_Name = "fpMUtilities"
 ' -------------------------------------------------------------------------------------------
 ' CORE, do not change
 '============================================================================================
-'   NAME:     fmUtilities
+'   NAME:     fpMUtilities
 '============================================================================================
 '   Purpose:  utilities being part of the core of the template
 '   Access:   Public
 '   Type:     Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -25,11 +25,11 @@ Attribute VB_Name = "fmUtilities"
 Option Explicit
 Option Private Module
 
-Private Const msCOMPONENT_NAME As String = "fmUtilities"
+Private Const smCOMPONENT_NAME As String = "fpMUtilities"
 
 ' Purpose: Return string for Application.Run for procedures in this workbook
 ' 0.1.0    20220709    gueleh    Initially created
-Public Function fsRunMyProcedure(ByVal sProcedureName As String) As String
-  fsRunMyProcedure = "'" & ThisWorkbook.Name & "'!" & sProcedureName
+Public Function sfRunMyProcedure(ByVal sProcedureName As String) As String
+  sfRunMyProcedure = "'" & ThisWorkbook.Name & "'!" & sProcedureName
 End Function
 

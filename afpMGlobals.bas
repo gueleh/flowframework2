@@ -1,13 +1,13 @@
-Attribute VB_Name = "afmGlobals"
+Attribute VB_Name = "afpMGlobals"
 ' -------------------------------------------------------------------------------------------
 ' APP-SPECIFIC CORE, your content has to be migrated manually if the template if updated
 '============================================================================================
-'   NAME:     afmGlobals
+'   NAME:     afpMGlobals
 '============================================================================================
 '   Purpose:  the app-specific globals of the framework
 '   Access:   Private
 '   Type:     Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -25,11 +25,11 @@ Attribute VB_Name = "afmGlobals"
 Option Explicit
 Option Private Module
 
-Private Const msCOMPONENT_NAME As String = "afmGlobals"
+Private Const smCOMPONENT_NAME As String = "afpMGlobals"
 
 'determines which mode supposed to be executed
-Public Enum afProcessingModes
-   afProcessingModeGlobalsOnly
+Public Enum eafProcessingModes
+   eafProcessingModeGlobalsOnly
 '>>>>>>> add your modes here
 
 '<<<<<<<
@@ -38,9 +38,9 @@ End Enum
 ' Purpose: executes the start processing logic as determined by the app-specific case
 ' Template Versions:
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub afStartProcessingMode(ByVal afeProcessingMode As afProcessingModes)
-   Select Case afeProcessingMode
-      Case afProcessingModeGlobalsOnly
+Public Sub afStartProcessingMode(ByVal eafProcessingMode As eafProcessingModes)
+   Select Case eafProcessingMode
+      Case eafProcessingModeGlobalsOnly
          'Do nothing except for the required initialization
 '>>>>>>> Your cases here
          
@@ -53,9 +53,9 @@ End Sub
 ' Purpose: executes the start processing logic as determined by the app-specific case
 ' Template Versions:
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub afEndProcessingMode(ByVal afeProcessingMode As afProcessingModes)
-   Select Case afeProcessingMode
-      Case afProcessingModeGlobalsOnly
+Public Sub afEndProcessingMode(ByVal eafProcessingMode As eafProcessingModes)
+   Select Case eafProcessingMode
+      Case eafProcessingModeGlobalsOnly
          'Do nothing
 '>>>>>>> Your cases here
          

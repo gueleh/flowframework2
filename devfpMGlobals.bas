@@ -1,13 +1,13 @@
-Attribute VB_Name = "devfmGlobals"
+Attribute VB_Name = "devfpMGlobals"
 ' -------------------------------------------------------------------------------------------
 ' CORE-DEV, do not change
 '============================================================================================
-'   NAME:     devfmGlobals
+'   NAME:     devfpMGlobals
 '============================================================================================
 '   Purpose:  the core globals when developing, can be removed along with all other modules when deploying
 '   Access:   Private
 '   Type:     Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -25,12 +25,12 @@ Attribute VB_Name = "devfmGlobals"
 Option Explicit
 Option Private Module
 
-Private Const msCOMPONENT_NAME As String = "devfmGlobals"
+Private Const smCOMPONENT_NAME As String = "devfpMGlobals"
 
 ' Purpose: initializes the globals which are required for development work
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub devfInitGlobals()
-   Set fgcolUnitTests = New Collection
+   Set colfgUnitTests = New Collection
 End Sub
 
 

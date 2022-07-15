@@ -1,4 +1,4 @@
-Attribute VB_Name = "devfUserInterface"
+Attribute VB_Name = "devfMUserInterface"
 ' -------------------------------------------------------------------------------------------
 ' CORE-DEV, do not change
 '============================================================================================
@@ -7,7 +7,7 @@ Attribute VB_Name = "devfUserInterface"
 '   Purpose:  directly accessible dev helpers
 '   Access:   Public
 '   Type:     Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -24,13 +24,13 @@ Attribute VB_Name = "devfUserInterface"
 '============================================================================================
 Option Explicit
 
-Private Const msCOMPONENT_NAME As String = "devfUserInterface"
+Private Const smCOMPONENT_NAME As String = "devfUserInterface"
 
 ' Purpose: write done stamp into active row of devlog
 ' 0.2.0    20220711    gueleh    Initially created
-Public Sub MarkLineItemAsDoneInDevLog()
-Attribute MarkLineItemAsDoneInDevLog.VB_Description = "Marks the line item with Done"
-Attribute MarkLineItemAsDoneInDevLog.VB_ProcData.VB_Invoke_Func = "m\n14"
+Public Sub devfMarkLineItemAsDoneInDevLog()
+Attribute devfMarkLineItemAsDoneInDevLog.VB_Description = "Marks the line item with Done"
+Attribute devfMarkLineItemAsDoneInDevLog.VB_ProcData.VB_Invoke_Func = "m\n14"
    Dim rng As Range
    Dim wks As Worksheet
    Set rng = Selection
@@ -40,8 +40,8 @@ Attribute MarkLineItemAsDoneInDevLog.VB_ProcData.VB_Invoke_Func = "m\n14"
    And rng.Row > 2 _
    And wks.Cells(rng.Row, 1).Value2 <> "" Then
       fInitGlobals
-      wks.Cells(rng.Row, 4) = fgclsFrameworkSettings.sVersionNumber
-      wks.Cells(rng.Row, 5) = fgclsFrameworkSettings.sVersionDateYYMMDD
+      wks.Cells(rng.Row, 4) = ofgCFrameworkSettings.sVersionNumber
+      wks.Cells(rng.Row, 5) = ofgCFrameworkSettings.sVersionDateYYMMDD
       wks.Cells(rng.Row, 6) = "Done"
    End If
 End Sub

@@ -1,13 +1,13 @@
-Attribute VB_Name = "devfmTesting"
+Attribute VB_Name = "devfpMTesting"
 ' -------------------------------------------------------------------------------------------
 ' CORE-DEV, do not change
 '============================================================================================
-'   NAME:     devfmTesting
+'   NAME:     devfpMTesting
 '============================================================================================
 '   Purpose:  running the unit and integration tests
 '   Access:   Public
 '   Type:     Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -25,25 +25,25 @@ Attribute VB_Name = "devfmTesting"
 Option Explicit
 Option Private Module
 
-Private Const msCOMPONENT_NAME As String = "devfmTesting"
+Private Const smCOMPONENT_NAME As String = "devfpMTesting"
 
 ' Purpose: registers a unit test for later execution and evaluation when supposed to be tested
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub devfRegisterUnitTest(ByRef clsCallParams As fclsCallParams)
-   If fgclsFrameworkSettings.bThisIsATestRun Then
-      Dim clsUnitTest As New devfclsUnitTest
-      clsCallParams.lUnitTestIndex = fgcolUnitTests.Count + 1
-      clsUnitTest.InitializeUnitTest clsCallParams
-      fgcolUnitTests.Add clsUnitTest
+Public Sub devfRegisterUnitTest(ByRef oCCallParams As fCCallParams)
+   If ofgCFrameworkSettings.bThisIsATestRun Then
+      Dim oCUnitTest As New devfCUnitTest
+      oCCallParams.lUnitTestIndex = colfgUnitTests.Count + 1
+      oCUnitTest.InitializeUnitTest oCCallParams
+      colfgUnitTests.Add oCUnitTest
    End If
 End Sub
 
 ' Purpose: registers an execution error when tested
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub devfRegisterExecutionError(ByRef clsCallParams As fclsCallParams)
-   If fgclsFrameworkSettings.bThisIsATestRun And clsCallParams.lUnitTestIndex = 0 Then
-      Dim clsUnitTest As devfclsUnitTest
-      Set clsUnitTest = fgcolUnitTests(clsCallParams.lUnitTestIndex)
+Public Sub devfRegisterExecutionError(ByRef oCCallParams As fCCallParams)
+   If ofgCFrameworkSettings.bThisIsATestRun And oCCallParams.lUnitTestIndex = 0 Then
+      Dim oCUnitTest As devfCUnitTest
+      Set oCUnitTest = colfgUnitTests(oCCallParams.lUnitTestIndex)
    End If
 End Sub
 
@@ -51,5 +51,5 @@ End Sub
 ' 0.1.0    20220709    gueleh    Initially created
 Private Sub mRunUnitTests()
    fInitGlobals
-   fgclsFrameworkSettings.bThisIsATestRun = True
+   ofgCFrameworkSettings.bThisIsATestRun = True
 End Sub

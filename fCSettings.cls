@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "fclsSettings"
+Attribute VB_Name = "fCSettings"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -10,12 +10,12 @@ Attribute VB_Exposed = False
 ' -------------------------------------------------------------------------------------------
 ' CORE, do not change
 '============================================================================================
-'   NAME:     fclsSettings
+'   NAME:     fCSettings
 '============================================================================================
 '   Purpose:  handling of the framework settings
 '   Access:   Public
 '   Type:     Class Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -32,53 +32,53 @@ Attribute VB_Exposed = False
 '============================================================================================
 Option Explicit
 
-Private Const msCOMPONENT_NAME As String = "fclsSettings"
+Private Const smCOMPONENT_NAME As String = "fCSettings"
 
-Private Const ms_name_VERSION_NUMBER As String = "fn_msVERSION_NUMBER"
-Private Const ms_name_VERSION_DATE_YYMMDD As String = "fn_msVERSION_DATE_YYMMDD"
-Private Const ms_name_DEBUG_MODE_IS_ON As String = "afn_mbDebugModeIsOn"
+Private Const sm_name_VERSION_NUMBER As String = "fn_msVERSION_NUMBER"
+Private Const sm_name_VERSION_DATE_YYMMDD As String = "fn_msVERSION_DATE_YYMMDD"
+Private Const sm_name_DEBUG_MODE_IS_ON As String = "afn_mbDebugModeIsOn"
 
-Private mwksFrameworkSettings As Worksheet
-Private mwksApplicationSpecificFrameworkSettings As Worksheet
-Private msVersionNumber As String
-Private msVersionDateYYMMDD As String
-Private mbDebugModeIsOn As Boolean
-Private mbThisIsATestRun As Boolean
+Private omwksFrameworkSettings As Worksheet
+Private omwksApplicationSpecificFrameworkSettings As Worksheet
+Private smVersionNumber As String
+Private smVersionDateYYMMDD As String
+Private bmDebugModeIsOn As Boolean
+Private bmThisIsATestRun As Boolean
 
 Public Property Get bDebugModeIsOn() As Boolean
-   bDebugModeIsOn = mbDebugModeIsOn
+   bDebugModeIsOn = bmDebugModeIsOn
 End Property
 
 Public Property Get bThisIsATestRun() As Boolean
-   bThisIsATestRun = mbThisIsATestRun
+   bThisIsATestRun = bmThisIsATestRun
 End Property
 
 Public Property Let bThisIsATestRun(ByVal bNewValue As Boolean)
-   mbThisIsATestRun = bNewValue
+   bmThisIsATestRun = bNewValue
 End Property
 
 Public Property Get sVersionNumber() As String
-   sVersionNumber = msVersionNumber
+   sVersionNumber = smVersionNumber
 End Property
 
 Public Property Get sVersionDateYYMMDD() As String
-   sVersionDateYYMMDD = msVersionDateYYMMDD
+   sVersionDateYYMMDD = smVersionDateYYMMDD
 End Property
 
 Private Sub Class_Initialize()
-   Set mwksFrameworkSettings = fwksSettings
-   Set mwksApplicationSpecificFrameworkSettings = afwksSettings
-   msVersionNumber = mwksFrameworkSettings.Names(ms_name_VERSION_NUMBER).RefersToRange.Value2
-   msVersionDateYYMMDD = mwksFrameworkSettings.Names(ms_name_VERSION_DATE_YYMMDD).RefersToRange.Value2
+   Set omwksFrameworkSettings = fwksSettings
+   Set omwksApplicationSpecificFrameworkSettings = afwksSettings
+   smVersionNumber = omwksFrameworkSettings.Names(sm_name_VERSION_NUMBER).RefersToRange.Value2
+   smVersionDateYYMMDD = omwksFrameworkSettings.Names(sm_name_VERSION_DATE_YYMMDD).RefersToRange.Value2
    mGetDebugMode
 End Sub
 
 Public Sub SetDebugModeIsOnTo(ByVal bNewValue As Boolean)
-   mbDebugModeIsOn = bNewValue
-   mwksApplicationSpecificFrameworkSettings.Names(ms_name_DEBUG_MODE_IS_ON).RefersToRange.Value2 = mbDebugModeIsOn
+   bmDebugModeIsOn = bNewValue
+   omwksApplicationSpecificFrameworkSettings.Names(sm_name_DEBUG_MODE_IS_ON).RefersToRange.Value2 = bmDebugModeIsOn
 End Sub
 
 Private Sub mGetDebugMode()
-   mbDebugModeIsOn = mwksApplicationSpecificFrameworkSettings.Names(ms_name_DEBUG_MODE_IS_ON).RefersToRange.Value2
+   bmDebugModeIsOn = omwksApplicationSpecificFrameworkSettings.Names(sm_name_DEBUG_MODE_IS_ON).RefersToRange.Value2
 End Sub
 
