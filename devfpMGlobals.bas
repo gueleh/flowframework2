@@ -30,7 +30,7 @@ Private Const smCOMPONENT_NAME As String = "devfpMGlobals"
 ' Purpose: initializes the globals which are required for development work
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub devfInitGlobals()
-   Set colfgUnitTests = New Collection
+   Set oColfgUnitTests = New Collection
 End Sub
 
 

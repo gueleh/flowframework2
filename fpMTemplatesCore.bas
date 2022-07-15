@@ -48,7 +48,7 @@ Public Sub fTemplateSubEntryLevel()
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 'Fixed, don't change
-   If ofgCFrameworkSettings.bThisIsATestRun Then fRegisterUnitTest oCMe
+   If oCfgFrameworkSettings.bThisIsATestRun Then fRegisterUnitTest oCMe
 Try:
    On Error GoTo Catch
    
@@ -85,8 +85,8 @@ Finally:
 Catch:
    If oCMe.oCError Is Nothing _
    Then fRegisterError oCMe, Err.Number, Err.Description
-   If ofgCFrameworkSettings.bThisIsATestRun Then fRegisterExecutionError oCMe
-   If ofgCFrameworkSettings.bDebugModeIsOn And Not oCMe.bResumedOnce Then
+   If oCfgFrameworkSettings.bThisIsATestRun Then fRegisterExecutionError oCMe
+   If oCfgFrameworkSettings.bDebugModeIsOn And Not oCMe.bResumedOnce Then
       oCMe.bResumedOnce = True: Stop: Resume
    Else
       fHandleError oCMe: Resume Finally
@@ -101,7 +101,7 @@ Public Function bfTemplateLowerLevel() As Boolean
 'Fixed, don't change
    Dim oCMe As New fCCallParams
    oCMe.sComponentName = smCOMPONENT_NAME
-   If ofgCFrameworkSettings.bThisIsATestRun Then fRegisterUnitTest oCMe
+   If oCfgFrameworkSettings.bThisIsATestRun Then fRegisterUnitTest oCMe
 
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
@@ -141,8 +141,8 @@ Finally:
 Catch:
    If oCMe.oCError Is Nothing _
    Then fRegisterError oCMe, Err.Number, Err.Description
-   If ofgCFrameworkSettings.bThisIsATestRun Then fRegisterExecutionError oCMe
-   If ofgCFrameworkSettings.bDebugModeIsOn And Not oCMe.bResumedOnce Then
+   If oCfgFrameworkSettings.bThisIsATestRun Then fRegisterExecutionError oCMe
+   If oCfgFrameworkSettings.bDebugModeIsOn And Not oCMe.bResumedOnce Then
       oCMe.bResumedOnce = True: Stop: Resume
    Else
       fHandleError oCMe: Resume Finally

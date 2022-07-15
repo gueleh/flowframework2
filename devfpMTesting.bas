@@ -30,20 +30,20 @@ Private Const smCOMPONENT_NAME As String = "devfpMTesting"
 ' Purpose: registers a unit test for later execution and evaluation when supposed to be tested
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub devfRegisterUnitTest(ByRef oCCallParams As fCCallParams)
-   If ofgCFrameworkSettings.bThisIsATestRun Then
+   If oCfgFrameworkSettings.bThisIsATestRun Then
       Dim oCUnitTest As New devfCUnitTest
-      oCCallParams.lUnitTestIndex = colfgUnitTests.Count + 1
+      oCCallParams.lUnitTestIndex = oColfgUnitTests.Count + 1
       oCUnitTest.InitializeUnitTest oCCallParams
-      colfgUnitTests.Add oCUnitTest
+      oColfgUnitTests.Add oCUnitTest
    End If
 End Sub
 
 ' Purpose: registers an execution error when tested
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub devfRegisterExecutionError(ByRef oCCallParams As fCCallParams)
-   If ofgCFrameworkSettings.bThisIsATestRun And oCCallParams.lUnitTestIndex = 0 Then
+   If oCfgFrameworkSettings.bThisIsATestRun And oCCallParams.lUnitTestIndex = 0 Then
       Dim oCUnitTest As devfCUnitTest
-      Set oCUnitTest = colfgUnitTests(oCCallParams.lUnitTestIndex)
+      Set oCUnitTest = oColfgUnitTests(oCCallParams.lUnitTestIndex)
    End If
 End Sub
 
@@ -51,5 +51,5 @@ End Sub
 ' 0.1.0    20220709    gueleh    Initially created
 Private Sub mRunUnitTests()
    fInitGlobals
-   ofgCFrameworkSettings.bThisIsATestRun = True
+   oCfgFrameworkSettings.bThisIsATestRun = True
 End Sub

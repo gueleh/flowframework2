@@ -67,10 +67,10 @@ Public Sub fRegisterError( _
       .sErrorDescription = sErrorDescription
    End With
    oCParams.SetError oCError
-   If colfgErrors.Count > 0 Then
-      colfgErrors.Add oCParams, , 1
+   If oColfgErrors.Count > 0 Then
+      oColfgErrors.Add oCParams, , 1
    Else
-      colfgErrors.Add oCParams
+      oColfgErrors.Add oCParams
    End If
    
 End Sub

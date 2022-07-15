@@ -6,7 +6,8 @@ Most of the documentation you can find directly in the code.
 * prefixes are in lower case
 * variable names are in CamelCase
 * constants are in UPPER_CASE_SEPARATED_BY_UNDERSCORE
-* always begin with membership indicator
+* always begin with membership indicator for name properties of VBA objects, i.e. workbooks, worksheets, modules, class modules
+* also begin with membership indicator for Excel names
 
 ### Prefix Indicating Element Membership
 Element membership always is explicit in the framework, it is recommended to do this also in the application to reduce cognitive load
@@ -24,13 +25,13 @@ Element membership always is explicit in the framework, it is recommended to do 
 	* x means that it is a named formula
 * rest like in code declarations
 * examples
-	* fn_msVERSION_NUMBER:
+	* fn_smVERSION_NUMBER:
 		* f: Framework
 		* n: Excel Name
 		* m: Reference to range, scoped to worksheet ("private")
 		* s: Represents a string
 		* name in all caps: is a constant
-	* an_gbSayHelloWorld:
+	* an_bgSayHelloWorld:
 		* a: Application
 		* n: Excel Name
 		* g: Reference to range, scoped to workbook ("global")
@@ -40,10 +41,8 @@ Element membership always is explicit in the framework, it is recommended to do 
 ### Prefixes for Types
 * b: Boolean
 * byt: Byte
-* col: VBA.Collection
 * cur: Currency
 * d: Double
-* dict: Scripting.Dictionary
 * dte: Date
 * e: Enum
 * i: Integer
@@ -51,12 +50,16 @@ Element membership always is explicit in the framework, it is recommended to do 
 * llng: LongLong
 * lptr: LongPtr
 * o: Object
+* oC: Class Object
+* oCol: VBA.Collection
+* oDict: Scripting.Dictionary
+* oFs: File System Object
+* oWkb: Workbook Object
+* oWks: Worksheet Object 
 * rng: Range
 * s: String
 * v: Variant
 * u: User Type
-* wks: Worksheet
-* wkb: Workbook
 
 * a after type prefix: Array, e.g. array of type variant starts with prefix va
 
@@ -74,11 +77,11 @@ The list contains only the codename of the sheets
 * fwksSettings: The worksheet with the framework settings
 
 ### Modules By Functional Units
-* afmErrorHandling
-* fmErrorHandling
+* afpMErrorHandling
+* fpMErrorHandling
 
-* fmGlobalsCore: The module with the framework core globals
+* fpMGlobalsCore: The module with the framework core globals
 
 ### Class Modules
-* fclsSettings: The class with the framework settings
+* fCSettings: The class with the framework settings
 	

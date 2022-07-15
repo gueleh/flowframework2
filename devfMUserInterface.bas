@@ -40,8 +40,8 @@ Attribute devfMarkLineItemAsDoneInDevLog.VB_ProcData.VB_Invoke_Func = "m\n14"
    And rng.Row > 2 _
    And wks.Cells(rng.Row, 1).Value2 <> "" Then
       fInitGlobals
-      wks.Cells(rng.Row, 4) = ofgCFrameworkSettings.sVersionNumber
-      wks.Cells(rng.Row, 5) = ofgCFrameworkSettings.sVersionDateYYMMDD
+      wks.Cells(rng.Row, 4) = oCfgFrameworkSettings.sVersionNumber
+      wks.Cells(rng.Row, 5) = oCfgFrameworkSettings.sVersionDateYYMMDD
       wks.Cells(rng.Row, 6) = "Done"
    End If
 End Sub

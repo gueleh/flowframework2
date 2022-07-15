@@ -35,11 +35,11 @@ Public Enum efProcessingModes
 End Enum
 
 'global class with framework settings, instance created during initialization of globals
-Public ofgCFrameworkSettings As fCSettings
+Public oCfgFrameworkSettings As fCSettings
 'global collection for error handling, errors are added to it and in the end the whole collection is handled based on it
-Public colfgErrors As Collection
+Public oColfgErrors As Collection
 'global collection for unit testing, test documentation is added to it and in the end a report is generated based on it
-Public colfgUnitTests As Collection
+Public oColfgUnitTests As Collection
 
 ' Purpose: starts the processing, to be executed at the very begin of the entry level
 ' 0.1.0    20220709    gueleh    Initially created
@@ -66,8 +66,8 @@ End Sub
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub fInitGlobals()
    mResetGlobals
-   Set ofgCFrameworkSettings = New fCSettings
-   Set colfgErrors = New Collection
+   Set oCfgFrameworkSettings = New fCSettings
+   Set oColfgErrors = New Collection
    
    ' Only executed when components are present
    On Error Resume Next
@@ -92,7 +92,7 @@ End Sub
 ' Purpose: reset the globals which should not retain their value
 ' 0.1.0    20220709    gueleh    Initially created
 Private Sub mResetGlobals()
-   Set colfgUnitTests = Nothing
+   Set oColfgUnitTests = Nothing
 End Sub
 
 ' Purpose: supports several different modes for starting the processing

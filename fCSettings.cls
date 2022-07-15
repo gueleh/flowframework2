@@ -34,12 +34,12 @@ Option Explicit
 
 Private Const smCOMPONENT_NAME As String = "fCSettings"
 
-Private Const sm_name_VERSION_NUMBER As String = "fn_msVERSION_NUMBER"
-Private Const sm_name_VERSION_DATE_YYMMDD As String = "fn_msVERSION_DATE_YYMMDD"
-Private Const sm_name_DEBUG_MODE_IS_ON As String = "afn_mbDebugModeIsOn"
+Private Const sm_name_VERSION_NUMBER As String = "fn_smVERSION_NUMBER"
+Private Const sm_name_VERSION_DATE_YYMMDD As String = "fn_smVERSION_DATE_YYMMDD"
+Private Const sm_name_DEBUG_MODE_IS_ON As String = "afn_bmDebugModeIsOn"
 
-Private omwksFrameworkSettings As Worksheet
-Private omwksApplicationSpecificFrameworkSettings As Worksheet
+Private omWksFrameworkSettings As Worksheet
+Private omWksApplicationSpecificFrameworkSettings As Worksheet
 Private smVersionNumber As String
 Private smVersionDateYYMMDD As String
 Private bmDebugModeIsOn As Boolean
@@ -66,19 +66,19 @@ Public Property Get sVersionDateYYMMDD() As String
 End Property
 
 Private Sub Class_Initialize()
-   Set omwksFrameworkSettings = fwksSettings
-   Set omwksApplicationSpecificFrameworkSettings = afwksSettings
-   smVersionNumber = omwksFrameworkSettings.Names(sm_name_VERSION_NUMBER).RefersToRange.Value2
-   smVersionDateYYMMDD = omwksFrameworkSettings.Names(sm_name_VERSION_DATE_YYMMDD).RefersToRange.Value2
+   Set omWksFrameworkSettings = fwksSettings
+   Set omWksApplicationSpecificFrameworkSettings = afwksSettings
+   smVersionNumber = omWksFrameworkSettings.Names(sm_name_VERSION_NUMBER).RefersToRange.Value2
+   smVersionDateYYMMDD = omWksFrameworkSettings.Names(sm_name_VERSION_DATE_YYMMDD).RefersToRange.Value2
    mGetDebugMode
 End Sub
 
 Public Sub SetDebugModeIsOnTo(ByVal bNewValue As Boolean)
    bmDebugModeIsOn = bNewValue
-   omwksApplicationSpecificFrameworkSettings.Names(sm_name_DEBUG_MODE_IS_ON).RefersToRange.Value2 = bmDebugModeIsOn
+   omWksApplicationSpecificFrameworkSettings.Names(sm_name_DEBUG_MODE_IS_ON).RefersToRange.Value2 = bmDebugModeIsOn
 End Sub
 
 Private Sub mGetDebugMode()
-   bmDebugModeIsOn = omwksApplicationSpecificFrameworkSettings.Names(sm_name_DEBUG_MODE_IS_ON).RefersToRange.Value2
+   bmDebugModeIsOn = omWksApplicationSpecificFrameworkSettings.Names(sm_name_DEBUG_MODE_IS_ON).RefersToRange.Value2
 End Sub
 
