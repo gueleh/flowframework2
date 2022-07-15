@@ -7,7 +7,7 @@ Attribute VB_Name = "devfmTesting"
 '   Purpose:  running the unit and integration tests
 '   Access:   Public
 '   Type:     Module
-'   Author:   Günther Lehner
+'   Author:   GÃ¼nther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
