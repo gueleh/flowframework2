@@ -7,7 +7,7 @@ Attribute VB_Name = "afmGlobals"
 '   Purpose:  the app-specific globals of the framework
 '   Access:   Private
 '   Type:     Module
-'   Author:   Günther Lehner
+'   Author:   GÃ¼nther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
