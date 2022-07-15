@@ -15,7 +15,7 @@ Attribute VB_Exposed = False
 '   Purpose:  a unit test
 '   Access:   Public
 '   Type:     Class Module
-'   Author:   Günther Lehner
+'   Author:   GÃ¼nther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
