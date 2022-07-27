@@ -32,7 +32,7 @@ Attribute VB_Exposed = False
 '============================================================================================
 Option Explicit
 
-Private Const smCOMPONENT_NAME As String = "fCSettings"
+Private Const s_m_COMPONENT_NAME As String = "fCSettings"
 
 Private Const sm_name_VERSION_NUMBER As String = "fn_smVERSION_NUMBER"
 Private Const sm_name_VERSION_DATE_YYMMDD As String = "fn_smVERSION_DATE_YYMMDD"

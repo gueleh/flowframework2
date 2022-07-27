@@ -25,11 +25,11 @@ Attribute VB_Name = "fpMUtilities"
 Option Explicit
 Option Private Module
 
-Private Const smCOMPONENT_NAME As String = "fpMUtilities"
+Private Const s_m_COMPONENT_NAME As String = "fpMUtilities"
 
 ' Purpose: Return string for Application.Run for procedures in this workbook
 ' 0.1.0    20220709    gueleh    Initially created
-Public Function sfRunMyProcedure(ByVal sProcedureName As String) As String
-  sfRunMyProcedure = "'" & ThisWorkbook.Name & "'!" & sProcedureName
+Public Function s_f_g_MyProcedureName(ByVal sProcedureName As String) As String
+  s_f_g_MyProcedureName = "'" & ThisWorkbook.Name & "'!" & sProcedureName
 End Function
 

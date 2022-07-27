@@ -25,31 +25,32 @@ Attribute VB_Name = "devfpMTesting"
 Option Explicit
 Option Private Module
 
-Private Const smCOMPONENT_NAME As String = "devfpMTesting"
+Private Const s_m_COMPONENT_NAME As String = "devfpMTesting"
 
 ' Purpose: registers a unit test for later execution and evaluation when supposed to be tested
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub devfRegisterUnitTest(ByRef oCCallParams As fCCallParams)
-   If oCfgFrameworkSettings.bThisIsATestRun Then
+Public Sub DEV_f_g_RegisterUnitTest(ByRef oCCallParams As fCCallParams)
+   If oC_f_g_FrameworkSettings.bThisIsATestRun Then
       Dim oCUnitTest As New devfCUnitTest
-      oCCallParams.lUnitTestIndex = oColfgUnitTests.Count + 1
+      oCCallParams.lUnitTestIndex = oCol_f_g_UnitTests.Count + 1
       oCUnitTest.InitializeUnitTest oCCallParams
-      oColfgUnitTests.Add oCUnitTest
+      oCol_f_g_UnitTests.Add oCUnitTest
    End If
 End Sub
 
 ' Purpose: registers an execution error when tested
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub devfRegisterExecutionError(ByRef oCCallParams As fCCallParams)
-   If oCfgFrameworkSettings.bThisIsATestRun And oCCallParams.lUnitTestIndex = 0 Then
+Public Sub DEV_f_g_RegisterExecutionError(ByRef oCCallParams As fCCallParams)
+   If oC_f_g_FrameworkSettings.bThisIsATestRun And oCCallParams.lUnitTestIndex = 0 Then
       Dim oCUnitTest As devfCUnitTest
-      Set oCUnitTest = oColfgUnitTests(oCCallParams.lUnitTestIndex)
+      Set oCUnitTest = oCol_f_g_UnitTests(oCCallParams.lUnitTestIndex)
    End If
 End Sub
 
 ' Purpose: runs the existing unit tests
 ' 0.1.0    20220709    gueleh    Initially created
 Private Sub mRunUnitTests()
-   fInitGlobals
-   oCfgFrameworkSettings.bThisIsATestRun = True
+   f_g_InitGlobals
+   oC_f_g_FrameworkSettings.bThisIsATestRun = True
+   'TODO: mRunUnitTests: add the actual code for running the unit tests
 End Sub

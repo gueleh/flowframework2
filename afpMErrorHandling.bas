@@ -25,12 +25,13 @@ Attribute VB_Name = "afpMErrorHandling"
 Option Explicit
 Option Private Module
 
-Private Const smCOMPONENT_NAME As String = "afpMErrorHandling"
+Private Const s_m_COMPONENT_NAME As String = "afpMErrorHandling"
 
 ' the app-specific error cases
 Public Enum eafHandledErrors
    eafHandledErrorGeneralError = 19999
-'>>>>>>> Add your error enum cases here
+'>>>>>>> Add your error enum cases here - add cases for them to safHandledErrorDescription below
+' if you want to have specific error descriptions
 
 '<<<<<<<
 End Enum

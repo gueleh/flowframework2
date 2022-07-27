@@ -32,20 +32,20 @@ Attribute VB_Exposed = False
 '============================================================================================
 Option Explicit
 
-Private Const smCOMPONENT_NAME As String = "devfCUnitTest"
+Private Const s_m_COMPONENT_NAME As String = "devfCUnitTest"
 
-Private bmExecutionError As Boolean 'indicates whether the unit has executed successfully
-Private omCCallParams As fCCallParams 'stores the call parameters of the tested unit
+Private b_m_ExecutionError As Boolean 'indicates whether the unit has executed successfully
+Private oC_m_CallParams As fCCallParams 'stores the call parameters of the tested unit
 
 ' Purpose: initializes class instance for a unit test
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub InitializeUnitTest(ByRef oCCallParams As fCCallParams)
-   Set omCCallParams = oCCallParams
+Public Sub InitializeUnitTest(ByRef oC_CallParams As fCCallParams)
+   Set oC_m_CallParams = oC_CallParams
 End Sub
 
 ' Purpose: registers an execution error for a unit test
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub RegisterExecutionError(ByRef oCCallParams As fCCallParams)
-   bmExecutionError = True
-   omCCallParams.SetoCError oCCallParams.oCError
+Public Sub RegisterExecutionError(ByRef oC_CallParams As fCCallParams)
+   b_m_ExecutionError = True
+   oC_m_CallParams.SetoCError oC_CallParams.oCError
 End Sub

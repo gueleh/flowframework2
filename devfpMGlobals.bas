@@ -25,12 +25,12 @@ Attribute VB_Name = "devfpMGlobals"
 Option Explicit
 Option Private Module
 
-Private Const smCOMPONENT_NAME As String = "devfpMGlobals"
+Private Const s_m_COMPONENT_NAME As String = "devfpMGlobals"
 
 ' Purpose: initializes the globals which are required for development work
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub devfInitGlobals()
-   Set oColfgUnitTests = New Collection
+Public Sub DEV_f_g_InitGlobals()
+   Set oCol_f_g_UnitTests = New Collection
 End Sub
 
 

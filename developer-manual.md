@@ -12,8 +12,8 @@ Most of the documentation you can find directly in the code.
 ### Prefix Indicating Element Membership
 Element membership always is explicit in the framework, it is recommended to do this also in the application to reduce cognitive load
 * a: Application
-* f: Flow Framework (no changes in App Dev)
-* af: Flow Framework with contents specific to application (only change the concents indicated as changeable)
+* f: Flow Framework (no changes in App Dev) - any changes done in these modules might break the framework and in case of updates also your application
+* af: Flow Framework with contents specific to application (only change the concents indicated as changeable), these contents do have to be migrated manually in case of an update
 
 ### Object Names in Excel (i.e. not VBA)
 * start with element membership prefix: a/f/af
@@ -84,4 +84,15 @@ The list contains only the codename of the sheets
 
 ### Class Modules
 * fCSettings: The class with the framework settings
-	
+
+## Architectural Approach
+Code is supposed to be only in forms, modules and class modules, i.e. the workbook, the worksheets and other objects visible in the Microsoft Excel Object tree view in the VBE should not contain any code. The reason are potential severe issues that might occur otherwise, leading to workbook instances broken beyond repair - in such cases, the affected workbooks can't even be opened without Excel crashing.
+
+The overall approach of this framework has three layers:
+* public UserInterface modules, the entry point for any user-triggered code execution, usually just calling a sub in an EntryLevel module
+* private EntryLevel modules, being the point of entry for code execution, either triggered by a call from a UserInterface module or from an EventHandler. Everything related to sheet protection, deactivating screen processing initializing globals etc. takes place on this entry level. The subs on this level are called entry level subs.
+* lower level modules and class modules: the rest of any call stack consists of what in the framework is called "lower level procedures"
+
+There are two procedure types for lower level procedures:
+* non-trivial procedures: these might potentially be the place of an error and thus (or for other good reasons) should participate in the error handling logic of the framework and these also can participate in the automated testing - their overall structure is always the same, consisting of a header and declarations section, one or more "try:" sections, one or more "catch:" sections and one or more "finally:" sections.
+* trivial procedures: these are so basic that they do not need to participate in the error handling logic of the template - they might have a basic error handling, e.g. just exiting execution with a function's default value in case of an error etc. 

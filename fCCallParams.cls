@@ -34,12 +34,13 @@ Attribute VB_Exposed = False
 '============================================================================================
 Option Explicit
 
-Private Const smCOMPONENT_NAME As String = "fCCallParams"
+Private Const s_m_COMPONENT_NAME As String = "fCCallParams"
 
-Private smProcedureName As String ' the name of the procedure the class instance refers to
-Private smComponentName As String ' the name of the code component the procedure belongs to
-Private lmUnitTestIndex As Long ' the position of the test in the collection of unit tests, _
+Private s_m_ProcedureName As String ' the name of the procedure the class instance refers to
+Private s_m_ComponentName As String ' the name of the code component the procedure belongs to
+Private l_m_UnitTestIndex As Long ' the position of the test in the collection of unit tests, _
    for direct reference to it
+   'TODO: [...] continue renaming here and make sure to change dev manual at the end
 Private bmResumedOnce As Boolean ' used for stopping and resuming once in an erroneous procedure _
    when in debug mode
 Private bmSilentError As Boolean ' if true, no error message will be displayed for an error occuring _
@@ -56,23 +57,23 @@ Public Property Get bSilentError() As Boolean: bSilentError = bmSilentError: End
 
 Public Property Let bSilentError(ByVal bNewValue As Boolean): bmSilentError = bNewValue: End Property
 
-Public Property Get lUnitTestIndex() As Long: lUnitTestIndex = lmUnitTestIndex: End Property
+Public Property Get lUnitTestIndex() As Long: lUnitTestIndex = l_m_UnitTestIndex: End Property
 
-Public Property Let lUnitTestIndex(ByVal lNewValue As Long): lmUnitTestIndex = lNewValue: End Property
+Public Property Let lUnitTestIndex(ByVal lNewValue As Long): l_m_UnitTestIndex = lNewValue: End Property
 
 Public Property Get oCError() As fCError: Set oCError = omCError: End Property
 
-Public Property Get sComponentName() As String: sComponentName = smComponentName: End Property
+Public Property Get sComponentName() As String: sComponentName = s_m_ComponentName: End Property
 
-Public Property Let sComponentName(ByVal sNewValue As String): smComponentName = sNewValue: End Property
+Public Property Let sComponentName(ByVal sNewValue As String): s_m_ComponentName = sNewValue: End Property
 
 Public Property Get sErrorMessage() As String: sErrorMessage = smErrorMessage: End Property
 
 Public Property Let sErrorMessage(ByVal sNewValue As String): smErrorMessage = sNewValue: End Property
 
-Public Property Get sProcedureName() As String: sProcedureName = smProcedureName: End Property
+Public Property Get sProcedureName() As String: sProcedureName = s_m_ProcedureName: End Property
 
-Public Property Let sProcedureName(ByVal sNewValue As String): smProcedureName = sNewValue: End Property
+Public Property Let sProcedureName(ByVal sNewValue As String): s_m_ProcedureName = sNewValue: End Property
 
 Public Property Get vaArgs() As Variant(): vaArgs = vamArgs: End Property
 
