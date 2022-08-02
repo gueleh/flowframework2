@@ -16,6 +16,7 @@ Attribute VB_Name = "devfMUserInterface"
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.7.0    02.08.2022    gueleh    Refactored name to match convention
 '   0.2.0    20220711    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
@@ -28,20 +29,20 @@ Private Const s_m_COMPONENT_NAME As String = "devfUserInterface"
 
 ' Purpose: write done stamp into active row of devlog
 ' 0.2.0    20220711    gueleh    Initially created
-Public Sub devfMarkLineItemAsDoneInDevLog()
-Attribute devfMarkLineItemAsDoneInDevLog.VB_Description = "Marks the line item with Done"
-Attribute devfMarkLineItemAsDoneInDevLog.VB_ProcData.VB_Invoke_Func = "m\n14"
-   Dim rng As Range
-   Dim wks As Worksheet
-   Set rng = Selection
-   Set wks = rng.Parent
-   If wks.Name = devfwksDevLog.Name _
-   And rng.Rows.Count = 1 _
-   And rng.Row > 2 _
-   And wks.Cells(rng.Row, 1).Value2 <> "" Then
-      f_g_InitGlobals
-      wks.Cells(rng.Row, 4) = oC_f_g_FrameworkSettings.sVersionNumber
-      wks.Cells(rng.Row, 5) = oC_f_g_FrameworkSettings.sVersionDateYYMMDD
-      wks.Cells(rng.Row, 6) = "Done"
+Public Sub DEV_f_g_MarkLineItemAsDoneInDevLog()
+Attribute DEV_f_g_MarkLineItemAsDoneInDevLog.VB_Description = "Marks the line item with Done"
+Attribute DEV_f_g_MarkLineItemAsDoneInDevLog.VB_ProcData.VB_Invoke_Func = "m\n14"
+   Dim oRng As Range
+   Dim oWks As Worksheet
+   Set oRng = Selection
+   Set oWks = oRng.Parent
+   If oWks.Name = devfwksDevLog.Name _
+   And oRng.Rows.Count = 1 _
+   And oRng.Row > 2 _
+   And oWks.Cells(oRng.Row, 1).Value2 <> "" Then
+      f_p_InitGlobals
+      oWks.Cells(oRng.Row, 4) = oC_f_p_FrameworkSettings.sVersionNumber
+      oWks.Cells(oRng.Row, 5) = oC_f_p_FrameworkSettings.sVersionDateYYMMDD
+      oWks.Cells(oRng.Row, 6) = "Done"
    End If
 End Sub

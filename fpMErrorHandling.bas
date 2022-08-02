@@ -28,35 +28,35 @@ Option Private Module
 Private Const s_m_COMPONENT_NAME As String = "fpMErrorHandling"
 
 'the error cases of the framework
-Public Enum efHandledErrors
-   efHandledErrorGeneralError = 9999
-   efHandledErrorAppSpecificError
-   e_f_g_HandledError_ExecutionOfLowerLevelFunction
+Public Enum e_f_p_HandledErrors
+   e_f_p_HandledError_GeneralError = 9999
+   e_f_p_HandledError_AppSpecificError
+   e_f_p_HandledError_ExecutionOfLowerLevelFunction
 End Enum
 
 ' Purpose: returns the error description for the provided error cases
 ' 0.1.0    20220709    gueleh    Initially created
-Public Function s_f_g_HandledErrorDescription( _
-   ByVal efHandledError As efHandledErrors, _
-   Optional ByVal eafHandledError As eafHandledErrors = 19999) As String
+Public Function s_f_p_HandledErrorDescription( _
+   ByVal efHandledError As e_f_p_HandledErrors, _
+   Optional ByVal eafHandledError As e_af_p_HandledErrors = 19999) As String
    
    Dim sDesc As String
    Select Case efHandledError
-      Case efHandledErrorAppSpecificError
-         sDesc = safHandledErrorDescription(eafHandledError)
-      Case efHandledErrorGeneralError
+      Case e_f_p_HandledError_AppSpecificError
+         sDesc = s_af_p_HandledErrorDescription(eafHandledError)
+      Case e_f_p_HandledError_GeneralError
          sDesc = "An error occurred. No specific description provided"
-      Case e_f_g_HandledError_ExecutionOfLowerLevelFunction
+      Case e_f_p_HandledError_ExecutionOfLowerLevelFunction
          sDesc = "The execution of a lower level function failed, refer to error log."
       Case Else
-         sDesc = "No description defined for this error. You can do this in Function safHandledErrorDescription in module afpMErrorHandling."
+         sDesc = "No description defined for this error. You can do this in Function s_af_p_HandledErrorDescription in module afpMErrorHandling."
    End Select
-   s_f_g_HandledErrorDescription = sDesc
+   s_f_p_HandledErrorDescription = sDesc
 End Function
 
 ' Purpose: registers an error in the error stack
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub f_g_RegisterError( _
+Public Sub f_p_RegisterError( _
    ByRef oC_f_Params As fCCallParams, _
    ByVal lErrorNumber As Long, _
    ByVal sErrorDescription As String)
@@ -67,17 +67,17 @@ Public Sub f_g_RegisterError( _
       .sErrorDescription = sErrorDescription
    End With
    oC_f_Params.SetoCError oCError
-   If oCol_f_g_Errors.Count > 0 Then
-      oCol_f_g_Errors.Add oC_f_Params, , 1
+   If oCol_f_p_Errors.Count > 0 Then
+      oCol_f_p_Errors.Add oC_f_Params, , 1
    Else
-      oCol_f_g_Errors.Add oC_f_Params
+      oCol_f_p_Errors.Add oC_f_Params
    End If
    
 End Sub
 
 ' Purpose: handles the error
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub f_g_HandleError(ByRef oC_f_Params As fCCallParams)
+Public Sub f_p_HandleError(ByRef oC_f_Params As fCCallParams)
    mLogError oC_f_Params
    With oC_f_Params
       If Not .bSilentError Then

@@ -28,8 +28,8 @@ Option Private Module
 Private Const s_m_COMPONENT_NAME As String = "afpMGlobals"
 
 'determines which mode supposed to be executed
-Public Enum e_af_g_ProcessingModes
-   eafProcessingModeGlobalsOnly
+Public Enum e_af_p_ProcessingModes
+   e_af_p_ProcessingModeGlobalsOnly
 '>>>>>>> add your modes here - then modify af_g_StartProcessingMode below to add your code
 ' for your modes
 
@@ -41,12 +41,12 @@ End Enum
 ' should start in a public entry level module, see the template procedure in fpMTemplatesCore
 ' Template Versions:
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub af_g_StartProcessingMode(ByVal eafProcessingMode As e_af_g_ProcessingModes)
+Public Sub af_p_StartProcessingMode(ByVal eafProcessingMode As e_af_p_ProcessingModes)
    Select Case eafProcessingMode
-      Case eafProcessingModeGlobalsOnly
+      Case e_af_p_ProcessingModeGlobalsOnly
          'Do nothing except for the required initialization
 '>>>>>>> Your cases here
-      'Case eafProcessingModeMyFineMode
+      'Case e_af_p_ProcessingModeMyFineMode
          'My fine code for this processing mode
          
 '<<<<<<<
@@ -60,9 +60,9 @@ End Sub
 ' is the last code executed before code execution ends
 ' Template Versions:
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub af_g_EndProcessingMode(ByVal eafProcessingMode As e_af_g_ProcessingModes)
+Public Sub af_p_EndProcessingMode(ByVal eafProcessingMode As e_af_p_ProcessingModes)
    Select Case eafProcessingMode
-      Case eafProcessingModeGlobalsOnly
+      Case e_af_p_ProcessingModeGlobalsOnly
          'Do nothing
 '>>>>>>> Your cases here
          

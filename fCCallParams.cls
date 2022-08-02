@@ -25,6 +25,7 @@ Attribute VB_Exposed = False
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.7.0    02.08.2022    gueleh    Just renaming
 ' 0.5.0    15.07.2022    gueleh    Changed public fields to private fields and added properties
 '   0.1.0    20220709    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
@@ -40,42 +41,41 @@ Private s_m_ProcedureName As String ' the name of the procedure the class instan
 Private s_m_ComponentName As String ' the name of the code component the procedure belongs to
 Private l_m_UnitTestIndex As Long ' the position of the test in the collection of unit tests, _
    for direct reference to it
-   'TODO: [...] continue renaming here and make sure to change dev manual at the end
-Private bmResumedOnce As Boolean ' used for stopping and resuming once in an erroneous procedure _
+Private b_m_ResumedOnce As Boolean ' used for stopping and resuming once in an erroneous procedure _
    when in debug mode
-Private bmSilentError As Boolean ' if true, no error message will be displayed for an error occuring _
+Private b_m_SilentError As Boolean ' if true, no error message will be displayed for an error occuring _
    in the procedure the instance of this class refers to
-Private smErrorMessage As String
-Private omCError As fCError
-Private vamArgs() As Variant ' supposed to store the args passed in to the procedure, for test and error documentation
+Private s_m_ErrorMessage As String
+Private oC_m_Error As fCError
+Private va_m_Args() As Variant ' supposed to store the args passed in to the procedure, for test and error documentation
 
-Public Property Get bResumedOnce() As Boolean: bResumedOnce = bmResumedOnce: End Property
+Public Property Get bResumedOnce() As Boolean: bResumedOnce = b_m_ResumedOnce: End Property
 
-Public Property Let bResumedOnce(ByVal bNewValue As Boolean): bmResumedOnce = bNewValue: End Property
+Public Property Let bResumedOnce(ByVal bNewValue As Boolean): b_m_ResumedOnce = bNewValue: End Property
 
-Public Property Get bSilentError() As Boolean: bSilentError = bmSilentError: End Property
+Public Property Get bSilentError() As Boolean: bSilentError = b_m_SilentError: End Property
 
-Public Property Let bSilentError(ByVal bNewValue As Boolean): bmSilentError = bNewValue: End Property
+Public Property Let bSilentError(ByVal bNewValue As Boolean): b_m_SilentError = bNewValue: End Property
 
 Public Property Get lUnitTestIndex() As Long: lUnitTestIndex = l_m_UnitTestIndex: End Property
 
 Public Property Let lUnitTestIndex(ByVal lNewValue As Long): l_m_UnitTestIndex = lNewValue: End Property
 
-Public Property Get oCError() As fCError: Set oCError = omCError: End Property
+Public Property Get oCError() As fCError: Set oCError = oC_m_Error: End Property
 
 Public Property Get sComponentName() As String: sComponentName = s_m_ComponentName: End Property
 
 Public Property Let sComponentName(ByVal sNewValue As String): s_m_ComponentName = sNewValue: End Property
 
-Public Property Get sErrorMessage() As String: sErrorMessage = smErrorMessage: End Property
+Public Property Get sErrorMessage() As String: sErrorMessage = s_m_ErrorMessage: End Property
 
-Public Property Let sErrorMessage(ByVal sNewValue As String): smErrorMessage = sNewValue: End Property
+Public Property Let sErrorMessage(ByVal sNewValue As String): s_m_ErrorMessage = sNewValue: End Property
 
 Public Property Get sProcedureName() As String: sProcedureName = s_m_ProcedureName: End Property
 
 Public Property Let sProcedureName(ByVal sNewValue As String): s_m_ProcedureName = sNewValue: End Property
 
-Public Property Get vaArgs() As Variant(): vaArgs = vamArgs: End Property
+Public Property Get vaArgs() As Variant(): vaArgs = va_m_Args: End Property
 
 ' Purpose: returns the args as list with comma separation, for non-printable args the type is provided
 ' 0.1.0    20220709    gueleh    Initially created
@@ -83,12 +83,12 @@ Public Function sArgsAsString() As String
    Dim l As Long
    Dim sResult As String
    Dim sElement As String
-   If Not IsEmpty(vamArgs) Then
-      For l = LBound(vamArgs) To UBound(vamArgs)
+   If Not IsEmpty(va_m_Args) Then
+      For l = LBound(va_m_Args) To UBound(va_m_Args)
          On Error Resume Next
-         sElement = vamArgs(l)
+         sElement = va_m_Args(l)
          If Err.Number > 0 Then
-            sElement = "Not prinable, type: " & TypeName(vamArgs(l))
+            sElement = "Not prinable, type: " & TypeName(va_m_Args(l))
             Err.Clear
          End If
          sResult = sElement & ", "
@@ -103,11 +103,11 @@ End Function
 ' 0.5.0    15.07.2022    gueleh    Initially documented
 Public Sub SetCallArgs(ParamArray vaArgs() As Variant)
    On Error Resume Next
-   vamArgs = vaArgs
+   va_m_Args = vaArgs
 End Sub
 
 ' Purpose: sets the oCError instance of the class, sub instead of property for easier handling
 ' 0.5.0    15.07.2022    gueleh    Initially documented and renamed
 Public Sub SetoCError(ByRef oCError As fCError)
-   Set omCError = oCError
+   Set oC_m_Error = oCError
 End Sub

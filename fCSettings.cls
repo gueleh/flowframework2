@@ -24,6 +24,7 @@ Attribute VB_Exposed = False
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.7.0    02.08.2022    gueleh    Refactored names
 '   0.1.0    20220709    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
@@ -34,51 +35,51 @@ Option Explicit
 
 Private Const s_m_COMPONENT_NAME As String = "fCSettings"
 
-Private Const sm_name_VERSION_NUMBER As String = "fn_smVERSION_NUMBER"
-Private Const sm_name_VERSION_DATE_YYMMDD As String = "fn_smVERSION_DATE_YYMMDD"
-Private Const sm_name_DEBUG_MODE_IS_ON As String = "afn_bmDebugModeIsOn"
+Private Const s_m_named_cell_s_m_VERSION_NUMBER As String = "f_named_cell_s_m_VERSION_NUMBER"
+Private Const s_m_named_cell_s_m_VERSION_DATE_YYMMDD As String = "f_named_cell_s_m_VERSION_DATE_YYMMDD"
+Private Const s_m_named_cell_b_m_DEBUG_MODE_IS_ON As String = "af_named_cell_b_m_DebugModeIsOn"
 
-Private omWksFrameworkSettings As Worksheet
-Private omWksApplicationSpecificFrameworkSettings As Worksheet
-Private smVersionNumber As String
-Private smVersionDateYYMMDD As String
-Private bmDebugModeIsOn As Boolean
-Private bmThisIsATestRun As Boolean
+Private oWks_m_FrameworkSettings As Worksheet
+Private oWks_m_ApplicationSpecificFrameworkSettings As Worksheet
+Private s_m_VersionNumber As String
+Private s_m_VersionDateYYMMDD As String
+Private b_m_DebugModeIsOn As Boolean
+Private b_m_ThisIsATestRun As Boolean
 
 Public Property Get bDebugModeIsOn() As Boolean
-   bDebugModeIsOn = bmDebugModeIsOn
+   bDebugModeIsOn = b_m_DebugModeIsOn
 End Property
 
 Public Property Get bThisIsATestRun() As Boolean
-   bThisIsATestRun = bmThisIsATestRun
+   bThisIsATestRun = b_m_ThisIsATestRun
 End Property
 
 Public Property Let bThisIsATestRun(ByVal bNewValue As Boolean)
-   bmThisIsATestRun = bNewValue
+   b_m_ThisIsATestRun = bNewValue
 End Property
 
 Public Property Get sVersionNumber() As String
-   sVersionNumber = smVersionNumber
+   sVersionNumber = s_m_VersionNumber
 End Property
 
 Public Property Get sVersionDateYYMMDD() As String
-   sVersionDateYYMMDD = smVersionDateYYMMDD
+   sVersionDateYYMMDD = s_m_VersionDateYYMMDD
 End Property
 
 Private Sub Class_Initialize()
-   Set omWksFrameworkSettings = fwksSettings
-   Set omWksApplicationSpecificFrameworkSettings = afwksSettings
-   smVersionNumber = omWksFrameworkSettings.Names(sm_name_VERSION_NUMBER).RefersToRange.Value2
-   smVersionDateYYMMDD = omWksFrameworkSettings.Names(sm_name_VERSION_DATE_YYMMDD).RefersToRange.Value2
+   Set oWks_m_FrameworkSettings = fwksSettings
+   Set oWks_m_ApplicationSpecificFrameworkSettings = afwksSettings
+   s_m_VersionNumber = oWks_m_FrameworkSettings.Names(s_m_named_cell_s_m_VERSION_NUMBER).RefersToRange.Value2
+   s_m_VersionDateYYMMDD = oWks_m_FrameworkSettings.Names(s_m_named_cell_s_m_VERSION_DATE_YYMMDD).RefersToRange.Value2
    mGetDebugMode
 End Sub
 
 Public Sub SetDebugModeIsOnTo(ByVal bNewValue As Boolean)
-   bmDebugModeIsOn = bNewValue
-   omWksApplicationSpecificFrameworkSettings.Names(sm_name_DEBUG_MODE_IS_ON).RefersToRange.Value2 = bmDebugModeIsOn
+   b_m_DebugModeIsOn = bNewValue
+   oWks_m_ApplicationSpecificFrameworkSettings.Names(s_m_named_cell_b_m_DEBUG_MODE_IS_ON).RefersToRange.Value2 = b_m_DebugModeIsOn
 End Sub
 
 Private Sub mGetDebugMode()
-   bmDebugModeIsOn = omWksApplicationSpecificFrameworkSettings.Names(sm_name_DEBUG_MODE_IS_ON).RefersToRange.Value2
+   b_m_DebugModeIsOn = oWks_m_ApplicationSpecificFrameworkSettings.Names(s_m_named_cell_b_m_DEBUG_MODE_IS_ON).RefersToRange.Value2
 End Sub
 

@@ -29,7 +29,7 @@ Private Const s_m_COMPONENT_NAME As String = "fpMUtilities"
 
 ' Purpose: Return string for Application.Run for procedures in this workbook
 ' 0.1.0    20220709    gueleh    Initially created
-Public Function s_f_g_MyProcedureName(ByVal sProcedureName As String) As String
-  s_f_g_MyProcedureName = "'" & ThisWorkbook.Name & "'!" & sProcedureName
+Public Function s_f_p_MyProcedureName(ByVal sProcedureName As String) As String
+  s_f_p_MyProcedureName = "'" & ThisWorkbook.Name & "'!" & sProcedureName
 End Function
 
