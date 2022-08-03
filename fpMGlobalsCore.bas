@@ -16,6 +16,7 @@ Attribute VB_Name = "fpMGlobalsCore"
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.9.0    03.08.2022    gueleh    Added const declaration
 '   0.1.0    20220709    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
@@ -26,6 +27,10 @@ Option Explicit
 Option Private Module
 
 Private Const s_m_COMPONENT_NAME As String = "fpMGlobalsCore"
+
+Public Const s_f_p_SPLIT_SEED_SEPARATOR As String = ","
+'TODO: Also add identifier for app tech sheets as soon as it is required
+Public Const s_f_p_split_seed_TECH_WKS_IDENTIFIERS As String = "devfwks,devafwks,devawks,fwks,afwks"
 
 'determines which mode is supposed to be executed
 Public Enum e_f_p_ProcessingModes
