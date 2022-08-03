@@ -24,6 +24,7 @@ Attribute VB_Exposed = False
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.8.0    03.08.2022    gueleh    Added SetNamesVisibleTo
 ' 0.7.0    02.08.2022    gueleh    Refactored names
 '   0.1.0    20220709    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
@@ -74,9 +75,19 @@ Private Sub Class_Initialize()
    mGetDebugMode
 End Sub
 
+
 Public Sub SetDebugModeIsOnTo(ByVal bNewValue As Boolean)
    b_m_DebugModeIsOn = bNewValue
    oWks_m_ApplicationSpecificFrameworkSettings.Names(s_m_named_cell_b_m_DEBUG_MODE_IS_ON).RefersToRange.Value2 = b_m_DebugModeIsOn
+End Sub
+
+' Purpose: setting the visibility of the Names used in this class
+' 0.8.0    03.08.2022    gueleh    Initially created
+Public Sub SetNamesVisibleTo(ByVal bVisible As Boolean)
+   oWks_m_ApplicationSpecificFrameworkSettings.Names(s_m_named_cell_b_m_DEBUG_MODE_IS_ON).Visible = bVisible
+   oWks_m_FrameworkSettings.Names(s_m_named_cell_s_m_VERSION_NUMBER).Visible = bVisible
+   oWks_m_FrameworkSettings.Names(s_m_named_cell_s_m_VERSION_DATE_YYMMDD).Visible = bVisible
+   'The visibility of Names of ListObjects depends on the visibility of the worksheet they are in
 End Sub
 
 Private Sub mGetDebugMode()
