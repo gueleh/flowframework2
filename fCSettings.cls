@@ -24,6 +24,7 @@ Attribute VB_Exposed = False
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.10.0    04.08.2022    gueleh    Changed property names to meet new convention
 ' 0.8.0    03.08.2022    gueleh    Added SetNamesVisibleTo
 ' 0.7.0    02.08.2022    gueleh    Refactored names
 '   0.1.0    20220709    gueleh    Initially created
@@ -49,28 +50,28 @@ Private b_m_DebugModeIsOn As Boolean
 Private b_m_ThisIsATestRun As Boolean
 Private b_m_DevelopmentModeIsOn As Boolean
 
-Public Property Get bDebugModeIsOn() As Boolean
-   bDebugModeIsOn = b_m_DebugModeIsOn
+Public Property Get b_prop_r_DebugModeIsOn() As Boolean
+   b_prop_r_DebugModeIsOn = b_m_DebugModeIsOn
 End Property
 
-Public Property Get bDevelopmentModeIsOn() As Boolean
-   bDevelopmentModeIsOn = b_m_DevelopmentModeIsOn
+Public Property Get b_prop_r_DevelopmentModeIsOn() As Boolean
+   b_prop_r_DevelopmentModeIsOn = b_m_DevelopmentModeIsOn
 End Property
 
-Public Property Get bThisIsATestRun() As Boolean
-   bThisIsATestRun = b_m_ThisIsATestRun
+Public Property Get b_prop_rw_ThisIsATestRun() As Boolean
+   b_prop_rw_ThisIsATestRun = b_m_ThisIsATestRun
 End Property
 
-Public Property Let bThisIsATestRun(ByVal bNewValue As Boolean)
+Public Property Let b_prop_rw_ThisIsATestRun(ByVal bNewValue As Boolean)
    b_m_ThisIsATestRun = bNewValue
 End Property
 
-Public Property Get sVersionNumber() As String
-   sVersionNumber = s_m_VersionNumber
+Public Property Get s_prop_r_VersionNumber() As String
+   s_prop_r_VersionNumber = s_m_VersionNumber
 End Property
 
-Public Property Get sVersionDateYYMMDD() As String
-   sVersionDateYYMMDD = s_m_VersionDateYYMMDD
+Public Property Get s_prop_r_VersionDateYYMMDD() As String
+   s_prop_r_VersionDateYYMMDD = s_m_VersionDateYYMMDD
 End Property
 
 Private Sub Class_Initialize()

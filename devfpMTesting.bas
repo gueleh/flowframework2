@@ -16,6 +16,7 @@ Attribute VB_Name = "devfpMTesting"
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.10.0    04.08.2022    gueleh    Changed property names to meet new convention
 '   0.1.0    20220709    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
@@ -30,9 +31,9 @@ Private Const s_m_COMPONENT_NAME As String = "devfpMTesting"
 ' Purpose: registers a unit test for later execution and evaluation when supposed to be tested
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub DEV_f_p_RegisterUnitTest(ByRef oCCallParams As fCCallParams)
-   If oC_f_p_FrameworkSettings.bThisIsATestRun Then
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then
       Dim oCUnitTest As New devfCUnitTest
-      oCCallParams.lUnitTestIndex = oCol_f_p_UnitTests.Count + 1
+      oCCallParams.l_prop_rw_UnitTestIndex = oCol_f_p_UnitTests.Count + 1
       oCUnitTest.InitializeUnitTest oCCallParams
       oCol_f_p_UnitTests.Add oCUnitTest
    End If
@@ -41,9 +42,9 @@ End Sub
 ' Purpose: registers an execution error when tested
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub DEV_f_p_RegisterExecutionError(ByRef oCCallParams As fCCallParams)
-   If oC_f_p_FrameworkSettings.bThisIsATestRun And oCCallParams.lUnitTestIndex = 0 Then
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun And oCCallParams.l_prop_rw_UnitTestIndex = 0 Then
       Dim oCUnitTest As devfCUnitTest
-      Set oCUnitTest = oCol_f_p_UnitTests(oCCallParams.lUnitTestIndex)
+      Set oCUnitTest = oCol_f_p_UnitTests(oCCallParams.l_prop_rw_UnitTestIndex)
    End If
 End Sub
 
@@ -51,6 +52,6 @@ End Sub
 ' 0.1.0    20220709    gueleh    Initially created
 Private Sub DEV_f_m_RunUnitTests()
    f_p_InitGlobals
-   oC_f_p_FrameworkSettings.bThisIsATestRun = True
+   oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun = True
    'TODO: DEV_f_m_RunUnitTests: add the actual code for running the unit tests
 End Sub

@@ -25,6 +25,7 @@ Attribute VB_Exposed = False
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.10.0    04.08.2022    gueleh    Changed property names to meet new convention
 ' 0.7.0    02.08.2022    gueleh    Just renaming
 ' 0.5.0    15.07.2022    gueleh    Changed public fields to private fields and added properties
 '   0.1.0    20220709    gueleh    Initially created
@@ -49,33 +50,33 @@ Private s_m_ErrorMessage As String
 Private oC_m_Error As fCError
 Private va_m_Args() As Variant ' supposed to store the args passed in to the procedure, for test and error documentation
 
-Public Property Get bResumedOnce() As Boolean: bResumedOnce = b_m_ResumedOnce: End Property
+Public Property Get b_prop_rw_ResumedOnce() As Boolean: b_prop_rw_ResumedOnce = b_m_ResumedOnce: End Property
 
-Public Property Let bResumedOnce(ByVal bNewValue As Boolean): b_m_ResumedOnce = bNewValue: End Property
+Public Property Let b_prop_rw_ResumedOnce(ByVal bNewValue As Boolean): b_m_ResumedOnce = bNewValue: End Property
 
-Public Property Get bSilentError() As Boolean: bSilentError = b_m_SilentError: End Property
+Public Property Get b_prop_rw_SilentError() As Boolean: b_prop_rw_SilentError = b_m_SilentError: End Property
 
-Public Property Let bSilentError(ByVal bNewValue As Boolean): b_m_SilentError = bNewValue: End Property
+Public Property Let b_prop_rw_SilentError(ByVal bNewValue As Boolean): b_m_SilentError = bNewValue: End Property
 
-Public Property Get lUnitTestIndex() As Long: lUnitTestIndex = l_m_UnitTestIndex: End Property
+Public Property Get l_prop_rw_UnitTestIndex() As Long: l_prop_rw_UnitTestIndex = l_m_UnitTestIndex: End Property
 
-Public Property Let lUnitTestIndex(ByVal lNewValue As Long): l_m_UnitTestIndex = lNewValue: End Property
+Public Property Let l_prop_rw_UnitTestIndex(ByVal lNewValue As Long): l_m_UnitTestIndex = lNewValue: End Property
 
-Public Property Get oCError() As fCError: Set oCError = oC_m_Error: End Property
+Public Property Get oC_prop_r_Error() As fCError: Set oC_prop_r_Error = oC_m_Error: End Property
 
-Public Property Get sComponentName() As String: sComponentName = s_m_ComponentName: End Property
+Public Property Get s_prop_rw_ComponentName() As String: s_prop_rw_ComponentName = s_m_ComponentName: End Property
 
-Public Property Let sComponentName(ByVal sNewValue As String): s_m_ComponentName = sNewValue: End Property
+Public Property Let s_prop_rw_ComponentName(ByVal sNewValue As String): s_m_ComponentName = sNewValue: End Property
 
-Public Property Get sErrorMessage() As String: sErrorMessage = s_m_ErrorMessage: End Property
+Public Property Get s_prop_rw_ErrorMessage() As String: s_prop_rw_ErrorMessage = s_m_ErrorMessage: End Property
 
-Public Property Let sErrorMessage(ByVal sNewValue As String): s_m_ErrorMessage = sNewValue: End Property
+Public Property Let s_prop_rw_ErrorMessage(ByVal sNewValue As String): s_m_ErrorMessage = sNewValue: End Property
 
-Public Property Get sProcedureName() As String: sProcedureName = s_m_ProcedureName: End Property
+Public Property Get s_prop_rw_ProcedureName() As String: s_prop_rw_ProcedureName = s_m_ProcedureName: End Property
 
-Public Property Let sProcedureName(ByVal sNewValue As String): s_m_ProcedureName = sNewValue: End Property
+Public Property Let s_prop_rw_ProcedureName(ByVal sNewValue As String): s_m_ProcedureName = sNewValue: End Property
 
-Public Property Get vaArgs() As Variant(): vaArgs = va_m_Args: End Property
+Public Property Get va_prop_r_Args() As Variant(): va_prop_r_Args = va_m_Args: End Property
 
 ' Purpose: returns the args as list with comma separation, for non-printable args the type is provided
 ' 0.1.0    20220709    gueleh    Initially created
@@ -106,7 +107,7 @@ Public Sub SetCallArgs(ParamArray vaArgs() As Variant)
    va_m_Args = vaArgs
 End Sub
 
-' Purpose: sets the oCError instance of the class, sub instead of property for easier handling
+' Purpose: sets the oC_prop_r_Error instance of the class, sub instead of property for easier handling
 ' 0.5.0    15.07.2022    gueleh    Initially documented and renamed
 Public Sub SetoCError(ByRef oCError As fCError)
    Set oC_m_Error = oCError

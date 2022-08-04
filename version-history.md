@@ -1,4 +1,6 @@
 # Version History of Flow Framework 2
+## 0.10.0, 220804
+* refactored and updated dev manual
 ## 0.9.0, 220803
 * added Development Mode
 ## 0.8.0, 220803

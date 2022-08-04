@@ -41,6 +41,12 @@ Element membership always is explicit in the framework, it is recommended to do 
 		* `g`: scoped to workbook ("global") and thus accessible via `Workbook.Names(sName)`
 		* `b`: Represents a boolean
 		* name in CamelCase: is a variable value that might change during usage oof application
+### Object Property Names
+The intention is to easily see whether it is a property and whether it can be read and/or written to, based on the name alone. Also the type should be clearly indicated.
+
+* `b_prop_rw_NameOfProperty`: a Boolean property for getting and letting
+* `s_prop_r_NameOfProperty`: a String property for getting
+* `s_prop_w_NameOfProperty`: a String property for letting
 
 ### Prefixes for Types
 * `b`: Boolean
@@ -73,26 +79,65 @@ Element membership always is explicit in the framework, it is recommended to do 
 	* `va_f_p_Example` for project scope, i.e. public in a private module and being part of the framework
 	* `va_f_g_Example` for global scope, i.e. public in public module, being part of the framework and also accessible for other VBA projects
 
+### Component Naming
+* `wkb`: Workbook
+* `wks`: Worksheet
+* `F`: user form
 * `M`: module
 * `C`: class module
 * `I`: interface class module
+* `p`: private module
+
+* `fFName`: user form with scope `f`, i.e. part of framework
+* `afwkbName`: Workbook object with scope `af`, i.e. part of framework but with partly custom contents
+* `fwksName`: Worksheet object with scope `f`, i.e. part of framework
+* `devfpMName`: Private(`p`) module(`M`) with scope Framework(`f`) and only required when developing(`dev`)
+* `aMUserInterface`: Public module with the name UserInterface with scope `a`
+* `aCName`: Class module with scope `a`, i.e. part of application
+* `IName`: Interface class module with implied scope `a`, i.e. part of application without using the prefix in the name (I don't do it, but it also would work)
+
+### Procedure Naming
+Procedure names should indicate the scope, class methods are exempted because the class already indicates the scope, e.g.
+* `DEV_f_g_Name`: Public Sub in a Public Module, thus `g` for global, only relevant when developing, thus `DEV` as prefix
+* `s_f_Name`: Public Function in a public module returning a string, part of framework - global access implied by not explicitly stating the scope
+* `sName`: Public Function in a class module, scope is indicated by class
+* `s_f_p_Name`: Public Function in a private module returning a string, part of framework
+* `DEV_s_f_m_Name`: Private Function in a private or public module, only relevant for development, returning a string and part of the framework
+* `mName`: Private Sub in a class module
 
 ## Component Usage and Specific Components
+The name prefixes of components are used in the code, especially the ones marking dev contents(`dev`), framework contents(`f`) and contents with framework structure and application contents(`af`) - not usind these prefixes or using them inadequately will break the framework - this is true for all possible types which can be part of the project explorer.
+
 ### Workbooks
 * `afwkbMain`: The main workbook of the application
 
 ### Worksheets
 The list contains only the codename of the sheets 
+* `afwksErrorLog`: Error log, filled automatically, emptied manually
 * `afwksSettings`: The worksheet with the app-specific framework settings
+* `awksMain`: One sheet of the application, can be removed if there is at least one other application scope sheet - otherwise switching off maintenance and development mode would fail due to having no worksheet left to be displayed
+* `devafwksDevLog`: Worksheet for a development log directly in the workbook, if needed 
 * `fwksSettings`: The worksheet with the framework settings
 
-### Modules By Functional Units
-* `afpMErrorHandling`
-* `fpMErrorHandling`
 
+### Modules
+* `afpMErrorHandling`: app-specific framework error handling, i.e. custom Enum values and descriptions that can be used in the framework's error handling logic
+* `afpMGlobals`: app-specific globals being part of the framework, i.e. custom processing mode for StartProcessing and EndProcessing
+* `devfMUserInterface`: user interaction during development
+* `devfpMGlobals`: framework globals relevant for development
+* `devfpMSandBox`: framework sandbox module relevant for development
+* `devfpMTesting`: framework module for running the unit and integration tests during development
+* `fpMEntryLevel`: framework entry level procedures - the entry level takes care of globals initialization, protection, screen updating etc. - it is a no-brainer wrapper for lower level processing
+* `fpMErrorHandling`: framework error handling
 * `fpMGlobalsCore`: The module with the framework core globals
+* `fpMTemplatesCore`: Template procedures for entry level and non-trivial lower level (i.e. with error handling, testing etc.)
+* `fpMUtilities`: framework general utility procedures
+* `fpMUtilitiesDev`: framework general utility procedures for development, which must not be removed when deploying - thus "Dev" in this case is not the prefix of the name
 
 ### Class Modules
+* `devfCUnitTest`: class for unit tests for one unit, relevant for dev only
+* `fCCallParams`: class storing information on running procedures, required for error handling, testing etc - mostly meta data which otherwise would not be available, like procedure name and name of the parent component of a procedure
+* `fCError`: for storing and using error object information, so that these are retained for proper handling throughout the whole call stack
 * `fCSettings`: The class with the framework settings
 
 ## Architectural Approach

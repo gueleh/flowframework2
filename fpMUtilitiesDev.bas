@@ -16,6 +16,7 @@ Attribute VB_Name = "fpMUtilitiesDev"
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.10.0    04.08.2022    gueleh    Changed property names to meet new convention
 ' 0.9.0    03.08.2022    gueleh    Added b_f_p_SetDevelopmentModeTo
 '   0.8.0    03.08.2022    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
@@ -43,13 +44,13 @@ End Sub
 Public Function b_f_p_SetDevelopmentModeTo(ByVal bDevModeIsOn As Boolean) As Boolean
 
    Dim oC_Me As New fCCallParams
-   oC_Me.sComponentName = s_m_COMPONENT_NAME
-   If oC_f_p_FrameworkSettings.bThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+   oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
 
    With oC_Me
-      .sProcedureName = "b_f_p_SetDevelopmentModeTo" 'Name of the function
-      .bSilentError = True 'False will display a message box - you should only do this on entry level
-      .sErrorMessage = "Setting the development mode failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .s_prop_rw_ProcedureName = "b_f_p_SetDevelopmentModeTo" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "Setting the development mode failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
       .SetCallArgs "Set to: " & bDevModeIsOn 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
    End With
 
@@ -81,15 +82,15 @@ Try:
    
 Finally:
    On Error Resume Next
-   If oC_Me.oCError Is Nothing Then b_f_p_SetDevelopmentModeTo = True 'reports execution as successful to caller
+   If oC_Me.oC_prop_r_Error Is Nothing Then b_f_p_SetDevelopmentModeTo = True 'reports execution as successful to caller
    Exit Function
    
 Catch:
-   If oC_Me.oCError Is Nothing _
+   If oC_Me.oC_prop_r_Error Is Nothing _
    Then f_p_RegisterError oC_Me, Err.Number, Err.Description
-   If oC_f_p_FrameworkSettings.bThisIsATestRun Then f_p_RegisterExecutionError oC_Me
-   If oC_f_p_FrameworkSettings.bDebugModeIsOn And Not oC_Me.bResumedOnce Then
-      oC_Me.bResumedOnce = True: Stop: Resume
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
    Else
       f_p_HandleError oC_Me: Resume Finally
    End If

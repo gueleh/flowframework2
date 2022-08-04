@@ -47,5 +47,5 @@ End Sub
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub RegisterExecutionError(ByRef oC_CallParams As fCCallParams)
    b_m_ExecutionError = True
-   oC_m_CallParams.SetoCError oC_CallParams.oCError
+   oC_m_CallParams.SetoCError oC_CallParams.oC_prop_r_Error
 End Sub

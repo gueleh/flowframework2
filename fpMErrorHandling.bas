@@ -16,6 +16,7 @@ Attribute VB_Name = "fpMErrorHandling"
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.10.0    04.08.2022    gueleh    Changed property names to meet new convention
 '   0.1.0    20220709    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
@@ -63,8 +64,8 @@ Public Sub f_p_RegisterError( _
 
    Dim oCError As New fCError
    With oCError
-      .lErrorNumber = lErrorNumber
-      .sErrorDescription = sErrorDescription
+      .l_prop_rw_ErrorNumber = lErrorNumber
+      .s_prop_rw_ErrorDescription = sErrorDescription
    End With
    oC_f_Params.SetoCError oCError
    If oCol_f_p_Errors.Count > 0 Then
@@ -80,8 +81,8 @@ End Sub
 Public Sub f_p_HandleError(ByRef oC_f_Params As fCCallParams)
    mLogError oC_f_Params
    With oC_f_Params
-      If Not .bSilentError Then
-         MsgBox .sErrorMessage, vbCritical
+      If Not .b_prop_rw_SilentError Then
+         MsgBox .s_prop_rw_ErrorMessage, vbCritical
       End If
    End With
 End Sub
@@ -97,12 +98,12 @@ Private Sub mLogError(ByRef oC_f_Params As fCCallParams)
       lRow = .Range(sANCHOR_ADDRESS).CurrentRegion.Rows.Count + .Range(sANCHOR_ADDRESS).Row - 1
       .Cells(lRow, 1).Value2 = Format(Now(), "YYMMDD hh:mm:ss")
       .Cells(lRow, 2).Value2 = Environ("Username")
-      .Cells(lRow, 3).Value2 = oC_f_Params.sComponentName
-      .Cells(lRow, 4).Value2 = oC_f_Params.sProcedureName
-      .Cells(lRow, 5).Value2 = oC_f_Params.oCError.lErrorNumber
-      .Cells(lRow, 6).Value2 = oC_f_Params.oCError.sErrorDescription
-      .Cells(lRow, 7).Value2 = oC_f_Params.bSilentError
-      .Cells(lRow, 8).Value2 = oC_f_Params.sErrorMessage
+      .Cells(lRow, 3).Value2 = oC_f_Params.s_prop_rw_ComponentName
+      .Cells(lRow, 4).Value2 = oC_f_Params.s_prop_rw_ProcedureName
+      .Cells(lRow, 5).Value2 = oC_f_Params.oC_prop_r_Error.l_prop_rw_ErrorNumber
+      .Cells(lRow, 6).Value2 = oC_f_Params.oC_prop_r_Error.s_prop_rw_ErrorDescription
+      .Cells(lRow, 7).Value2 = oC_f_Params.b_prop_rw_SilentError
+      .Cells(lRow, 8).Value2 = oC_f_Params.s_prop_rw_ErrorMessage
       .Cells(lRow, 9).Value2 = oC_f_Params.sArgsAsString()
       .Cells.Calculate
    End With

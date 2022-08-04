@@ -16,6 +16,7 @@ Attribute VB_Name = "fpMTemplatesCore"
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.10.0    04.08.2022    gueleh    Changed property names to meet new convention
 '   0.1.0    20220709    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
@@ -33,22 +34,22 @@ Public Sub f_p_TemplateSubEntryLevel()
 
 'Fixed, don't change
    Dim oC_Me As New fCCallParams
-   oC_Me.sComponentName = s_m_COMPONENT_NAME
+   oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
    'Consult the manual for learning about the options for f_g_StartProcessing
    f_p_StartProcessing 'calling without args only inits the globals
    With oC_Me
-      .sProcedureName = "f_p_TemplateSubEntryLevel" 'Name of the sub
-      .bSilentError = False 'False will display a message box - you should only do this on entry level
-      .sErrorMessage = "Your message here." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .s_prop_rw_ProcedureName = "f_p_TemplateSubEntryLevel" 'Name of the sub
+      .b_prop_rw_SilentError = False 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "Your message here." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
       .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
    End With
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 'Fixed, don't change
-   If oC_f_p_FrameworkSettings.bThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
 Try:
    On Error GoTo Catch
    
@@ -83,11 +84,11 @@ Finally:
 'Fixed, don't change
    Exit Sub
 Catch:
-   If oC_Me.oCError Is Nothing _
+   If oC_Me.oC_prop_r_Error Is Nothing _
    Then f_p_RegisterError oC_Me, Err.Number, Err.Description
-   If oC_f_p_FrameworkSettings.bThisIsATestRun Then f_p_RegisterExecutionError oC_Me
-   If oC_f_p_FrameworkSettings.bDebugModeIsOn And Not oC_Me.bResumedOnce Then
-      oC_Me.bResumedOnce = True: Stop: Resume
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
    Else
       f_p_HandleError oC_Me: Resume Finally
    End If
@@ -100,15 +101,15 @@ Public Function b_f_p_TemplateLowerLevel() As Boolean
 
 'Fixed, don't change
    Dim oC_Me As New fCCallParams
-   oC_Me.sComponentName = s_m_COMPONENT_NAME
-   If oC_f_p_FrameworkSettings.bThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+   oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
 
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
    With oC_Me
-      .sProcedureName = "b_f_p_TemplateLowerLevel" 'Name of the function
-      .bSilentError = True 'False will display a message box - you should only do this on entry level
-      .sErrorMessage = "Your message here." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .s_prop_rw_ProcedureName = "b_f_p_TemplateLowerLevel" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "Your message here." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
       .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
    End With
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -133,17 +134,17 @@ Finally:
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
 'MAKE SURE TO REPLACE fbTemplateLowerLevel WITH THE NAME OF YOUR FUNCTION
-   If oC_Me.oCError Is Nothing Then b_f_p_TemplateLowerLevel = True 'reports execution as successful to caller
+   If oC_Me.oC_prop_r_Error Is Nothing Then b_f_p_TemplateLowerLevel = True 'reports execution as successful to caller
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 'Fixed, don't change
    Exit Function
 Catch:
-   If oC_Me.oCError Is Nothing _
+   If oC_Me.oC_prop_r_Error Is Nothing _
    Then f_p_RegisterError oC_Me, Err.Number, Err.Description
-   If oC_f_p_FrameworkSettings.bThisIsATestRun Then f_p_RegisterExecutionError oC_Me
-   If oC_f_p_FrameworkSettings.bDebugModeIsOn And Not oC_Me.bResumedOnce Then
-      oC_Me.bResumedOnce = True: Stop: Resume
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
    Else
       f_p_HandleError oC_Me: Resume Finally
    End If

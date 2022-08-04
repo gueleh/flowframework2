@@ -8,6 +8,7 @@ Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
 ' Purpose: CORE, do not change - trivial class to store error object properties
+' 0.10.0    04.08.2022    gueleh    Changed property names to meet new convention
 ' 0.7.0    02.08.2022    gueleh    Refactored to use properties instead of direct access to fields
 ' 0.1.0    20220709    gueleh    Initially created
 Option Explicit
@@ -15,10 +16,10 @@ Option Explicit
 Private l_m_ErrorNumber As Long
 Private s_m_ErrorDescription As String
 
-Public Property Get lErrorNumber() As Long: lErrorNumber = l_m_ErrorNumber: End Property
+Public Property Get l_prop_rw_ErrorNumber() As Long: l_prop_rw_ErrorNumber = l_m_ErrorNumber: End Property
 
-Public Property Let lErrorNumber(ByVal lNewValue As Long): l_m_ErrorNumber = lNewValue: End Property
+Public Property Let l_prop_rw_ErrorNumber(ByVal lNewValue As Long): l_m_ErrorNumber = lNewValue: End Property
 
-Public Property Get sErrorDescription() As String: sErrorDescription = s_m_ErrorDescription: End Property
+Public Property Get s_prop_rw_ErrorDescription() As String: s_prop_rw_ErrorDescription = s_m_ErrorDescription: End Property
 
-Public Property Let sErrorDescription(ByVal sNewValue As String): s_m_ErrorDescription = sNewValue: End Property
+Public Property Let s_prop_rw_ErrorDescription(ByVal sNewValue As String): s_m_ErrorDescription = sNewValue: End Property
