@@ -116,7 +116,8 @@ The list contains only the codename of the sheets
 * `afwksErrorLog`: Error log, filled automatically, emptied manually
 * `afwksSettings`: The worksheet with the app-specific framework settings
 * `awksMain`: One sheet of the application, can be removed if there is at least one other application scope sheet - otherwise switching off maintenance and development mode would fail due to having no worksheet left to be displayed
-* `devafwksDevLog`: Worksheet for a development log directly in the workbook, if needed 
+* `devafwksDevLog`: Worksheet for a development log directly in the workbook, if needed
+* `devfwksTestCanvas`: worksheet for development tests of the framework 
 * `fwksSettings`: The worksheet with the framework settings
 
 
@@ -127,6 +128,7 @@ The list contains only the codename of the sheets
 * `devfpMGlobals`: framework globals relevant for development
 * `devfpMSandBox`: framework sandbox module relevant for development
 * `devfpMTesting`: framework module for running the unit and integration tests during development
+* `devfpMUtilities`: utilities for development that do require the frameworks development resources
 * `fpMEntryLevel`: framework entry level procedures - the entry level takes care of globals initialization, protection, screen updating etc. - it is a no-brainer wrapper for lower level processing
 * `fpMErrorHandling`: framework error handling
 * `fpMGlobalsCore`: The module with the framework core globals
@@ -138,6 +140,7 @@ The list contains only the codename of the sheets
 * `devfCUnitTest`: class for unit tests for one unit, relevant for dev only
 * `fCCallParams`: class storing information on running procedures, required for error handling, testing etc - mostly meta data which otherwise would not be available, like procedure name and name of the parent component of a procedure
 * `fCError`: for storing and using error object information, so that these are retained for proper handling throughout the whole call stack
+* `fCRangeArrayProcessor`: convenient array-based range data processing
 * `fCSettings`: The class with the framework settings
 
 ## Architectural Approach

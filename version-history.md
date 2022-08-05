@@ -1,4 +1,8 @@
 # Version History of Flow Framework 2
+## 0.11.0, 220805
+* added skeleton for convenient array-based range data processing class, containing method to sanitize array items starting with a 0, so that the leading zeroes are retained
+* added test canvas worksheet for framework development
+* added dev utility to reset test canvas worksheet
 ## 0.10.0, 220804
 * refactored and updated dev manual
 ## 0.9.0, 220803
