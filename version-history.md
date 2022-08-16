@@ -1,4 +1,7 @@
 # Version History of Flow Framework 2
+## 0.12.0, 220816
+* export of all code modules via VBA, including the worksheet .cls files
+* export the properties of all Name objects except for the value to a text file for version control
 ## 0.11.0, 220805
 * added skeleton for convenient array-based range data processing class, containing method to sanitize array items starting with a 0, so that the leading zeroes are retained
 * added test canvas worksheet for framework development

@@ -1,0 +1,4 @@
+afSettings!af_named_cell_b_m_DebugModeIsOn              =afSettings!$B$3            afSettings    
+afSettings!af_named_cell_b_m_DevelopmentModeIsOn        =afSettings!$B$4            afSettings    
+fSettings!f_named_cell_s_m_VERSION_DATE_YYMMDD          =fSettings!$B$4             fSettings     As text in Format YYMMDD
+fSettings!f_named_cell_s_m_VERSION_NUMBER =fSettings!$B$3             fSettings     As text in Semantic Versioning 2.0
