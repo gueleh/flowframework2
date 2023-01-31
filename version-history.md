@@ -1,4 +1,7 @@
 # Version History of Flow Framework 2
+## 0.14.0, 230131
+* added export of wks names and codenames to textfile for version control
+* added export of vb project code library references to textfile for version control
 ## 0.13.0, 230131
 * added dev utility to send a ping to the direct window informing about module and proc name, in order to manually check whether logic skeletons are properly integrated in the call stack
 ## 0.12.1, 230131

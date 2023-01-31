@@ -1,0 +1,6 @@
+awksMain      aMain
+fwksSettings  fSettings
+afwksSettings afSettings
+afwksErrorLog afErrorLog
+devafwksDevLog              devafDevLog
+devfwksTestCanvas           devfTestCanvas

@@ -28,8 +28,10 @@ Option Private Module
 Private Const s_m_COMPONENT_NAME As String = "devfpMEntryLevel"
 
 ' Purpose: exports all files required for version control to the project folder
+' 0.14.0    31.01.2023    gueleh    Changed scope to public to call it from UI module, added export of wks names
+'        and code lib reference data
 ' 0.12.0    16.08.2022    gueleh    Initially created
-Private Sub DEV_f_p_ExportDataForVersionControl()
+Public Sub DEV_f_p_ExportDataForVersionControl()
 
 'Fixed, don't change
    Dim oC_Me As New fCCallParams
@@ -68,6 +70,18 @@ Try:
          e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
          s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
    
+      If Not _
+   oC_VersionControlExport.bExportWorksheetNameData() _
+      Then Err.Raise _
+         e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+         s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
+   
+      If Not _
+   oC_VersionControlExport.bExportReferenceData() _
+      Then Err.Raise _
+         e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+         s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
+
 'End of your code <<<<<<<
    
 'Fixed, don't change

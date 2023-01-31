@@ -24,6 +24,7 @@ Attribute VB_Exposed = False
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.14.0    31.01.2023    gueleh    Added support for exporting wks data and reference data for version control
 '   0.12.0    16.08.2022    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
@@ -34,9 +35,153 @@ Option Explicit
 
 Private Const s_m_COMPONENT_NAME As String = "devfCVersionControlExport"
 
-' TODO: Routine to also export the VB project's references
 ' TODO: Export List Object properties to text file
-' TODO: Worksheet names to text file
+
+' Purpose: print project reference data to text file for version control
+' 0.14.0    31.01.2023    gueleh    Initially created
+Public Function bExportReferenceData() As Boolean
+'Fixed, don't change
+   Dim oC_Me As New fCCallParams
+   oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'Your custom settings here
+   With oC_Me
+      .s_prop_rw_ProcedureName = "bExportReferenceData" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "The export of name data failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+'Fixed, don't change
+Try:
+   On Error GoTo Catch
+
+'>>>>>>> Your code here
+   Dim oC As VBIDE.Reference
+   Dim iFileNumber As Integer
+   Dim sFileFullPath As String
+   Dim sReference As String
+   
+   sFileFullPath = ThisWorkbook.Path & "\" & "References.txt"
+   On Error Resume Next
+   Kill sFileFullPath
+   On Error GoTo Catch
+   iFileNumber = FreeFile
+   
+   Open sFileFullPath For Output As iFileNumber
+   
+   For Each oC In ThisWorkbook.VBProject.References
+      With oC
+         sReference = .Name & "|" & .Description & "|" _
+            & .GUID & "|" & .Major & "|" & .Minor & "|" & .FullPath
+      End With
+      Print #iFileNumber, sReference
+   Next oC
+
+'End of your code <<<<<<<
+
+'Fixed, don't change
+Finally:
+   On Error Resume Next
+'>>>>>>> Your code here
+   'everything that must be executed regardless of an error or not
+   Close #iFileNumber
+'End of your code <<<<<<<
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'Your custom settings here
+'MAKE SURE TO REPLACE fbTemplateLowerLevel WITH THE NAME OF YOUR FUNCTION
+   If oC_Me.oC_prop_r_Error Is Nothing Then bExportReferenceData = True 'reports execution as successful to caller
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+'Fixed, don't change
+   Exit Function
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing _
+   Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
+   Else
+      f_p_HandleError oC_Me: Resume Finally
+   End If
+
+End Function
+
+
+' Purpose: exports names and codenames of worksheets into text file for version control
+' 0.14.0    31.01.2023    gueleh    Initially created
+Public Function bExportWorksheetNameData() As Boolean
+'Fixed, don't change
+   Dim oC_Me As New fCCallParams
+   oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'Your custom settings here
+   With oC_Me
+      .s_prop_rw_ProcedureName = "bExportWorksheetNameData" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "The export of name data failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+'Fixed, don't change
+Try:
+   On Error GoTo Catch
+
+'>>>>>>> Your code here
+   Dim oWks As Worksheet
+   Dim iFileNumber As Integer
+   Dim sFileFullPath As String
+   
+   sFileFullPath = ThisWorkbook.Path & "\" & "WorksheetNames.txt"
+   On Error Resume Next
+   Kill sFileFullPath
+   On Error GoTo Catch
+   iFileNumber = FreeFile
+   
+   Open sFileFullPath For Output As iFileNumber
+   
+   For Each oWks In ThisWorkbook.Worksheets
+      Print #iFileNumber, oWks.CodeName, oWks.Name
+   Next oWks
+
+'End of your code <<<<<<<
+
+'Fixed, don't change
+Finally:
+   On Error Resume Next
+'>>>>>>> Your code here
+   'everything that must be executed regardless of an error or not
+   Close #iFileNumber
+'End of your code <<<<<<<
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'Your custom settings here
+'MAKE SURE TO REPLACE fbTemplateLowerLevel WITH THE NAME OF YOUR FUNCTION
+   If oC_Me.oC_prop_r_Error Is Nothing Then bExportWorksheetNameData = True 'reports execution as successful to caller
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+'Fixed, don't change
+   Exit Function
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing _
+   Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
+   Else
+      f_p_HandleError oC_Me: Resume Finally
+   End If
+
+End Function
+
+
 
 ' Purpose: exports data of all names to a text file
 ' 0.12.0    16.08.2022    gueleh    Initially created

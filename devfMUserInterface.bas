@@ -47,3 +47,7 @@ Attribute DEV_f_g_MarkLineItemAsDoneInAfDevLog.VB_ProcData.VB_Invoke_Func = "m\n
       oWks.Cells(oRng.Row, 6) = "Done"
    End If
 End Sub
+
+Public Sub DEV_f_g_ExportVersionControlData()
+   DEV_f_p_ExportDataForVersionControl
+End Sub
