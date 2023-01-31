@@ -97,4 +97,8 @@ Catch:
 
 End Function
 
+Public Sub f_p_PrintCallParams(ByRef oC_Me As fCCallParams)
+   On Error Resume Next
+   Debug.Print "Running " & oC_Me.s_prop_rw_ComponentName & "." & oC_Me.s_prop_rw_ProcedureName & "(" & oC_Me.sArgsAsString() & ")"
+End Sub
 

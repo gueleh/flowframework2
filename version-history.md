@@ -1,4 +1,6 @@
 # Version History of Flow Framework 2
+## 0.13.0, 230131
+* added dev utility to send a ping to the direct window informing about module and proc name, in order to manually check whether logic skeletons are properly integrated in the call stack
 ## 0.12.1, 230131
 * bugfix: added Option Private Module to devfpMUtilities
 ## 0.12.0, 220816

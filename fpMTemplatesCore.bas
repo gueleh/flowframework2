@@ -16,6 +16,7 @@ Attribute VB_Name = "fpMTemplatesCore"
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+' 0.13.0    31.01.2023    gueleh    Added "ping" as indicator for execution in skeletons in both templates
 ' 0.10.0    04.08.2022    gueleh    Changed property names to meet new convention
 '   0.1.0    20220709    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
@@ -29,6 +30,7 @@ Option Private Module
 Private Const s_m_COMPONENT_NAME As String = "fpMTemplatesCore"
 
 ' Purpose: template for an entry level sub
+' 0.13.0    31.01.2023    gueleh    Added "ping" as indicator for execution in skeletons
 ' 0.1.0    20220709    gueleh    Initially created
 Public Sub f_p_TemplateSubEntryLevel()
 
@@ -55,6 +57,9 @@ Try:
    
 '>>>>>>> Your code here
 'TODO: Write f_g_TemplateSubEntryLevel
+      
+'TODO: Remove f_p_PrintCallParams oC_Me if not needed - it just shows via printing to the direct window if the proc is executed
+   f_p_PrintCallParams oC_Me
       
    'Example for lower level call involving error handler (should always be the case for non-trivial procedures)
    'The intendation below is supposed to make it easier to discern these calls from other if blocks
@@ -95,6 +100,7 @@ Catch:
 End Sub
 
 ' Purpose: template for a non-trivial lower level procedure with error handling and execution control
+' 0.13.0    31.01.2023    gueleh    Added "ping" as indicator for execution in skeletons
 ' 0.1.0    20220709    gueleh    Initially created
 ' Usage: if you need to return one or more values then declare these as ByRef args as in the template below, e.g. ByRef sReturnValue As String
 Public Function b_f_p_TemplateLowerLevel() As Boolean
@@ -120,7 +126,10 @@ Try:
 
 '>>>>>>> Your code here
 'TODO: Write b_f_g_TemplateLowerLevel
-   Debug.Print 1 / 0
+
+'TODO: Remove f_p_PrintCallParams oC_Me if not needed - it just shows via printing to the direct window if the proc is executed
+   f_p_PrintCallParams oC_Me
+      
 'End of your code <<<<<<<
 
 'Fixed, don't change
