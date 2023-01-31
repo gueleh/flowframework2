@@ -1,4 +1,6 @@
 # Version History of Flow Framework 2
+## 0.12.1, 230131
+* bugfix: added Option Private Module to devfpMUtilities
 ## 0.12.0, 220816
 * export of all code modules via VBA, including the worksheet .cls files
 * export the properties of all Name objects except for the value to a text file for version control
