@@ -1,0 +1,2 @@
+dte_name_wkb_AppVersionDate =a_Settings!$B$4            FF2s-Little-Sis.xlsb        
+s_name_wkb_AppVersionNumber =a_Settings!$B$3            FF2s-Little-Sis.xlsb        
