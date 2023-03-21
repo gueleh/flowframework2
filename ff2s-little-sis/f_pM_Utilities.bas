@@ -75,8 +75,3 @@ Public Function oRng_f_p_RangeFromWorkbookName(ByVal sName As String) As Variant
    On Error Resume Next
    oRng_f_p_RangeFromWorkbookName = ThisWorkbook.Names(sName).RefersToRange
 End Function
-
-Public Sub f_p_SanitizeUsedRange(ByRef oWks As Worksheet)
-'TODO: [+] f_p_SanitizeUsedRange:  write the function
-    
-End Sub

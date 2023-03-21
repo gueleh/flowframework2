@@ -20,6 +20,8 @@ Attribute VB_Exposed = False
 '   GitHubID: gueleh
 '   Required:
 '   Usage:
+'     + see the sub which is testing the class in DEV_f_pM_Testing
+'     + this class can be used independently from the framework
 '--------------------------------------------------------------------------------------------
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
@@ -37,15 +39,35 @@ Private Const s_m_COMPONENT_NAME As String = "f_C_Wks"
 Private oWks_m_Wks As Worksheet
 Attribute oWks_m_Wks.VB_VarHelpID = -1
 Private oRng_m_Data As Range
+Private b_m_FirstRowIsHeaderRow As Boolean
+Private oDict_m_ColumnNumbersByHeaderName As Scripting.Dictionary
+
+Private Sub Class_Terminate()
+   Set oDict_m_ColumnNumbersByHeaderName = Nothing
+End Sub
 
 Public Property Get oWks_prop_r() As Worksheet
    If b_m_WksIsNotSet() Then Exit Property
    Set oWks_prop_r = oWks_m_Wks
 End Property
 
-Public Property Get oRng_prop_rw_Data() As Range
+Public Property Get oRng_prop_r_Data() As Range
    If b_m_DataRangeIsNotSet() Then Exit Property
-   Set oRng_prop_rw_Data = oRng_m_Data
+   Set oRng_prop_r_Data = oRng_m_Data
+End Property
+
+Public Property Get oRng_prop_r_DataWithoutHeader() As Range
+   If b_m_DataRangeIsNotSet() Then Exit Property
+   Dim lOffset As Long
+   If b_m_FirstRowIsHeaderRow Then lOffset = 1
+   Set oRng_prop_r_DataWithoutHeader = oRng_m_Data.Offset(1).Resize(oRng_m_Data.Rows.Count - lOffset)
+End Property
+
+Public Property Get l_prop_r_ColumnNumberByHeaderName(ByVal sHeaderName As String) As Long
+   If oDict_m_ColumnNumbersByHeaderName Is Nothing Then Exit Property
+   If oDict_m_ColumnNumbersByHeaderName.Exists(sHeaderName) Then
+      l_prop_r_ColumnNumberByHeaderName = oDict_m_ColumnNumbersByHeaderName(sHeaderName)
+   End If
 End Property
 
 ' Purpose: gets current range under consideration of anchor cell(s), i.e. ignoring potential
@@ -77,8 +99,17 @@ Public Sub DeleteAllContents()
    oWks_m_Wks.UsedRange.Rows.Delete
 End Sub
 
+' Purpose: sets the data range based on anchor cell(s)
+' Usage:
+'  + without top right anchor cell the range is determined based on the end of current region
+'  + if first row of the data range is the header row, then please set the boolean to true
+'  + if first row of the data range is the header row and you immediately want to create
+'     the dictionary with column numbers by header names, then please set the boolean to true
+' 0.3.0    21.03.2023    gueleh    Initially created
 Public Sub SetDataRangeByAnchors(ByRef oRngAnchorCellTopLeft As Range, _
-   Optional ByRef oRngAnchorCellTopRight As Range)
+   Optional ByRef oRngAnchorCellTopRight As Range, _
+   Optional ByVal bFirstRowIsHeaderRow As Boolean = False, _
+   Optional ByVal bCreateHeaderDictionary As Boolean = False)
 
    If b_m_WksIsNotSet() Then Exit Sub
    If oRngAnchorCellTopRight Is Nothing Then
@@ -89,11 +120,103 @@ Public Sub SetDataRangeByAnchors(ByRef oRngAnchorCellTopLeft As Range, _
       Set oRng_m_Data = oRng_m_SanitizedCurrentRegion(oRngAnchorCellTopLeft, oRngAnchorCellTopRight)
    End If
 
+   If bFirstRowIsHeaderRow Then
+      b_m_FirstRowIsHeaderRow = True
+      If bCreateHeaderDictionary Then CreateHeaderDictionary
+   End If
+
 End Sub
 
-Public Sub SanitizeUsedRange()
-   'TODO: [+] SanitizeUsedRange:  write the code for this
+Public Sub CreateHeaderDictionary(Optional ByVal lRowWithHeaders As Long = 0)
+   If b_m_WksIsNotSet() Then Exit Sub
+   If b_m_DataRangeIsNotSet() Then Exit Sub
+   If b_m_HeaderCannotBeSet(lRowWithHeaders) Then Exit Sub
+   
+   Dim oRngHeaderRow As Range
+   Dim oRngHeaderCell As Range
+   Dim sHeaderName As String
+   Dim lHeaderRow As Long
+   
+   If lRowWithHeaders > 0 Then
+      lHeaderRow = lRowWithHeaders
+   Else
+      lHeaderRow = oRng_m_Data.Row
+   End If
+   
+   Set oRngHeaderRow = oWks_m_Wks.Range( _
+      oWks_m_Wks.Cells(lHeaderRow, oRng_m_Data.Column), _
+      oWks_m_Wks.Cells(lHeaderRow, (oRng_m_Data.Column + oRng_m_Data.Columns.Count - 1)))
+      
+   Set oDict_m_ColumnNumbersByHeaderName = New Scripting.Dictionary
+   For Each oRngHeaderCell In oRngHeaderRow
+      sHeaderName = oRngHeaderCell.Value2
+      If sHeaderName = "" Then GoTo Catch
+      If Not oDict_m_ColumnNumbersByHeaderName.Exists(sHeaderName) Then
+         oDict_m_ColumnNumbersByHeaderName.Add sHeaderName, oRngHeaderCell.Column
+      Else
+         GoTo Catch
+      End If
+   Next oRngHeaderCell
+      
+   Exit Sub
+Catch:
+   MsgBox "Header could not be set due to invalid data in header row, i.e. names not unique or cells empty", vbCritical
+   Set oDict_m_ColumnNumbersByHeaderName = Nothing
 End Sub
+
+Private Function b_m_HeaderCannotBeSet(ByVal lRow As Long) As Boolean
+   Dim bCannotBeSet As Boolean
+   If lRow = 0 And Not b_m_FirstRowIsHeaderRow Then
+      bCannotBeSet = True
+   ElseIf lRow > 0 _
+   And lRow >= oRng_m_Data.Row _
+   And lRow <= (oRng_m_Data.Row + oRng_m_Data.Rows.Count - 1) _
+   Then
+      bCannotBeSet = True
+   ElseIf lRow >= (oWks_m_Wks.UsedRange.Row + oWks_m_Wks.UsedRange.Rows.Count - 1) _
+   Then
+      bCannotBeSet = True
+   End If
+   
+   If bCannotBeSet Then
+      MsgBox "Header cannot be set - either first row of data range has to be specified as header row when setting the data range or a valid row number outside of the data range has to be provided.", vbCritical
+      b_m_HeaderCannotBeSet = True
+   End If
+End Function
+
+' Purpose: sanitizes the used range to cover only the really used range, fails if it contains merged cells
+' 0.3.0    21.03.2023    gueleh    Initially created
+Public Sub SanitizeUsedRange(Optional ByVal bFailSilentlyInCaseOfMergedCells = False)
+   If b_m_WksIsNotSet() Then Exit Sub
+   If b_m_UsedRangeHasMergedCells(bFailSilentlyInCaseOfMergedCells) Then Exit Sub
+
+   Dim lLastRow As Long
+   Dim lLastColumn As Long
+
+   With oWks_m_Wks
+'        Set dummyRng = .UsedRange
+      On Error Resume Next
+      lLastRow = .Cells.Find("*", After:=.Cells(1), LookIn:=xlFormulas, Lookat:=xlWhole, SearchOrder:=xlByRows, SearchDirection:=xlPrevious).Row
+      lLastColumn = .Cells.Find("*", After:=.Cells(1), LookIn:=xlFormulas, Lookat:=xlWhole, SearchOrder:=xlByColumns, SearchDirection:=xlPrevious).Column
+      On Error GoTo 0
+
+      If lLastRow * lLastColumn = 0 Then
+          DeleteAllContents
+      Else
+          .Range(.Cells(lLastRow + 1, 1), _
+                 .Cells(.Rows.Count, 1)).EntireRow.Delete
+          .Range(.Cells(1, lLastColumn + 1), _
+                 .Cells(1, .Columns.Count)).EntireColumn.Delete
+      End If
+    End With
+End Sub
+
+Private Function b_m_UsedRangeHasMergedCells(ByVal bFailSilently As Boolean) As Boolean
+   If oWks_m_Wks.UsedRange.MergeCells Then
+      MsgBox "The worksheet " & oWks_m_Wks.Name & " has merged cells. Please unmerge all cells and try again.", vbCritical
+      b_m_UsedRangeHasMergedCells = True
+   End If
+End Function
 
 Private Function b_m_WksIsNotSet() As Boolean
    If oWks_m_Wks Is Nothing Then
