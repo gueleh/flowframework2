@@ -1,4 +1,9 @@
 # Version History of Flow Framework 2's Little Sister
+## 0.4.0 230324
+* changed wks in f_C_Wks to be WithEvents
+* added event procedure for wks change
+* added todo entries for making events work by storing names of procedures to be called in class fields
+
 ## 0.3.0 230321
 * added sanitation of used range in enhanced worksheet class
 * added functionality for getting column numbers of data by header name

@@ -30,13 +30,13 @@ Attribute VB_Exposed = False
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
 '   ''''''''''''''''''''
-'   none
+'TODO: [+] f_C_Wks:  add required events for oWks_m_Wks
 '============================================================================================
 Option Explicit
 
 Private Const s_m_COMPONENT_NAME As String = "f_C_Wks"
 
-Private oWks_m_Wks As Worksheet
+Private WithEvents oWks_m_Wks As Worksheet
 Attribute oWks_m_Wks.VB_VarHelpID = -1
 Private oRng_m_Data As Range
 Private b_m_FirstRowIsHeaderRow As Boolean
@@ -273,3 +273,8 @@ Private Function oRng_m_SanitizedCurrentRegion(ByRef oRngAnchorCellTopLeft As Ra
 
 End Function
 
+Private Sub oWks_m_Wks_Change(ByVal Target As Range)
+'TODO: [+] oWks_m_Wks_Change:  test whether procedure to be called is stored in respective field
+'TODO: [+] oWks_m_Wks_Change:  add hook to call procedure the name of which is stored in a field
+
+End Sub
