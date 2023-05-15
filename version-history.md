@@ -1,4 +1,8 @@
 # Version History of Flow Framework 2
+## 0.15.0, 230415
+* added f_C_Wks for data worksheet handling
+* added f_I_DataRecord and f_C_DataRecord for data record handling
+
 ## 0.14.0, 230131
 * added export of wks names and codenames to textfile for version control
 * added export of vb project code library references to textfile for version control

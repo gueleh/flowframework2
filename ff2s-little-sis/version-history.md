@@ -1,4 +1,7 @@
 # Version History of Flow Framework 2's Little Sister
+## 0.6.0 230515
+* added functionality to support Worksheet change event to f_C_Wks
+
 ## 0.5.0 230515
 * added interface class and implementation for generic data record class
 

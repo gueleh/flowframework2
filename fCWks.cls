@@ -2,7 +2,7 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "f_C_Wks"
+Attribute VB_Name = "fCWks"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
@@ -41,28 +41,10 @@ Attribute oWks_m_Wks.VB_VarHelpID = -1
 Private oRng_m_Data As Range
 Private b_m_FirstRowIsHeaderRow As Boolean
 Private oDict_m_ColumnNumbersByHeaderName As Scripting.Dictionary
-Private s_m_NameOfSubToRunOnChange As String
-Private b_m_WksChangeEventIsActive As Boolean
 
 Private Sub Class_Terminate()
    Set oDict_m_ColumnNumbersByHeaderName = Nothing
 End Sub
-
-Public Property Let b_prop_rw_WksChangeEventIsActive(ByVal bNewValue As Boolean)
-   b_m_WksChangeEventIsActive = bNewValue
-End Property
-
-Public Property Get b_prop_rw_WksChangeEventIsActive() As Boolean
-   b_prop_rw_WksChangeEventIsActive = b_m_WksChangeEventIsActive
-End Property
-
-Public Property Let s_prop_rw_NameOfSubToRunOnWksChange(ByVal sName As String)
-   s_m_NameOfSubToRunOnChange = sName
-End Property
-
-Public Property Get s_prop_rw_NameOfSubToRunOnWksChange() As String
-   s_prop_rw_NameOfSubToRunOnWksChange = s_m_NameOfSubToRunOnChange
-End Property
 
 Public Property Get oWks_prop_r() As Worksheet
    If b_m_WksIsNotSet() Then Exit Property
@@ -292,7 +274,7 @@ Private Function oRng_m_SanitizedCurrentRegion(ByRef oRngAnchorCellTopLeft As Ra
 End Function
 
 Private Sub oWks_m_Wks_Change(ByVal Target As Range)
-   If Not b_m_WksChangeEventIsActive Then Exit Sub
-   If Len(s_m_NameOfSubToRunOnChange) = 0 Then Exit Sub
-   Application.Run "'" & ThisWorkbook.Name & "'!" & s_m_NameOfSubToRunOnChange, Target
+'TODO: [+] oWks_m_Wks_Change:  test whether procedure to be called is stored in respective field
+'TODO: [+] oWks_m_Wks_Change:  add hook to call procedure the name of which is stored in a field
+
 End Sub
