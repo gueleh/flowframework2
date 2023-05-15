@@ -1,4 +1,7 @@
 # Version History of Flow Framework 2's Little Sister
+## 0.5.0 230515
+* added interface class and implementation for generic data record class
+
 ## 0.4.0 230324
 * changed wks in f_C_Wks to be WithEvents
 * added event procedure for wks change
