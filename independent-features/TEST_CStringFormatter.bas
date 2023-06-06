@@ -21,12 +21,15 @@ Private Sub mTestStringFormatter()
       & "Variable 1: " & sNAME & vbLf _
       & "Variable 2: " & lAGE
    
+   
+   
    oCTest.AddTest "1", "Return correct string", _
       sAllInputs, sEXPECTED_OUTPUT, "Instance created", _
       oC.sFormatted(sINPUT, sPLACEHOLDER, sNAME, lAGE) = sEXPECTED_OUTPUT
    
    oColTests.Add oCTest
    
+  
    Set oCTest = New CTest
    sAllInputs = "Input String: " & sINPUT & vbLf _
       & "Placeholder: empty string" & sPLACEHOLDER & vbLf _
