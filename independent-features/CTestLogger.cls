@@ -42,7 +42,7 @@ Public Sub LogTestResults(ByRef oWksLog As Worksheet, ByRef oColTests As Collect
       If oWksLog.AutoFilterMode Then oWksLog.AutoFilterMode = False
       oWksLog.Cells.Clear
       lRow = 4
-      vaHeader = Array("ID", "Description", "Input", "Expected Output", "Starting State", "Passed?")
+      vaHeader = Array("ID", "Description", "Input", "Expected Output", "Actual Output", "Starting State", "Passed?")
       For Each oRngCell In oWksLog.Range("A" & (lRow - 1)).Resize(1, UBound(vaHeader) + 1)
          oRngCell.Value2 = vaHeader(oRngCell.Column - 1)
       Next oRngCell
