@@ -11,13 +11,13 @@ Attribute VB_Exposed = False
 ' Purpose: the app settings in a trivial class with public fields
 Option Explicit
 
-Private Const s_m_NAME_s_named_cell_wkb_AppVersionNumber As String = "s_named_cell_wkb_AppVersionNumber"
-Private Const s_m_NAME_dte_named_cell_wkb_AppVersionDate As String = "dte_named_cell_wkb_AppVersionDate"
+Private Const s_m_NAME_a_named_cell_s_g_AppVersionNumber As String = "a_named_cell_s_g_AppVersionNumber"
+Private Const s_m_NAME_a_named_cell_dte_g_AppVersionDate As String = "a_named_cell_dte_g_AppVersionDate"
 
 Public sAppVersionNumber As String
 Public dteAppVersionDate As String
 
 Private Sub Class_Initialize()
-   sAppVersionNumber = v_f_p_ValueFromWorkbookName(s_m_NAME_s_named_cell_wkb_AppVersionNumber)
-   dteAppVersionDate = v_f_p_ValueFromWorkbookName(s_m_NAME_dte_named_cell_wkb_AppVersionDate)
+   sAppVersionNumber = v_f_p_ValueFromWorkbookName(s_m_NAME_a_named_cell_s_g_AppVersionNumber)
+   dteAppVersionDate = v_f_p_ValueFromWorkbookName(s_m_NAME_a_named_cell_dte_g_AppVersionDate)
 End Sub

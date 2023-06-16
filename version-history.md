@@ -1,4 +1,8 @@
 # Version History of Flow Framework 2
+## 1.0.1 230616
+* fixed nomenclature issue for some named cells and respective contents
+* updated developer manual
+
 ## 1.0.0 230616
 * reduced cognitive load for dev work: changed names of classes and modules to be more easily readable, losing direct compatibility with prior versions
 * added containers for APP content

@@ -1,27 +1,34 @@
 # Developer Manual for Flow Framework 2
-Most of the documentation you can find directly in the code.
+The purpose of the framework is to provide a powerful structure for developing and maintaining applications in Excel VBA, which is designed for both clean architecture and clean code.
+
+Much of the documentation you can find directly in the code.
 
 ## Naming Conventions
+The general purpose of the naming convention is increased readability and reduced cognitive load when developing or reviewing the code. The initial effort for learning the conventions quickly is hugely overcompensated by easy and fast comprehension.
+
 ### General Syntax
-* prefixes are in lower case
-* variable names are in CamelCase
-* constants are in `UPPER_CASE_SEPARATED_BY_UNDERSCORE`
-* always begin with element membership indicator for `Codename` properties of VBA objects, i.e. workbooks, worksheets, modules, class modules (see next section for guidance)
-* also begin with element membership indicator for Excel Names, these also are supposed to clearly show that they are Names, see the respective section below
-* elements which are only relevant for development in addition start with dev, i.e. `devfwksExample` would be the codename of a worksheet object belonging to the framework and only required for development
-* public procedure names being only relevant for development start with the suffix DEV, e.g. `Public Sub DEV_f_Test()` is a framework sub only relevant for development
+* the type of variables has to be indicated by a prefix, to reduce cognitive load for developers and to avoid type mismatches
+* the nomenclature is based on the so called "Hungarian Notation", see the respective section below for a comprehensive list
+* prefixes are in lower case, e.g. s for String or sa for a String array.
+* variable names are in CamelCase, e.g. sMyName.
+* constant names are in `UPPER_CASE_SEPARATED_BY_UNDERSCORE`, also using a lower case prefix as type indication, e.g. sMY_NAME.
+* always begin with the element membership indicator for `Codename` properties of VBA objects, i.e. workbooks, worksheets, modules, class modules (see next section for guidance), e.g. a_wks_Name for a worksheet 
+* also begin with the element membership indicator for Excel Names, these also are supposed to clearly show that they are Names, see the respective section below, e.g. s_named_cell_TheNameOfTheCell for a cell the value of which is supposed to be treated as a string
+* elements which are only relevant for development in addition start with DEV, e.g. `DEV_f_wks_Example` would be the codename of a worksheet object belonging to the framework and only required for development
+* public procedure names being only relevant for development also start with the suffix DEV, e.g. `Public Sub DEV_f_Test()` is a framework sub only relevant for development
 
 ### Prefix Indicating Element Membership
-Element membership always is explicit in the framework, it is recommended to do this also in the application to reduce cognitive load
-* `a`: Application, e.g. `aMUserInterface` is the codename of a module (`M`) belonging to the application
-* `f`: Flow Framework 2 (no changes in App Dev) - any changes done in these modules might break the framework and in case of updates also your application, e.g. `fCExample` is the codename of a class module (`C`) belonging to the framework
-* `af`: Flow Framework 2 with contents specific to application (only change the concents indicated as changeable), these contents do have to be migrated manually in case of an update, e.g. `afpMGlobals` is the codename of a private module (`pM`) belonging to the framework but designed for holding app specific contents as well
+Element membership always is explicit in the framework and uses underscores for easier recognition, it is recommended to do this also in the application to reduce cognitive load
+* `a`: Application, e.g. `a_M_UserInterface` is the codename of a module (`M`) belonging to the application
+* `f`: Flow Framework 2, i.e. no changes in App Dev to these elements as any changes done in these elements might break the framework and in case of updates also your application, e.g. `f_C_Example` is the codename of a class module (`C`) belonging to the framework
+* `af`: Flow Framework 2 with contents specific to application. Only change the concents indicated as changeable via code comments. Your app contents do have to be migrated manually in case of an update, which will only deliver the framework portion of it in the first place. Example: `af_pM_Globals` is the codename of a private module (`pM`) belonging to the framework but designed for holding app specific contents as well
 
-### Object Names in Excel (i.e. not VBA, but as managed via the UI)
-* start with element membership prefix: `a`, `f` or `af`
+### Defined Names in Excel (i.e. not VBA, but as managed via the UI)
+* start with element membership prefix: `a`, `f` or `af` - you may want to omit `a`, as this would implicitly point to app contents.
 * indicators for Names
 	* `named_cell` for Names referring to a range containing only one cell
-	* `named_rng` for Names referring to a range containing more than one cell, also including tables
+	* `named_rng` for Names referring to a range containing more than one cell
+	* `named_lo` for List Objects
 	* `named_fx` for Names referring to a formula
 * underscore after membership and Names indicator show that it is an Excel UI and not a VBA element, see examples below in comparison to variable and constant names in VBA
 * indicator for Name scope:
@@ -41,7 +48,8 @@ Element membership always is explicit in the framework, it is recommended to do 
 		* `g`: scoped to workbook ("global") and thus accessible via `Workbook.Names(sName)`
 		* `b`: Represents a boolean
 		* name in CamelCase: is a variable value that might change during usage oof application
-### Object Property Names
+
+### Class Property Names
 The intention is to easily see whether it is a property and whether it can be read and/or written to, based on the name alone. Also the type should be clearly indicated.
 
 * `b_prop_rw_NameOfProperty`: a Boolean property for getting and letting
