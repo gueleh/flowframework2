@@ -1,8 +1,7 @@
-Attribute VB_Name = "fpMUtilitiesDev"
-' -------------------------------------------------------------------------------------------
+Attribute VB_Name = "f_pM_UtilitiesDev"
 ' CORE, do not change
 '============================================================================================
-'   NAME:     fpMUtilitiesDev
+'   NAME:     f_pM_UtilitiesDev
 '============================================================================================
 '   Purpose:  utilities for development work which have to be available also in production
 '   Access:   Private
@@ -27,23 +26,23 @@ Attribute VB_Name = "fpMUtilitiesDev"
 Option Explicit
 Option Private Module
 
-Private Const s_m_COMPONENT_NAME As String = "fpMUtilitiesDev"
+Private Const s_m_COMPONENT_NAME As String = "f_pM_UtilitiesDev"
 
 Public Sub f_SetTechnicalNamesVisibleToFalse()
-   Dim oC As New fCSettings
+   Dim oC As New f_C_Settings
    oC.SetNamesVisibleTo False
 End Sub
 
 Public Sub f_SetTechnicalNamesVisibleToTrue()
-   Dim oC As New fCSettings
+   Dim oC As New f_C_Settings
    oC.SetNamesVisibleTo True
 End Sub
 
-' Purpose: setting the development mode to the provided value, see also caller doc in fpMEntryLevel
+' Purpose: setting the development mode to the provided value, see also caller doc in f_pM_EntryLevel
 ' 0.9.0    03.08.2022    gueleh    Initially created
 Public Function b_f_p_SetDevelopmentModeTo(ByVal bDevModeIsOn As Boolean) As Boolean
 
-   Dim oC_Me As New fCCallParams
+   Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
 
@@ -97,7 +96,7 @@ Catch:
 
 End Function
 
-Public Sub f_p_PrintCallParams(ByRef oC_Me As fCCallParams)
+Public Sub f_p_PrintCallParams(ByRef oC_Me As f_C_CallParams)
    On Error Resume Next
    Debug.Print "Running " & oC_Me.s_prop_rw_ComponentName & "." & oC_Me.s_prop_rw_ProcedureName & "(" & oC_Me.sArgsAsString() & ")"
 End Sub

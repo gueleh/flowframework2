@@ -1,11 +1,10 @@
-Attribute VB_Name = "devfpMEntryLevel"
-' -------------------------------------------------------------------------------------------
-' CORE-DEV, do not change
+Attribute VB_Name = "DEV_f_pM_EntryLevel"
+' CORE-DEV - do not change, optionally remove when deploying app
 '============================================================================================
-'   NAME:     devfpMEntryLevel
+'   NAME:     DEV_f_pM_EntryLevel
 '============================================================================================
 '   Purpose:  entry level procedures related to development
-'   Access:   Public
+'   Access:   Private
 '   Type:     Module
 '   Author:   Günther Lehner
 '   Contact:  guleh@pm.me
@@ -16,7 +15,6 @@ Attribute VB_Name = "devfpMEntryLevel"
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
-'   0.12.0    16.08.2022    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
 '   ''''''''''''''''''''
@@ -25,7 +23,7 @@ Attribute VB_Name = "devfpMEntryLevel"
 Option Explicit
 Option Private Module
 
-Private Const s_m_COMPONENT_NAME As String = "devfpMEntryLevel"
+Private Const s_m_COMPONENT_NAME As String = "DEV_f_pM_EntryLevel"
 
 ' Purpose: exports all files required for version control to the project folder
 ' 0.14.0    31.01.2023    gueleh    Changed scope to public to call it from UI module, added export of wks names
@@ -34,7 +32,7 @@ Private Const s_m_COMPONENT_NAME As String = "devfpMEntryLevel"
 Public Sub DEV_f_p_ExportDataForVersionControl()
 
 'Fixed, don't change
-   Dim oC_Me As New fCCallParams
+   Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -56,7 +54,7 @@ Try:
    
 '>>>>>>> Your code here
       
-   Dim oC_VersionControlExport As New devfCVersionControlExport
+   Dim oC_VersionControlExport As New DEV_f_C_VersionControlExport
    
       If Not _
    oC_VersionControlExport.bExportAllComponents() _

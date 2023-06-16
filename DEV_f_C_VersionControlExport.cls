@@ -2,18 +2,17 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "devfCVersionControlExport"
+Attribute VB_Name = "DEV_f_C_VersionControlExport"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -------------------------------------------------------------------------------------------
-' CORE-DEV, do not change
+' CORE-DEV - do not change, optionally remove when deploying app
 '============================================================================================
-'   NAME:     devfCVersionControlExport
+'   NAME:     DEV_f_C_VersionControlExport
 '============================================================================================
 '   Purpose:  exports all data relevant for convenient version control
-'   Access:   Public
+'   Access:   Private
 '   Type:     Class Module
 '   Author:   Günther Lehner
 '   Contact:  guleh@pm.me
@@ -33,7 +32,7 @@ Attribute VB_Exposed = False
 '============================================================================================
 Option Explicit
 
-Private Const s_m_COMPONENT_NAME As String = "devfCVersionControlExport"
+Private Const s_m_COMPONENT_NAME As String = "DEV_f_C_VersionControlExport"
 
 ' TODO: Export List Object properties to text file
 
@@ -41,7 +40,7 @@ Private Const s_m_COMPONENT_NAME As String = "devfCVersionControlExport"
 ' 0.14.0    31.01.2023    gueleh    Initially created
 Public Function bExportReferenceData() As Boolean
 'Fixed, don't change
-   Dim oC_Me As New fCCallParams
+   Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
 
@@ -116,7 +115,7 @@ End Function
 ' 0.14.0    31.01.2023    gueleh    Initially created
 Public Function bExportWorksheetNameData() As Boolean
 'Fixed, don't change
-   Dim oC_Me As New fCCallParams
+   Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
 
@@ -187,7 +186,7 @@ End Function
 ' 0.12.0    16.08.2022    gueleh    Initially created
 Public Function bExportNameData() As Boolean
 'Fixed, don't change
-   Dim oC_Me As New fCCallParams
+   Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
 
@@ -261,7 +260,7 @@ End Function
 Public Function bExportAllComponents() As Boolean
 
 'Fixed, don't change
-   Dim oC_Me As New fCCallParams
+   Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
 

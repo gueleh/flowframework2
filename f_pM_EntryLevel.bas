@@ -1,11 +1,10 @@
-Attribute VB_Name = "fpMEntryLevel"
-' -------------------------------------------------------------------------------------------
+Attribute VB_Name = "f_pM_EntryLevel"
 ' CORE, do not change
 '============================================================================================
-'   NAME:     fpMEntryLevel
+'   NAME:     f_pM_EntryLevel
 '============================================================================================
 '   Purpose:  entry level procedures which are part of the framework core
-'   Access:   Public
+'   Access:   Private
 '   Type:     Module
 '   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
@@ -27,13 +26,13 @@ Attribute VB_Name = "fpMEntryLevel"
 Option Explicit
 Option Private Module
 
-Private Const s_m_COMPONENT_NAME As String = "fpMEntryLevel"
+Private Const s_m_COMPONENT_NAME As String = "f_pM_EntryLevel"
 
 ' Purpose: enters the development mode, showing all wks, showing all names
 ' 0.9.0    03.08.2022    gueleh    Initially created
 Public Sub f_p_EnterDevelopmentMode()
 
-   Dim oC_Me As New fCCallParams
+   Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    
    f_p_StartProcessing 'calling without args only inits the globals
@@ -75,7 +74,7 @@ End Sub
 ' 0.9.0    03.08.2022    gueleh    Initially created
 Public Sub f_p_LeaveDevelopmentMode()
 
-   Dim oC_Me As New fCCallParams
+   Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
    
    f_p_StartProcessing 'calling without args only inits the globals

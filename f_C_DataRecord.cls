@@ -7,7 +7,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' Purpose: standard class for data records, based on a dictionary for field name and value pairs - based on interface for polymorphism and extension if needed in app
+' CORE, do not change
+' Purpose: standard class for data records, based on a dictionary for field name and value pairs.
+'     based on interface for polymorphism and extension if needed in app
 ' 0.15.0    15.05.2023    gueleh    Initially created
 Option Explicit
 Implements f_I_DataRecord

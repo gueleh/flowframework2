@@ -2,15 +2,14 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "fCRangeArrayProcessor"
+Attribute VB_Name = "f_C_RangeArrayProcessor"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-' -------------------------------------------------------------------------------------------
 ' CORE, do not change or remove
 '============================================================================================
-'   NAME:     fCRangeArrayProcessor
+'   NAME:     f_C_RangeArrayProcessor
 '============================================================================================
 '   Purpose:  convenient array-based processing for range data
 '   Access:   Public
@@ -32,7 +31,7 @@ Attribute VB_Exposed = False
 '============================================================================================
 Option Explicit
 
-Private Const s_m_COMPONENT_NAME As String = "fCRangeArrayProcessor"
+Private Const s_m_COMPONENT_NAME As String = "f_C_RangeArrayProcessor"
 
 Private va_m_Data() As Variant
 Private rng_m_DataRange() As Range

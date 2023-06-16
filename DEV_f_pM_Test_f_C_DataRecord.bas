@@ -1,5 +1,27 @@
 Attribute VB_Name = "DEV_f_pM_Test_f_C_DataRecord"
+' CORE-DEV - do not change, optionally remove when deploying app
+'============================================================================================
+'   NAME:     DEV_f_pM_Test_f_C_DataRecord
+'============================================================================================
+'   Purpose:  directly accessible dev helpers
+'   Access:   Public
+'   Type:     Module
+'   Author:   Günther Lehner
+'   Contact:  guenther.lehner@protonmail.com
+'   GitHubID: gueleh
+'   Required:
+'   Usage:
+'--------------------------------------------------------------------------------------------
+'   VERSION HISTORY
+'   Version    Date    Developer    Changes
+'   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'--------------------------------------------------------------------------------------------
+'   BACKLOG
+'   ''''''''''''''''''''
+'   none
+'============================================================================================
 Option Explicit
+Option Private Module
 
 Private Const s_m_COMPONENT_NAME As String = "DEV_f_pM_Test_f_C_DataRecord"
 

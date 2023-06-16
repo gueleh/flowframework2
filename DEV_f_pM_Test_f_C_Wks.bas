@@ -1,9 +1,28 @@
 Attribute VB_Name = "DEV_f_pM_Test_f_C_Wks"
-' Purpose: Tests for the class f_C_Wks
-' Usage:
+' CORE-DEV - do not change, optionally remove when deploying app
+'============================================================================================
+'   NAME:     DEV_f_pM_Test_f_C_Wks
+'============================================================================================
+'   Purpose:  directly accessible dev helpers
+'   Access:   Private
+'   Type:     Module
+'   Author:   Günther Lehner
+'   Contact:  guenther.lehner@protonmail.com
+'   GitHubID: gueleh
+'   Required:
+'   Usage:
 '  + can be used without the framework, except for a test canvas sheet with the codename DEV_a_wks_TestCanvas
 '  + based on Debug.Assert, which stops the code if the test fails
-' 0.2.0    20.03.2023    gueleh    Initially created
+'--------------------------------------------------------------------------------------------
+'   VERSION HISTORY
+'   Version    Date    Developer    Changes
+'   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'     0.2.0    20.03.2023    gueleh    Initially created
+'--------------------------------------------------------------------------------------------
+'   BACKLOG
+'   ''''''''''''''''''''
+'   none
+'============================================================================================
 Option Explicit
 Option Private Module
 

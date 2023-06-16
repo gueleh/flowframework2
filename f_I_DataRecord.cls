@@ -7,6 +7,9 @@ Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
+' CORE, do not change
+' Purpose: interface for standard class for data records,
+'     based on a dictionary for field name and value pairs.
 Option Explicit
 
 Public sPrimaryKey As String
