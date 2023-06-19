@@ -2,12 +2,12 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "CStringFormatter"
+Attribute VB_Name = "i_C_StringFormatter"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'   NAME:     CStringFormatter
+'   NAME:     i_C_StringFormatter
 '============================================================================================
 '   Purpose:  this class allows for inserting values of variables into strings based on placeholder chars
 '   Access:   Public
@@ -35,7 +35,7 @@ Public Function sFormatted( _
    ParamArray vaVariables() _
 ) As String
 
-   Const sERROR As String = "<ERROR> when applying CStringFormatter.sFormatted()"
+   Const sERROR As String = "<ERROR> when applying i_C_StringFormatter.sFormatted()"
 
    Dim lIterator As Long
    Dim lPlaceholderCount As Long

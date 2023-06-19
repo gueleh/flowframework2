@@ -1,5 +1,6 @@
-Attribute VB_Name = "TEST_CStringFormatter"
+Attribute VB_Name = "DEV_i_pM_T_i_C_StringFormatter"
 Option Explicit
+Option Private Module
 
 Private Sub mTestStringFormatter()
    Const sINPUT As String = "My name is ${s} and I am ${s} years old."
@@ -8,14 +9,14 @@ Private Sub mTestStringFormatter()
    Const sPLACEHOLDER2 As String = "${t}"
    Const sNAME As String = "Anders"
    Const lAGE As Long = 7
-   Const sERROR As String = "<ERROR> when applying CStringFormatter.sFormatted()"
-   Dim oCTest As CTest
+   Const sERROR As String = "<ERROR> when applying i_C_StringFormatter.sFormatted()"
+   Dim oCTest As i_C_Test
    Dim oColTests As New Collection
-   Dim oCLog As New CTestLogger
-   Dim oC As New CStringFormatter
+   Dim oCLog As New i_C_TestLogger
+   Dim oC As New i_C_StringFormatter
    Dim sAllInputs As String
    
-   Set oCTest = New CTest
+   Set oCTest = New i_C_Test
    sAllInputs = "Input String: " & sINPUT & vbLf _
       & "Placeholder: " & sPLACEHOLDER & vbLf _
       & "Variable 1: " & sNAME & vbLf _
@@ -30,7 +31,7 @@ Private Sub mTestStringFormatter()
    oColTests.Add oCTest
    
   
-   Set oCTest = New CTest
+   Set oCTest = New i_C_Test
    sAllInputs = "Input String: " & sINPUT & vbLf _
       & "Placeholder: empty string" & sPLACEHOLDER & vbLf _
       & "Variable 1: " & sNAME & vbLf _
@@ -41,7 +42,7 @@ Private Sub mTestStringFormatter()
    
    oColTests.Add oCTest
    
-   Set oCTest = New CTest
+   Set oCTest = New i_C_Test
    sAllInputs = "Input String: " & sINPUT & vbLf _
       & "Placeholder: " & sPLACEHOLDER & vbLf _
       & "Variable 1: " & sNAME & vbLf _
@@ -53,7 +54,7 @@ Private Sub mTestStringFormatter()
    
    oColTests.Add oCTest
    
-   Set oCTest = New CTest
+   Set oCTest = New i_C_Test
    sAllInputs = "Input String: " & sINPUT & vbLf _
       & "Placeholder: " & sPLACEHOLDER & vbLf _
       & "Variable 1: " & sNAME
@@ -64,7 +65,7 @@ Private Sub mTestStringFormatter()
    oColTests.Add oCTest
    
    
-   Set oCTest = New CTest
+   Set oCTest = New i_C_Test
    sAllInputs = "Input String: " & sINPUT & vbLf _
       & "Placeholder: " & sPLACEHOLDER2 & vbLf _
       & "Variable 1: " & sNAME

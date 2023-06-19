@@ -1,4 +1,4 @@
-Attribute VB_Name = "DEV_pM_EntryLevel"
+Attribute VB_Name = "DEV_i_pM_EntryLevel"
 '============================================================================================
 '   NAME:     DEV_pM_EntryLevel
 '============================================================================================
@@ -36,7 +36,7 @@ Public Sub DEV_ExportDataForVersionControl()
 Try:
    On Error GoTo Catch
    
-   Dim oC_VersionControlExport As New DEV_CVersionControlExport
+   Dim oC_VersionControlExport As New DEV_i_C_VersionControlExport
    
    With Application
       .ScreenUpdating = False

@@ -2,12 +2,12 @@ VERSION 1.0 CLASS
 BEGIN
   MultiUse = -1  'True
 END
-Attribute VB_Name = "CTestLogger"
+Attribute VB_Name = "i_C_TestLogger"
 Attribute VB_GlobalNameSpace = False
 Attribute VB_Creatable = False
 Attribute VB_PredeclaredId = False
 Attribute VB_Exposed = False
-'   NAME:     CTestLogger
+'   NAME:     i_C_TestLogger
 '============================================================================================
 '   Purpose:  prints test results to provided wks
 '   Access:   Public
@@ -34,7 +34,7 @@ Public Sub LogTestResults(ByRef oWksLog As Worksheet, ByRef oColTests As Collect
    Dim lRow As Long
    Dim vaHeader() As Variant
    Dim oRngCell As Range
-   Dim oCTest As CTest
+   Dim oCTest As i_C_Test
    Dim lPassed As Long
    
    If oColTests.Count > 0 Then
