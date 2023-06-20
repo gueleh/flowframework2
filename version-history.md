@@ -1,4 +1,7 @@
 # Version History of Flow Framework 2
+## 1.0.2 230620
+* fixed entry level template for more transparency regarding start and end processing
+
 ## 1.0.1 230616
 * fixed nomenclature issue for some named cells and respective contents
 * updated developer manual

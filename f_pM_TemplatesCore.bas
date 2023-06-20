@@ -39,8 +39,16 @@ Public Sub f_p_TemplateSubEntryLevel()
    
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
-   'Consult the manual for learning about the options for f_g_StartProcessing
-   f_p_StartProcessing 'calling without args only inits the globals
+   'Consult the manual for learning about the options for f_p_StartProcessing
+   ' Default: init globals, turning off and on screen updating and automatic calculation
+   f_p_StartProcessing e_f_p_ProcessingMode_AutoCalcOffOnSceenUpdatingOffOn
+   
+   ' Alternative: only initializing globals
+   'f_p_StartProcessing 'calling without args only inits the globals
+   
+   ' Alternative: app specific behavior, determined by own enum values in the second argument
+   'f_p_StartProcessing e_f_p_ProcessingMode_AppSpecific, e_af_p_ProcessingModeGlobalsOnly
+   
    With oC_Me
       .s_prop_rw_ProcedureName = "f_p_TemplateSubEntryLevel" 'Name of the sub
       .b_prop_rw_SilentError = False 'False will display a message box - you should only do this on entry level
@@ -81,8 +89,12 @@ Finally:
 
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 'Your custom settings here
-   'Consult the manual for learning about the options for f_g_EndProcessing
-   f_p_EndProcessing 'calling without args does nothing
+   'Consult the manual for learning about the options for f_p_EndProcessing
+   f_p_EndProcessing e_f_p_ProcessingMode_AutoCalcOffOnSceenUpdatingOffOn
+   'Alternative:
+   'f_p_EndProcessing 'calling without args does nothing
+   'Alternative:
+   'f_p_EndProcessing e_f_p_ProcessingMode_AppSpecific, e_af_p_ProcessingModeGlobalsOnly
 '!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 'Fixed, don't change
