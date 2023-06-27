@@ -24,7 +24,7 @@ Element membership always is explicit in the framework and uses underscores for 
 * `af`: Flow Framework 2 with contents specific to application. Only change the concents indicated as changeable via code comments. Your app contents do have to be migrated manually in case of an update, which will only deliver the framework portion of it in the first place. Example: `af_pM_Globals` is the codename of a private module (`pM`) belonging to the framework but designed for holding app specific contents as well
 
 ### Defined Names in Excel (i.e. not VBA, but as managed via the UI)
-* start with element membership prefix: `a`, `f` or `af` - you may want to omit `a`, as this would implicitly point to app contents.
+* start with element membership indicator prefix: `a`, `f` or `af`
 * indicators for Names
 	* `named_cell` for Names referring to a range containing only one cell
 	* `named_rng` for Names referring to a range containing more than one cell
@@ -32,7 +32,7 @@ Element membership always is explicit in the framework and uses underscores for 
 	* `named_fx` for Names referring to a formula
 * underscore after membership and Names indicator show that it is an Excel UI and not a VBA element, see examples below in comparison to variable and constant names in VBA
 * indicator for Name scope:
-	* `g` or omission of scope indicator means reference to range, scoped to workbook ("global")
+	* `g` means reference to range, scoped to workbook ("global")
 	* `m` means reference to range, scoped to worksheet ("private")
 * rest like in code declarations
 * examples
@@ -42,7 +42,7 @@ Element membership always is explicit in the framework and uses underscores for 
 		* `s`: Represents a string (i.e. cell value to be used as string in VBA)
 		* `m`: scoped to worksheet ("private") and thus accessible via `Worksheet.Names(sName)`
 		* name in ALL_CAPS: is a constant
-	* `a_named_cell_b_g_SayHelloWorld` alias `a_named_cell_b_SayHelloWorld`:
+	* `a_named_cell_b_g_SayHelloWorld` alias  alias :
 		* `a`: Application
 		* `named_cell`: Excel Name referring to range containing one cell
 		* `g`: scoped to workbook ("global") and thus accessible via `Workbook.Names(sName)`
@@ -56,7 +56,11 @@ The intention is to easily see whether it is a property and whether it can be re
 * `s_prop_r_NameOfProperty`: a String property for getting
 * `s_prop_w_NameOfProperty`: a String property for letting
 
+If a property is private, the respective indicator `m` should be added as the second element of the name, e.g. `b_m_prop_r_NameOfProperty` would be a private read-only property.
+
 ### Prefixes for Types
+The type prefixes are based on the so called Hungarian notation. You may or may not use underscores between the type prefix and the name of a variable for better readability. If you also need a scope indicator like `m` for "module scope" (or "private"), then you should use underscores. See the examples below.
+
 * `b`: Boolean
 * `byt`: Byte
 * `cur`: Currency
@@ -82,54 +86,81 @@ The intention is to easily see whether it is a property and whether it can be re
 * `a` after type prefix: Array, e.g. `vaExample` is the name of an array of type variant when declared with procedure scope
 
 * depending on the scope, underscores are used to more easily identify the scope of a declared name, e.g.
-	* `vaExample` for procedure scope
+	* `vaExample` or `va_Example` for procedure scope 
 	* `va_m_Example` for module scope (not needing a membership signifier as only accessible within a module)
 	* `va_f_p_Example` for project scope, i.e. public in a private module and being part of the framework
 	* `va_f_g_Example` for global scope, i.e. public in public module, being part of the framework and also accessible for other VBA projects
+	* `va_p_Example` or `va_a_p_Example` for project scope of a variable belonging to your application
 
 ### Component Naming
+Scope indicators:
+* `a` or `af` or `f` or `i`: almost like for variables and defined names, in position 1 of the name (unless it is a DEV component), with additional option `i` for independent components, i.e. components that can be used independently from the framework and the application.
+* `DEV`: component for development which is not needed in production (always in position 1 of the name)
+
+Component types:
 * `wkb`: Workbook
 * `wks`: Worksheet
 * `F`: user form
-* `M`: module
+* `M`: public module
+* `pM`: private module
 * `C`: class module
 * `I`: interface class module
-* `p`: private module
 
-* `fFName`: user form with scope `f`, i.e. part of framework
-* `afwkbName`: Workbook object with scope `af`, i.e. part of framework but with partly custom contents
-* `fwksName`: Worksheet object with scope `f`, i.e. part of framework
-* `devfpMName`: Private(`p`) module(`M`) with scope Framework(`f`) and only required when developing(`dev`)
-* `aMUserInterface`: Public module with the name UserInterface with scope `a`
-* `aCName`: Class module with scope `a`, i.e. part of application
-* `IName`: Interface class module with implied scope `a`, i.e. part of application without using the prefix in the name (I don't do it, but it also would work)
+Examples:
+* `f_F_Name`: user form with scope `f`, i.e. part of framework
+* `af_wkb_Name`: Workbook object with scope `af`, i.e. part of framework but with partly custom contents
+* `f_wks_Name`: Worksheet object with scope `f`, i.e. part of framework
+* `DEV_f_pM_Name`: Private(`p`) module(`M`) with scope Framework(`f`) and only required when developing(`DEV`)
+* `a_M_UserInterface`: Public module with the name UserInterface with scope `a`
+* `a_C_Name`: Class module with scope `a`, i.e. part of application
+* `i_I_Name`: Interface class module that can be used independently, i.e. without the framework and also in another project without any need for changes
 
 ### Procedure Naming
-Procedure names should indicate the scope, class methods are exempted because the class already indicates the scope, e.g.
-* `DEV_f_g_Name`: Public Sub in a Public Module, thus `g` for global, only relevant when developing, thus `DEV` as prefix
-* `s_f_Name`: Public Function in a public module returning a string, part of framework - global access implied by not explicitly stating the scope
-* `sName`: Public Function in a class module, scope is indicated by class
-* `s_f_p_Name`: Public Function in a private module returning a string, part of framework
-* `DEV_s_f_m_Name`: Private Function in a private or public module, only relevant for development, returning a string and part of the framework
-* `mName`: Private Sub in a class module
+Procedure names should indicate the scope, i.e. its membership and whether it is public or private.
+
+Class methods are exempted except for private methods, because the class name itself already indicates the scope, i.e. when a method or a property is available for a caller, then it is public.
+
+Examples:
+* `DEV_f_g_Name`: Public Sub in a public Module, thus `g` for global, i.e. available also for other projects; only relevant when developing, thus `DEV` as prefix.
+* `sName`: Public Function in a class module, scope is implied for caller due to it being accessible.
+* `s_f_p_Name`: Public Function in a private module returning a string, part of framework.
+* `DEV_s_f_m_Name`: Private Function in a private or public module, only relevant for. development, returning a string and part of the framework
+* `mName` or `m_Name`: Private Sub in a (class) module.
+* `a_p_Name`: Public sub in a private module belonging to the application, i.e. accessible for other code modules of the same project. `a` is used because module procedures can be called without specifying the module name, this is an important difference in comparison to class modules.
 
 ## Component Usage and Specific Components
-The name prefixes of components are used in the code, especially the ones marking dev contents(`dev`), framework contents(`f`) and contents with framework structure and application contents(`af`) - not usind these prefixes or using them inadequately will break the framework - this is true for all possible types which can be part of the project explorer.
+The name prefixes of components are used by framework code, especially the ones marking dev contents(`DEV`), framework contents(`f`) and contents with framework structure and application contents(`af`) - not using these prefixes in the component naming or using them inadequately will break the framework - this is true for all possible types which can be part of the project explorer.
+
+This means:
+* do not rename any `DEV`, `f`, `af` components or you might break the framework
+* do not use `f` or `af` as prefixes in the names of your app components as this might lead to unexpected behavior, especially when updating the framework automatically in your app with the respective functionality.
+* do use the `DEV` prefix only if you want components to be removed during automatic deployment with the respective functionality and make sure that their absence does not break your app.
 
 ### Workbooks
-* `afwkbMain`: The main workbook of the application
+* `a_wkb_Main`: The main workbook of the application - as there only can be one workbook object in a workbook, it was given this name. This is the workbook that contains the framework code.
 
 ### Worksheets
-The list contains only the codename of the sheets 
-* `afwksErrorLog`: Error log, filled automatically, emptied manually
-* `afwksSettings`: The worksheet with the app-specific framework settings
-* `awksMain`: One sheet of the application, can be removed if there is at least one other application scope sheet - otherwise switching off maintenance and development mode would fail due to having no worksheet left to be displayed
-* `devafwksDevLog`: Worksheet for a development log directly in the workbook, if needed
-* `devfwksTestCanvas`: worksheet for development tests of the framework 
-* `fwksSettings`: The worksheet with the framework settings
+`a`-Scope worksheets are not affected when the framework is updated automatically in an application. 
 
+`af`-Scope worksheets are used by framework code, but normally are not affected when the framework is updated - if they are affected, the update comes with specific instructions on how to update them.
+
+`DEV`-Scope worksheets are removed automatically during deployment. Manual follow-up actions may be required to remove refs to the from application code. Also, no references to such sheets should be contained in any worksheets other than `DEV` sheets or in defined names.
+
+The list contains only the codename of the sheets, the names can be changed as you see fit. 
+
+* `a_wks_Main`: an empty worksheet which comes with a fresh framework version - this can be used as main worksheet or removed if there is at least one other `a` worksheet. It is intended to act as the "home page" of an application.
+* `a_wks_Settings`: a worksheet which is intended to store the application's settings. It comes with a fresh version of the framework, already containing some basic settings and it is coupled with the class module a_C_Settings, which also comes with a fresh version of the framework.
+* `af_wks_ErrorLog`: Error log, filled automatically, emptied manually.
+* `af_wks_Settings`: The worksheet with the app-specific framework settings. This means, while these settings are part of the framework, the values stored in this worksheet will be retained when the framework is updated (unless otherwise specified in the update instructions) in your application. Do not change anything in this sheet.
+* `DEV_a_wks_TestCanvas`: worksheet for development tests during app development
+* `DEF_af_wks_DevLog`: Worksheet for a development log directly in the workbook, if needed. Do not change the column structure in this sheet.
+* `DEV_f_wks_TestCanvas`: worksheet for development tests of the framework code
+* `f_wks_Settings`: The worksheet with the framework settings. Do not change anything in this sheet. 
 
 ### Modules
+* `a_M_UserInterface`: public module for app subs and functions which are called directly by user interaction. Normally these just call so called-entry level procedures, please refer to the chapter explaining the recommended architecture.
+* `a_pM_EntryLevel`: private module for app entry-level subs and function which are called by code in a user interface module such as `a_M_UserInterface`. Please refer to the chapter explaining the recommended architecture to learn more about entry-level subs and functions.
+* `a_pM_Globals`: private module for the application's project scope globals (scope indicator `p` in names)
 * `afpMErrorHandling`: app-specific framework error handling, i.e. custom Enum values and descriptions that can be used in the framework's error handling logic
 * `afpMGlobals`: app-specific globals being part of the framework, i.e. custom processing mode for StartProcessing and EndProcessing
 * `devfMUserInterface`: user interaction during development
@@ -162,3 +193,30 @@ The overall approach of this framework has three layers:
 There are two procedure types for lower level procedures:
 * non-trivial procedures: these might potentially be the place of an error and thus (or for other good reasons) should participate in the error handling logic of the framework and these also can participate in the automated testing - their overall structure is always the same, consisting of a header and declarations section, one or more `try:` sections, one or more `catch:` sections and one or more `finally:` sections.
 * trivial procedures: these are so basic that they do not need to participate in the error handling logic of the template - they might have a basic error handling, e.g. just exiting execution with a function's default value in case of an error etc. 
+
+## Recommended Tools
+I work with following tools for a better dev experience:
+* VBE add-in MZ-Tools for numerous helpful features
+* VBE add-in RubberduckVBA for testing, refactoring and improved project navigation
+* Git and a suitable desktop client, e.g. GitHub Desktop or Sourcetree, for version control
+* Mermaid Online Editor for UML class diagrams
+* ChatGPT
+
+The following sections contain guidance on how you can use these tools together with the framework.
+
+### Tips for MZ-Tools
+
+### Tips for RubberduckVBA
+
+### Tips for Version Control
+
+#### When working alone without branches
+
+#### When collaborating with branches and folders
+The golden rule: no changes whatsoever other than mere code changes when not working on main, i.e. no changes to worksheet contents, no changes to defined names, no new worksheets, no renaming of worksheets etc. 
+The reason is simple: git can't handle these and you are very likely to end up with a total mess.
+The exception: if you are sure that your changes are clearly separated from the main version of the workbook and can be easily done to the main workbook during integration. In this case the actions for integration should be documented in detail in parallel to your work. They have to be accurate and complete.
+
+### Tips for UML class diagrams made with Mermaid
+
+## Tips for Using ChatGPT

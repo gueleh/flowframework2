@@ -1,4 +1,7 @@
 # Version History of Flow Framework 2
+## 1.0.3 230627
+* fixed missing const required for code template usage in a_pM_OnChangeSubsFor_f_C_Wks
+
 ## 1.0.2 230620
 * fixed entry level template for more transparency regarding start and end processing
 
