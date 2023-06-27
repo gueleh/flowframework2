@@ -160,7 +160,7 @@ The list contains only the codename of the sheets, the names can be changed as y
 ### Modules
 * `a_M_UserInterface`: public module for app subs and functions which are called directly by user interaction. Normally these just call so called-entry level procedures, please refer to the chapter explaining the recommended architecture.
 * `a_pM_EntryLevel`: private module for app entry-level subs and function which are called by code in a user interface module such as `a_M_UserInterface`. Please refer to the chapter explaining the recommended architecture to learn more about entry-level subs and functions.
-* `a_pM_Globals`: private module for the application's project scope globals (scope indicator `p` in names)
+* `a_pM_Globals`: private module for the application's project scope globals (scope indicator `p` in names), i.e. constants, enumerations, variables and procedures related to project scope global enumerations and variables.
 * `afpMErrorHandling`: app-specific framework error handling, i.e. custom Enum values and descriptions that can be used in the framework's error handling logic
 * `afpMGlobals`: app-specific globals being part of the framework, i.e. custom processing mode for StartProcessing and EndProcessing
 * `devfMUserInterface`: user interaction during development
