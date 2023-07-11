@@ -159,28 +159,28 @@ The list contains only the codename of the sheets, the names can be changed as y
 
 ### Modules
 * `a_M_UserInterface`: public module for app subs and functions which are called directly by user interaction. Normally these just call so called-entry level procedures, please refer to the chapter explaining the recommended architecture.
-* `a_pM_EntryLevel`: private module for app entry-level subs and function which are called by code in a user interface module such as `a_M_UserInterface`. Please refer to the chapter explaining the recommended architecture to learn more about entry-level subs and functions.
-* `a_pM_Globals`: private module for the application's project scope globals (scope indicator `p` in names), i.e. constants, enumerations, variables and procedures related to project scope global enumerations and variables.
-* `afpMErrorHandling`: app-specific framework error handling, i.e. custom Enum values and descriptions that can be used in the framework's error handling logic
-* `afpMGlobals`: app-specific globals being part of the framework, i.e. custom processing mode for StartProcessing and EndProcessing
-* `devfMUserInterface`: user interaction during development
-* `devfpMGlobals`: framework globals relevant for development
-* `devfpMSandBox`: framework sandbox module relevant for development
-* `devfpMTesting`: framework module for running the unit and integration tests during development
-* `devfpMUtilities`: utilities for development that do require the frameworks development resources
-* `fpMEntryLevel`: framework entry level procedures - the entry level takes care of globals initialization, protection, screen updating etc. - it is a no-brainer wrapper for lower level processing
-* `fpMErrorHandling`: framework error handling
-* `fpMGlobalsCore`: The module with the framework core globals
-* `fpMTemplatesCore`: Template procedures for entry level and non-trivial lower level (i.e. with error handling, testing etc.)
-* `fpMUtilities`: framework general utility procedures
-* `fpMUtilitiesDev`: framework general utility procedures for development, which must not be removed when deploying - thus "Dev" in this case is not the prefix of the name
+* `a_pM_EntryLevel`: private module (scope indicator `p` in names) for app entry-level subs and function which are called by code in a user interface module such as `a_M_UserInterface`. Please refer to the chapter explaining the recommended architecture to learn more about entry-level subs and functions.
+* `a_pM_Globals`: private module for the application's project scope globals, i.e. constants, enumerations, variables and procedures related to project scope global enumerations and variables.
+* `af_pM_ErrorHandling`: app-specific framework error handling, i.e. custom Enum values and descriptions that can be used in the framework's error handling logic
+* `af_pM_Globals`: app-specific globals being part of the framework, i.e. custom processing mode for StartProcessing and EndProcessing
+* `DEV_f_M_UserInterface`: user interaction during development
+* `DEV_f_pM_Globals`: framework globals relevant for development
+* `DEV_f_pM_SandBox`: framework sandbox module relevant for development
+* `DEV_f_pM_Testing`: framework module for running the unit and integration tests during development
+* `DEV_f_pM_Utilities`: utilities for development that do require the frameworks development resources
+* `f_pM_EntryLevel`: framework entry level procedures - the entry level takes care of globals initialization, protection, screen updating etc. - it is a no-brainer wrapper for lower level processing
+* `f_pM_ErrorHandling`: framework error handling
+* `f_pM_GlobalsCore`: The module with the framework core globals
+* `f_pM_TemplatesCore`: Template procedures for entry level and non-trivial lower level (i.e. with error handling, testing etc.)
+* `f_pM_Utilities`: framework general utility procedures
+* `f_pM_UtilitiesDev`: framework general utility procedures for development, which must not be removed when deploying - thus "Dev" in this case is not the prefix of the name
 
 ### Class Modules
-* `devfCUnitTest`: class for unit tests for one unit, relevant for dev only
-* `fCCallParams`: class storing information on running procedures, required for error handling, testing etc - mostly meta data which otherwise would not be available, like procedure name and name of the parent component of a procedure
-* `fCError`: for storing and using error object information, so that these are retained for proper handling throughout the whole call stack
-* `fCRangeArrayProcessor`: convenient array-based range data processing
-* `fCSettings`: The class with the framework settings
+* `DEV_f_C_UnitTest`: class for unit tests for one unit, relevant for dev only
+* `f_C_CallParams`: class storing information on running procedures, required for error handling, testing etc - mostly meta data which otherwise would not be available, like procedure name and name of the parent component of a procedure
+* `f_C_Error`: for storing and using error object information, so that these are retained for proper handling throughout the whole call stack
+* `f_C_RangeArrayProcessor`: convenient array-based range data processing
+* `f_C_Settings`: The class with the framework settings
 
 ## Architectural Approach
 Code is supposed to be only in forms, modules and class modules, i.e. the workbook, the worksheets and other objects visible in the Microsoft Excel Object tree view in the VBE should not contain any code. The reason are potential severe issues that might occur otherwise, leading to workbook instances broken beyond repair - in such cases, the affected workbooks can't even be opened without Excel crashing.
