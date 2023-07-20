@@ -1,4 +1,9 @@
 # Version History of Flow Framework 2
+
+## 1.1.0 230720
+* added a block for custom error handling to entry level sub and lower level function templates, including hooks for generic code
+* added error handling hook subs, taking a ParamArray
+
 ## 1.0.3 230627
 * fixed missing const required for code template usage in a_pM_OnChangeSubsFor_f_C_Wks
 

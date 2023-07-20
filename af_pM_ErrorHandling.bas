@@ -53,4 +53,23 @@ Public Function s_af_p_HandledErrorDescription(ByVal eafHandledError As e_af_p_H
    s_af_p_HandledErrorDescription = sDesc
 End Function
 
+' Purpose: hook performed when entry level sub runs into an error
+' Template Versions:
+' 1.1.0    20.07.2023    gueleh    Initially created
+Public Sub af_p_Hook_ErrorHandling_EntryLevel(ParamArray vaArguments() As Variant)
+'>>>>>>> Add your code here
+
+'<<<<<<<
+End Sub
+
+' Purpose: hook performed when entry level sub runs into an error
+' Template Versions:
+' 1.1.0    20.07.2023    gueleh    Initially created
+Public Sub af_p_Hook_ErrorHandling_LowerLevel(ParamArray vaArguments() As Variant)
+'>>>>>>> Add your code here
+
+'<<<<<<<
+End Sub
+
+
 

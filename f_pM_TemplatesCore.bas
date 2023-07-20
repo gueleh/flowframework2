@@ -99,6 +99,16 @@ Finally:
 
 'Fixed, don't change
    Exit Sub
+   
+HandleError:
+   af_pM_ErrorHandling.af_p_Hook_ErrorHandling_EntryLevel
+'>>>>>>> Your code here
+   'everything that must be executed in case of an error
+
+'End of your code <<<<<<<
+   Resume Finally
+
+'Fixed, don't change
 Catch:
    If oC_Me.oC_prop_r_Error Is Nothing _
    Then f_p_RegisterError oC_Me, Err.Number, Err.Description
@@ -106,7 +116,7 @@ Catch:
    If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
       oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
    Else
-      f_p_HandleError oC_Me: Resume Finally
+      f_p_HandleError oC_Me: GoTo HandleError
    End If
 End Sub
 
@@ -159,6 +169,16 @@ Finally:
 
 'Fixed, don't change
    Exit Function
+   
+HandleError:
+   af_pM_ErrorHandling.af_p_Hook_ErrorHandling_LowerLevel
+'>>>>>>> Your code here
+   'everything that must be executed in case of an error
+
+'End of your code <<<<<<<
+
+'Fixed, don't change
+   Resume Finally
 Catch:
    If oC_Me.oC_prop_r_Error Is Nothing _
    Then f_p_RegisterError oC_Me, Err.Number, Err.Description
@@ -166,7 +186,7 @@ Catch:
    If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
       oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
    Else
-      f_p_HandleError oC_Me: Resume Finally
+      f_p_HandleError oC_Me: GoTo HandleError
    End If
 
 End Function
