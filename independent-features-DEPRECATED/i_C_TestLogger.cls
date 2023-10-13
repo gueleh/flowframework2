@@ -21,6 +21,7 @@ Attribute VB_Exposed = False
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
 '   '''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
+'  1.0.1    231004      gueleh      Made compatible with macOS
 '   1.0.0    02.06.2023    gueleh    Initially created
 '--------------------------------------------------------------------------------------------
 '   BACKLOG
@@ -60,6 +61,7 @@ Public Sub LogTestResults(ByRef oWksLog As Worksheet, ByRef oColTests As Collect
       Next oRngCell
       
       oWksLog.Columns.AutoFit
+      On Error Resume Next
       oWksLog.Range("A3").AutoFilter
    End If
    
