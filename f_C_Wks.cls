@@ -14,7 +14,7 @@ Attribute VB_Exposed = False
 '   Purpose:  enhanced worksheet class
 '   Access:   Public
 '   Type:     Class Module
-'   Author:   GÃ¼nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guleh@pm.me
 '   GitHubID: gueleh
 '   Required:
@@ -32,7 +32,6 @@ Attribute VB_Exposed = False
 'TODO: [+] f_C_Wks:  add required events for oWks_m_Wks
 '============================================================================================
 Option Explicit
-
 
 Private Const s_m_COMPONENT_NAME As String = "f_C_Wks"
 

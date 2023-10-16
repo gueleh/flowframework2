@@ -1,5 +1,8 @@
 # Version History of Flow Framework 2
 
+## 1.2.0 231016
+* added compact versions of the templates for entry level and lower level
+
 ## 1.1.0 230720
 * added a block for custom error handling to entry level sub and lower level function templates, including hooks for generic code
 * added error handling hook subs, taking a ParamArray
