@@ -1,5 +1,8 @@
 # Version History of Flow Framework 2
 
+## 1.3.0 231018
+* added version control data export of settings in settings sheets (except for extraction logic, which has dummy values in this version)
+
 ## 1.2.0 231016
 * added compact versions of the templates for entry level and lower level
 

@@ -36,6 +36,101 @@ Private Const s_m_COMPONENT_NAME As String = "DEV_f_C_VersionControlExport"
 
 ' TODO: Export List Object properties to text file
 
+
+' Purpose: exports data from settings sheets
+' 1.3.0    18.10.2023    gueleh    Initially created
+Public Function bExportSettingsSheetData() As Boolean
+'Fixed, don't change
+   Dim oC_Me As New f_C_CallParams
+   oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'Your custom settings here
+   With oC_Me
+      .s_prop_rw_ProcedureName = "bExportSettingsSheetData" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "The export of settings sheet data failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+'Fixed, don't change
+Try:
+   On Error GoTo Catch
+
+'>>>>>>> Your code here
+   Dim oWks As Worksheet
+   Dim iFileNumber As Integer
+   Dim sFileFullPath As String
+   Dim oColSheets As Collection
+   Dim oCSettingsSheet As f_C_SettingsSheet
+   Dim oColSettings As Collection
+   Dim oCSetting As f_C_Setting
+   
+   Set oColSheets = oCol_af_p_SettingsSheets()
+   
+   If oColSheets Is Nothing Then
+      MsgBox "Collection with settings sheets could not be build. Creation of version control data for settings sheets skipped.", vbExclamation
+      GoTo Finally
+   End If
+   
+   For Each oCSettingsSheet In oColSheets
+      Set oColSettings = New Collection
+         If Not _
+      oCSettingsSheet.bGetSettingsFromSettingsSheet(oColSettings) _
+         Then Err.Raise _
+            e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+            s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
+      sFileFullPath = ThisWorkbook.Path & "\" & "SettingsSheet-" _
+         & oCSettingsSheet.oWks_prop_r_SettingsSheet.CodeName & ".txt"
+      On Error Resume Next
+      Kill sFileFullPath
+      On Error GoTo Catch
+      iFileNumber = FreeFile
+      
+      Open sFileFullPath For Output As iFileNumber
+      
+      For Each oCSetting In oColSettings
+         Print #iFileNumber, oCSetting.sID, oCSetting.sName, oCSetting.sValue
+      Next oCSetting
+      
+      Close #iFileNumber
+      
+   Next oCSettingsSheet
+
+'End of your code <<<<<<<
+
+'Fixed, don't change
+Finally:
+   On Error Resume Next
+'>>>>>>> Your code here
+   'everything that must be executed regardless of an error or not
+   Close #iFileNumber
+'End of your code <<<<<<<
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'Your custom settings here
+'MAKE SURE TO REPLACE fbTemplateLowerLevel WITH THE NAME OF YOUR FUNCTION
+   If oC_Me.oC_prop_r_Error Is Nothing Then bExportSettingsSheetData = True 'reports execution as successful to caller
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+'Fixed, don't change
+   Exit Function
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing _
+   Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
+   Else
+      f_p_HandleError oC_Me: Resume Finally
+   End If
+
+End Function
+
+
+
 ' Purpose: print project reference data to text file for version control
 ' 0.14.0    31.01.2023    gueleh    Initially created
 Public Function bExportReferenceData() As Boolean

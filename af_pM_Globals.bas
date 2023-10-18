@@ -71,3 +71,47 @@ Public Sub af_p_EndProcessingMode(ByVal eafProcessingMode As e_af_p_ProcessingMo
    End Select
 End Sub
 
+' Purpose: builds and returns collection with f_C_SettingsSheet instances
+'  for the provided worksheets
+' 1.3.0    18.10.2023    gueleh    Initially created
+Public Function oCol_af_p_SettingsSheets() As Collection
+   
+   Const lROW_START As Long = 3
+   Const lCOL_ID As Long = 3
+   Const lCOL_NAME As Long = 1
+   Const lCOL_VALUE As Long = 2
+   
+   Dim oCol As New Collection
+   Dim oC As New f_C_SettingsSheet
+   Dim oColWks As New Collection
+   Dim oWks As Worksheet
+   
+   On Error GoTo Catch
+   
+   With oColWks
+      .Add f_wks_Settings
+      .Add af_wks_Settings
+      .Add a_wks_Settings
+   End With
+   
+   For Each oWks In oColWks
+      Set oC = New f_C_SettingsSheet
+         If Not _
+      oC.bConstruct(oWks, lROW_START, lCOL_ID, lCOL_NAME, lCOL_VALUE) _
+         Then Err.Raise _
+            e_f_p_HandledError_GeneralError, , _
+            s_f_p_HandledErrorDescription(e_f_p_HandledError_GeneralError)
+      oCol.Add oC
+   Next oWks
+      
+'>>>>>>> Your settings sheets here
+' (they have to fulfill the contract, refer to f_C_SettingsSheet for guidance)
+   
+'<<<<<<<
+   Set oCol_af_p_SettingsSheets = oCol
+   Exit Function
+   
+Catch:
+   Set oCol_af_p_SettingsSheets = Nothing
+
+End Function
