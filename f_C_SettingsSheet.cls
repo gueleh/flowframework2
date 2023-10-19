@@ -163,14 +163,20 @@ Try: On Error GoTo Catch
 
 '>>>>>>> Your code here
    Dim oCSetting As f_C_Setting
-'TODO: [+] bGetSettingsFromSettingsSheet: write the logic
-   'Dummy
-   Set oCSetting = New f_C_Setting
-   oCSetting.sID = "DummyID"
-   oCSetting.sName = "DummyName"
-   oCSetting.sValue = "DummyValue"
-   oCol_Settings.Add oCSetting
+   Dim lRow As Long
+   Dim sID, sName As String
    
+   For lRow = l_m_RowStart To oWks_m_Settings.UsedRange.Rows.Count + l_m_RowStart
+      sID = CStr(oWks_m_Settings.Cells(lRow, l_m_ColID).FormulaLocal)
+      sName = CStr(oWks_m_Settings.Cells(lRow, l_m_ColName).FormulaLocal)
+      If Len(sID) > 0 And Len(sName) > 0 Then
+         Set oCSetting = New f_C_Setting
+         oCSetting.sID = sID
+         oCSetting.sName = sName
+         oCSetting.sValue = CStr(oWks_m_Settings.Cells(lRow, l_m_ColValue).FormulaLocal)
+         oCol_Settings.Add oCSetting
+      End If
+   Next lRow
    
 'End of your code <<<<<<<
 

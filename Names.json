@@ -1,0 +1,46 @@
+{
+	"names": [
+		{
+		"name": "a_named_cell_dte_g_AppVersionDate",
+		"refersTo": "=a_Settings!$B$4",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "a_named_cell_s_g_AppVersionNumber",
+		"refersTo": "=a_Settings!$B$3",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "af_Settings!af_named_cell_b_m_DebugModeIsOn",
+		"refersTo": "=af_Settings!$B$3",
+		"parentName": "af_Settings",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "af_Settings!af_named_cell_b_m_DevelopmentModeIsOn",
+		"refersTo": "=af_Settings!$B$4",
+		"parentName": "af_Settings",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "f_Settings!f_named_cell_s_m_VERSION_DATE_YYMMDD",
+		"refersTo": "=f_Settings!$B$4",
+		"parentName": "f_Settings",
+		"comment": "As text in Format YYMMDD",
+		"macroType": "-4142"
+		},
+		{
+		"name": "f_Settings!f_named_cell_s_m_VERSION_NUMBER",
+		"refersTo": "=f_Settings!$B$3",
+		"parentName": "f_Settings",
+		"comment": "As text in Semantic Versioning 2.0",
+		"macroType": "-4142"
+		}
+	]
+}

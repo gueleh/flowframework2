@@ -74,4 +74,3 @@ Public Function oRng_f_p_RangeFromWorkbookName(ByVal sName As String) As Variant
    On Error Resume Next
    oRng_f_p_RangeFromWorkbookName = ThisWorkbook.Names(sName).RefersToRange
 End Function
-

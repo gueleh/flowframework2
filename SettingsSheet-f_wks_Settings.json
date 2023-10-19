@@ -1,0 +1,14 @@
+{
+	"f_wks_Settings": [
+		{
+		"id": "f_named_cell_s_m_VERSION_NUMBER",
+		"name": "VersionNumber",
+		"value": "1.4.0"
+		},
+		{
+		"id": "f_named_cell_s_m_VERSION_DATE_YYMMDD",
+		"name": "VersionDate",
+		"value": "231019"
+		}
+	]
+}

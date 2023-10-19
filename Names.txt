@@ -1,6 +1,0 @@
-a_named_cell_dte_g_AppVersionDate         =a_Settings!$B$4            FlowFramework2.xlsb         
-a_named_cell_s_g_AppVersionNumber         =a_Settings!$B$3            FlowFramework2.xlsb         
-af_Settings!af_named_cell_b_m_DebugModeIsOn             =af_Settings!$B$3           af_Settings   
-af_Settings!af_named_cell_b_m_DevelopmentModeIsOn       =af_Settings!$B$4           af_Settings   
-f_Settings!f_named_cell_s_m_VERSION_DATE_YYMMDD         =f_Settings!$B$4            f_Settings    As text in Format YYMMDD
-f_Settings!f_named_cell_s_m_VERSION_NUMBER              =f_Settings!$B$3            f_Settings    As text in Semantic Versioning 2.0

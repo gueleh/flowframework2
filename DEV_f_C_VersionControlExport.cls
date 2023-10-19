@@ -34,10 +34,8 @@ Option Explicit
 
 Private Const s_m_COMPONENT_NAME As String = "DEV_f_C_VersionControlExport"
 
-' TODO: Export List Object properties to text file
-
-
 ' Purpose: exports data from settings sheets
+' 1.4.0    19.10.2023    gueleh    changed export from text to json
 ' 1.3.0    18.10.2023    gueleh    Initially created
 Public Function bExportSettingsSheetData() As Boolean
 'Fixed, don't change
@@ -67,6 +65,7 @@ Try:
    Dim oCSettingsSheet As f_C_SettingsSheet
    Dim oColSettings As Collection
    Dim oCSetting As f_C_Setting
+   Dim lSettingsCount As Long
    
    Set oColSheets = oCol_af_p_SettingsSheets()
    
@@ -83,7 +82,7 @@ Try:
             e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
             s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
       sFileFullPath = ThisWorkbook.Path & "\" & "SettingsSheet-" _
-         & oCSettingsSheet.oWks_prop_r_SettingsSheet.CodeName & ".txt"
+         & oCSettingsSheet.oWks_prop_r_SettingsSheet.CodeName & ".json"
       On Error Resume Next
       Kill sFileFullPath
       On Error GoTo Catch
@@ -91,9 +90,22 @@ Try:
       
       Open sFileFullPath For Output As iFileNumber
       
+      Print #iFileNumber, "{"
+      Print #iFileNumber, vbTab & """" & oCSettingsSheet.oWks_prop_r_SettingsSheet.CodeName & """: ["
       For Each oCSetting In oColSettings
-         Print #iFileNumber, oCSetting.sID, oCSetting.sName, oCSetting.sValue
+         lSettingsCount = lSettingsCount + 1
+         Print #iFileNumber, vbTab & vbTab & "{"
+         Print #iFileNumber, vbTab & vbTab & """id"": """ & oCSetting.sID & ""","
+         Print #iFileNumber, vbTab & vbTab & """name"": """ & oCSetting.sName & ""","
+         Print #iFileNumber, vbTab & vbTab & """value"": """ & oCSetting.sValue & """"
+         If lSettingsCount = oColSettings.Count Then
+            Print #iFileNumber, vbTab & vbTab & "}"
+         Else
+            Print #iFileNumber, vbTab & vbTab & "},"
+         End If
       Next oCSetting
+      Print #iFileNumber, vbTab & "]"
+      Print #iFileNumber, "}"
       
       Close #iFileNumber
       
@@ -132,6 +144,7 @@ End Function
 
 
 ' Purpose: print project reference data to text file for version control
+' 1.4.0    19.10.2023    gueleh    changed export from text to json
 ' 0.14.0    31.01.2023    gueleh    Initially created
 Public Function bExportReferenceData() As Boolean
 'Fixed, don't change
@@ -158,8 +171,9 @@ Try:
    Dim iFileNumber As Integer
    Dim sFileFullPath As String
    Dim sReference As String
+   Dim lReferenceCount As Long
    
-   sFileFullPath = ThisWorkbook.Path & "\" & "References.txt"
+   sFileFullPath = ThisWorkbook.Path & "\" & "References.json"
    On Error Resume Next
    Kill sFileFullPath
    On Error GoTo Catch
@@ -167,13 +181,28 @@ Try:
    
    Open sFileFullPath For Output As iFileNumber
    
+   Print #iFileNumber, "{"
+   Print #iFileNumber, vbTab & """references"": ["
    For Each oC In ThisWorkbook.VBProject.References
-      With oC
-         sReference = .Name & "|" & .Description & "|" _
-            & .GUID & "|" & .Major & "|" & .Minor & "|" & .FullPath
-      End With
-      Print #iFileNumber, sReference
+      lReferenceCount = lReferenceCount + 1
+      Print #iFileNumber, vbTab & vbTab & "{"
+      Print #iFileNumber, vbTab & vbTab & """name"": """ & oC.Name & ""","
+      Print #iFileNumber, vbTab & vbTab & """description"": """ & oC.Description & ""","
+      Print #iFileNumber, vbTab & vbTab & """type"": """ & oC.Type & ""","
+      Print #iFileNumber, vbTab & vbTab & """builtIn"": """ & oC.BuiltIn & ""","
+      Print #iFileNumber, vbTab & vbTab & """guid"": """ & oC.GUID & ""","
+      Print #iFileNumber, vbTab & vbTab & """isBroken"": """ & oC.IsBroken & ""","
+      Print #iFileNumber, vbTab & vbTab & """major"": """ & oC.Major & ""","
+      Print #iFileNumber, vbTab & vbTab & """minor"": """ & oC.Minor & ""","
+      Print #iFileNumber, vbTab & vbTab & """fullPath"": """ & Replace$(oC.FullPath, "\", "\\") & """"
+      If lReferenceCount = ThisWorkbook.VBProject.References.Count Then
+         Print #iFileNumber, vbTab & vbTab & "}"
+      Else
+         Print #iFileNumber, vbTab & vbTab & "},"
+      End If
    Next oC
+   Print #iFileNumber, vbTab & "]"
+   Print #iFileNumber, "}"
 
 'End of your code <<<<<<<
 
@@ -207,6 +236,7 @@ End Function
 
 
 ' Purpose: exports names and codenames of worksheets into text file for version control
+' 1.4.0    19.10.2023    gueleh    changed export from text to json
 ' 0.14.0    31.01.2023    gueleh    Initially created
 Public Function bExportWorksheetNameData() As Boolean
 'Fixed, don't change
@@ -232,8 +262,9 @@ Try:
    Dim oWks As Worksheet
    Dim iFileNumber As Integer
    Dim sFileFullPath As String
+   Dim lCount As Long
    
-   sFileFullPath = ThisWorkbook.Path & "\" & "WorksheetNames.txt"
+   sFileFullPath = ThisWorkbook.Path & "\" & "WorksheetNames.json"
    On Error Resume Next
    Kill sFileFullPath
    On Error GoTo Catch
@@ -241,9 +272,23 @@ Try:
    
    Open sFileFullPath For Output As iFileNumber
    
+   Print #iFileNumber, "{"
+   Print #iFileNumber, vbTab & """worksheets"": ["
    For Each oWks In ThisWorkbook.Worksheets
-      Print #iFileNumber, oWks.CodeName, oWks.Name
+      lCount = lCount + 1
+      Print #iFileNumber, vbTab & vbTab & "{"
+      Print #iFileNumber, vbTab & vbTab & """codeName"": """ & oWks.CodeName & ""","
+      Print #iFileNumber, vbTab & vbTab & """name"": """ & oWks.Name & ""","
+      Print #iFileNumber, vbTab & vbTab & """usedRangeRowsCountLarge"": """ & oWks.UsedRange.Rows.CountLarge & ""","
+      Print #iFileNumber, vbTab & vbTab & """usedRangeColumnsCountLarge"": """ & oWks.UsedRange.Columns.CountLarge & """"
+      If lCount = ThisWorkbook.Worksheets.Count Then
+         Print #iFileNumber, vbTab & vbTab & "}"
+      Else
+         Print #iFileNumber, vbTab & vbTab & "},"
+      End If
    Next oWks
+   Print #iFileNumber, vbTab & "]"
+   Print #iFileNumber, "}"
 
 'End of your code <<<<<<<
 
@@ -278,6 +323,7 @@ End Function
 
 
 ' Purpose: exports data of all names to a text file
+' 1.4.0    19.10.2023    gueleh    changed export from text to json
 ' 0.12.0    16.08.2022    gueleh    Initially created
 Public Function bExportNameData() As Boolean
 'Fixed, don't change
@@ -303,8 +349,9 @@ Try:
    Dim oName As Name
    Dim iFileNumber As Integer
    Dim sFileFullPath As String
+   Dim lCount As Long
    
-   sFileFullPath = ThisWorkbook.Path & "\" & "Names.txt"
+   sFileFullPath = ThisWorkbook.Path & "\" & "Names.json"
    On Error Resume Next
    Kill sFileFullPath
    On Error GoTo Catch
@@ -312,13 +359,30 @@ Try:
    
    Open sFileFullPath For Output As iFileNumber
    
+   Print #iFileNumber, "{"
+   Print #iFileNumber, vbTab & """names"": ["
    For Each oName In ThisWorkbook.Names
+      lCount = lCount + 1
+      Print #iFileNumber, vbTab & vbTab & "{"
+      
+      Print #iFileNumber, vbTab & vbTab & """name"": """ & oName.Name & ""","
       If oName.MacroType <> xlNone Then
-         Print #iFileNumber, oName.Name, oName.Category, oName.Parent.Name, oName.Comment
+         Print #iFileNumber, vbTab & vbTab & """category"": """ & oName.Category & ""","
       Else
-         Print #iFileNumber, oName.Name, oName.RefersTo, oName.Parent.Name, oName.Comment
+         Print #iFileNumber, vbTab & vbTab & """refersTo"": """ & oName.RefersTo & ""","
+      End If
+      Print #iFileNumber, vbTab & vbTab & """parentName"": """ & oName.Parent.Name & ""","
+      Print #iFileNumber, vbTab & vbTab & """comment"": """ & oName.Comment & ""","
+      Print #iFileNumber, vbTab & vbTab & """macroType"": """ & oName.MacroType & """"
+      
+      If lCount = ThisWorkbook.Names.Count Then
+         Print #iFileNumber, vbTab & vbTab & "}"
+      Else
+         Print #iFileNumber, vbTab & vbTab & "},"
       End If
    Next oName
+   Print #iFileNumber, vbTab & "]"
+   Print #iFileNumber, "}"
 
 'End of your code <<<<<<<
 

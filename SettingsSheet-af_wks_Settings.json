@@ -1,0 +1,14 @@
+{
+	"af_wks_Settings": [
+		{
+		"id": "af_named_cell_b_m_DebugModeIsOn",
+		"name": "DebugModeIsOn",
+		"value": "WAHR"
+		},
+		{
+		"id": "af_named_cell_b_m_DevelopmentModeIsOn",
+		"name": "DevelopmentModeIsOn",
+		"value": "WAHR"
+		},
+	]
+}

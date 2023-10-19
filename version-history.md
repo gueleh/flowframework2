@@ -1,5 +1,9 @@
 # Version History of Flow Framework 2
 
+## 1.4.0 231018
+* added extraction logic to version control data export of settings in settings sheets
+* changed export format for all version control data priorly being exported as txt to json
+
 ## 1.3.0 231018
 * added version control data export of settings in settings sheets (except for extraction logic, which has dummy values in this version)
 

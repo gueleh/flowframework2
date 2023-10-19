@@ -1,0 +1,52 @@
+{
+	"worksheets": [
+		{
+		"codeName": "a_wks_Main",
+		"name": "a_Main",
+		"usedRangeRowsCountLarge": "1",
+		"usedRangeColumnsCountLarge": "1"
+		},
+		{
+		"codeName": "a_wks_Settings",
+		"name": "a_Settings",
+		"usedRangeRowsCountLarge": "4",
+		"usedRangeColumnsCountLarge": "9"
+		},
+		{
+		"codeName": "af_wks_Settings",
+		"name": "af_Settings",
+		"usedRangeRowsCountLarge": "4",
+		"usedRangeColumnsCountLarge": "5"
+		},
+		{
+		"codeName": "f_wks_Settings",
+		"name": "f_Settings",
+		"usedRangeRowsCountLarge": "4",
+		"usedRangeColumnsCountLarge": "5"
+		},
+		{
+		"codeName": "af_wks_ErrorLog",
+		"name": "af_ErrorLog",
+		"usedRangeRowsCountLarge": "24",
+		"usedRangeColumnsCountLarge": "9"
+		},
+		{
+		"codeName": "DEV_af_wks_DevLog",
+		"name": "DEV_af_DevLog",
+		"usedRangeRowsCountLarge": "3",
+		"usedRangeColumnsCountLarge": "6"
+		},
+		{
+		"codeName": "DEV_a_wks_TestCanvas",
+		"name": "DEV_a_TestCanvas",
+		"usedRangeRowsCountLarge": "1",
+		"usedRangeColumnsCountLarge": "1"
+		},
+		{
+		"codeName": "DEV_f_wks_TestCanvas",
+		"name": "DEV_f_TestCanvas",
+		"usedRangeRowsCountLarge": "1",
+		"usedRangeColumnsCountLarge": "1"
+		}
+	]
+}
