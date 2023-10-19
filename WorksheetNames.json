@@ -7,6 +7,12 @@
 		"usedRangeColumnsCountLarge": "1"
 		},
 		{
+		"codeName": "a_wks_VersionControlRanges",
+		"name": "a_RangesVersionControl",
+		"usedRangeRowsCountLarge": "3",
+		"usedRangeColumnsCountLarge": "4"
+		},
+		{
 		"codeName": "a_wks_Settings",
 		"name": "a_Settings",
 		"usedRangeRowsCountLarge": "4",

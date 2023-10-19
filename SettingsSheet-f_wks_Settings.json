@@ -3,12 +3,14 @@
 		{
 		"id": "f_named_cell_s_m_VERSION_NUMBER",
 		"name": "VersionNumber",
-		"value": "1.4.0"
+		"value2": "1.5.0",
+		"formulaLocal": "1.5.0"
 		},
 		{
 		"id": "f_named_cell_s_m_VERSION_DATE_YYMMDD",
 		"name": "VersionDate",
-		"value": "231019"
+		"value2": "231019",
+		"formulaLocal": "231019"
 		}
 	]
 }

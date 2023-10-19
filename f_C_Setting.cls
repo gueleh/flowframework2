@@ -12,4 +12,5 @@ Option Explicit
 Public sID As String
 Public sName As String
 Public sValue As String
+Public sFormulaLocal As String
 

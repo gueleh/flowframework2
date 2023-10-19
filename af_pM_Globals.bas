@@ -92,6 +92,7 @@ Public Function oCol_af_p_SettingsSheets() As Collection
       .Add f_wks_Settings
       .Add af_wks_Settings
       .Add a_wks_Settings
+      .Add a_wks_VersionControlRanges
    End With
    
    For Each oWks In oColWks

@@ -1,6 +1,13 @@
 {
 	"names": [
 		{
+		"name": "_xlfn.SHEET",
+		"category": "All",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "1"
+		},
+		{
 		"name": "a_named_cell_dte_g_AppVersionDate",
 		"refersTo": "=a_Settings!$B$4",
 		"parentName": "FlowFramework2.xlsb",
@@ -40,6 +47,13 @@
 		"refersTo": "=f_Settings!$B$3",
 		"parentName": "f_Settings",
 		"comment": "As text in Semantic Versioning 2.0",
+		"macroType": "-4142"
+		},
+		{
+		"name": "f_named_rng_VersionControlDemo",
+		"refersTo": "=f_Settings!$A$2:$E$2",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
 		"macroType": "-4142"
 		}
 	]

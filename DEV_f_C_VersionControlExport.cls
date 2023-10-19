@@ -97,7 +97,8 @@ Try:
          Print #iFileNumber, vbTab & vbTab & "{"
          Print #iFileNumber, vbTab & vbTab & """id"": """ & oCSetting.sID & ""","
          Print #iFileNumber, vbTab & vbTab & """name"": """ & oCSetting.sName & ""","
-         Print #iFileNumber, vbTab & vbTab & """value"": """ & oCSetting.sValue & """"
+         Print #iFileNumber, vbTab & vbTab & """value2"": """ & oCSetting.sValue & ""","
+         Print #iFileNumber, vbTab & vbTab & """formulaLocal"": """ & oCSetting.sFormulaLocal & """"
          If lSettingsCount = oColSettings.Count Then
             Print #iFileNumber, vbTab & vbTab & "}"
          Else

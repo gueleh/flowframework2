@@ -173,7 +173,8 @@ Try: On Error GoTo Catch
          Set oCSetting = New f_C_Setting
          oCSetting.sID = sID
          oCSetting.sName = sName
-         oCSetting.sValue = CStr(oWks_m_Settings.Cells(lRow, l_m_ColValue).FormulaLocal)
+         oCSetting.sValue = CStr(oWks_m_Settings.Cells(lRow, l_m_ColValue).Value2)
+         oCSetting.sFormulaLocal = CStr(oWks_m_Settings.Cells(lRow, l_m_ColValue).FormulaLocal)
          oCol_Settings.Add oCSetting
       End If
    Next lRow

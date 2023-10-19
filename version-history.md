@@ -1,6 +1,11 @@
 # Version History of Flow Framework 2
 
-## 1.4.0 231018
+## 1.5.0 231019
+* added settings sheet for worksheet content monitoring for version control
+* added this sheet to version control of settings sheets
+* added Value2 to settings sheet version control data
+
+## 1.4.0 231019
 * added extraction logic to version control data export of settings in settings sheets
 * changed export format for all version control data priorly being exported as txt to json
 
