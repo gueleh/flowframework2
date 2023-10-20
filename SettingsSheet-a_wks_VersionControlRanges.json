@@ -3,8 +3,8 @@
 		{
 		"id": "f_named_rng_VersionControlDemo",
 		"name": "Demo entry",
-		"value2": "Wahr",
-		"formulaLocal": "=NICHT(ISTFEHLER(D3))"
+		"value2": "isValid:=WAHR;numberOfRows:=1;numberOfColumns:=5;anchorRow:=2;anchorColumn:=1",
+		"formulaLocal": "=VERKETTEN("isValid:="&NICHT(ISTFEHLER(D3));";";"numberOfRows:="&D3;";";"numberOfColumns:="&E3;";";"anchorRow:="&F3;";";"anchorColumn:="&G3)"
 		},
 	]
 }

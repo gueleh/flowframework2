@@ -34,6 +34,119 @@ Option Explicit
 
 Private Const s_m_COMPONENT_NAME As String = "DEV_f_C_VersionControlExport"
 
+Public Function bExportRangeContentData() As Boolean
+'Fixed, don't change
+   Dim oC_Me As New f_C_CallParams
+   oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'Your custom settings here
+   With oC_Me
+      .s_prop_rw_ProcedureName = "bExportRangeContentData" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "The export of range content data failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+'Fixed, don't change
+Try:
+   On Error GoTo Catch
+
+'>>>>>>> Your code here
+   Const lROW_START As Long = 3
+   Const lCOL_ID As Long = 3
+   Const lCOL_NAME As Long = 1
+   Const lCOL_VALUE As Long = 2
+   
+   Dim oWks As Worksheet
+   Dim iFileNumber As Integer
+   Dim sFileFullPath As String
+   Dim oCSettingsSheet As f_C_SettingsSheet
+   Dim oColSettings As Collection
+   Dim oCSetting As f_C_Setting
+   
+   Dim oCRanges As New DEV_f_C_VersionControlRanges
+   Dim oCRange As DEV_f_C_VersionControlRange
+   Dim oColRanges As Collection
+   Dim lCount As Long
+   
+   oCRanges.Construct a_wks_VersionControlRanges, lROW_START, lCOL_NAME, lCOL_ID
+   
+      If Not _
+   oCRanges.bBuildCollectionWithRanges() _
+      Then Err.Raise _
+         e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+         s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
+   
+   Set oColRanges = oCRanges.oCol_prop_r_VersionControlRanges
+      
+   If oColRanges.Count = 0 Then GoTo Finally
+      
+   
+   sFileFullPath = ThisWorkbook.Path & "\" & "VersionControlledRangeContent.json"
+   On Error Resume Next
+   Kill sFileFullPath
+   On Error GoTo Catch
+   iFileNumber = FreeFile
+   
+   Open sFileFullPath For Output As iFileNumber
+   
+   Print #iFileNumber, "{"
+   Print #iFileNumber, vbTab & """" & oCSettingsSheet.oWks_prop_r_SettingsSheet.CodeName & """: ["
+   For Each oCRange In oColRanges
+      lCount = lCount + 1
+'TODO: [+] bExportRangeContentData:  finish the code
+      Print #iFileNumber, vbTab & vbTab & "{"
+      Print #iFileNumber, vbTab & vbTab & """id"": """ & oCSetting.sID & ""","
+      Print #iFileNumber, vbTab & vbTab & """name"": """ & oCSetting.sName & ""","
+      Print #iFileNumber, vbTab & vbTab & """value2"": """ & oCSetting.sValue & ""","
+      Print #iFileNumber, vbTab & vbTab & """formulaLocal"": """ & oCSetting.sFormulaLocal & """"
+      If lCount = oColRanges.Count Then
+         Print #iFileNumber, vbTab & vbTab & "}"
+      Else
+         Print #iFileNumber, vbTab & vbTab & "},"
+      End If
+      
+   Next oCRange
+
+   Print #iFileNumber, vbTab & "]"
+   Print #iFileNumber, "}"
+   
+   Close #iFileNumber
+
+'End of your code <<<<<<<
+
+'Fixed, don't change
+Finally:
+   On Error Resume Next
+'>>>>>>> Your code here
+   'everything that must be executed regardless of an error or not
+   Close #iFileNumber
+'End of your code <<<<<<<
+
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+'Your custom settings here
+'MAKE SURE TO REPLACE fbTemplateLowerLevel WITH THE NAME OF YOUR FUNCTION
+   If oC_Me.oC_prop_r_Error Is Nothing Then bExportRangeContentData = True 'reports execution as successful to caller
+'!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+'Fixed, don't change
+   Exit Function
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing _
+   Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
+   Else
+      f_p_HandleError oC_Me: Resume Finally
+   End If
+
+End Function
+
+
 ' Purpose: exports data from settings sheets
 ' 1.4.0    19.10.2023    gueleh    changed export from text to json
 ' 1.3.0    18.10.2023    gueleh    Initially created
