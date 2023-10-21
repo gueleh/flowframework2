@@ -8,6 +8,13 @@
 		"macroType": "1"
 		},
 		{
+		"name": "_xlfn.SINGLE",
+		"category": "All",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "1"
+		},
+		{
 		"name": "a_named_cell_dte_g_AppVersionDate",
 		"refersTo": "=a_Settings!$B$4",
 		"parentName": "FlowFramework2.xlsb",

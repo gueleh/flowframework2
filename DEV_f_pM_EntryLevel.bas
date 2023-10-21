@@ -86,6 +86,12 @@ Try:
          e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
          s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
 
+      If Not _
+   oC_VersionControlExport.bExportRangeContentData() _
+      Then Err.Raise _
+         e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+         s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
+
 
 'End of your code <<<<<<<
    

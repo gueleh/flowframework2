@@ -70,7 +70,10 @@ Try:
    Dim oCRanges As New DEV_f_C_VersionControlRanges
    Dim oCRange As DEV_f_C_VersionControlRange
    Dim oColRanges As Collection
-   Dim lCount As Long
+   Dim lCountRanges As Long
+   Dim oRngCell As Range
+   Dim lCountCells As Long
+   Dim oWksParent As Worksheet
    
    oCRanges.Construct a_wks_VersionControlRanges, lROW_START, lCOL_NAME, lCOL_ID
    
@@ -93,25 +96,41 @@ Try:
    
    Open sFileFullPath For Output As iFileNumber
    
-   Print #iFileNumber, "{"
-   Print #iFileNumber, vbTab & """" & oCSettingsSheet.oWks_prop_r_SettingsSheet.CodeName & """: ["
    For Each oCRange In oColRanges
-      lCount = lCount + 1
+      lCountRanges = lCountRanges + 1
 'TODO: [+] bExportRangeContentData:  finish the code
+      Set oWksParent = oCRange.oRng_prop_r_TheRange.Parent
+      Print #iFileNumber, "{"
+      Print #iFileNumber, vbTab & """" & oCRange.s_prop_r_NameOfRange & """: ["
       Print #iFileNumber, vbTab & vbTab & "{"
-      Print #iFileNumber, vbTab & vbTab & """id"": """ & oCSetting.sID & ""","
-      Print #iFileNumber, vbTab & vbTab & """name"": """ & oCSetting.sName & ""","
-      Print #iFileNumber, vbTab & vbTab & """value2"": """ & oCSetting.sValue & ""","
-      Print #iFileNumber, vbTab & vbTab & """formulaLocal"": """ & oCSetting.sFormulaLocal & """"
-      If lCount = oColRanges.Count Then
-         Print #iFileNumber, vbTab & vbTab & "}"
+      Print #iFileNumber, vbTab & vbTab & vbTab & """name"": """ & oCRange.s_prop_r_Name & ""","
+      Print #iFileNumber, vbTab & vbTab & vbTab & """worksheetCodeName"": """ & oWksParent.CodeName & ""","
+      Print #iFileNumber, vbTab & vbTab & vbTab & """rowsCount"": """ & oCRange.oRng_prop_r_TheRange.Rows.CountLarge & ""","
+      Print #iFileNumber, vbTab & vbTab & vbTab & """columnsCount"": """ & oCRange.oRng_prop_r_TheRange.Columns.CountLarge & ""","
+      Print #iFileNumber, vbTab & vbTab & vbTab & """anchorRow"": """ & oCRange.oRng_prop_r_TheRange.Row & ""","
+      Print #iFileNumber, vbTab & vbTab & vbTab & """anchorColum"": """ & oCRange.oRng_prop_r_TheRange.Column & ""","
+      Print #iFileNumber, vbTab & vbTab & vbTab & """cellContents"": ["
+      For Each oRngCell In oCRange.oRng_prop_r_TheRange
+         lCountCells = lCountCells + 1
+         Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & "{"
+         Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """rowNumber"": """ & oRngCell.Row & ""","
+         Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """columnNumber"": """ & oRngCell.Column & ""","
+         Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """value2"": """ & oRngCell.Value2 & ""","
+         Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """formulaLocal"": """ & oRngCell.FormulaLocal & """"
+         If lCountCells = oCRange.oRng_prop_r_TheRange.CountLarge Then
+            Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & "}"
+            Print #iFileNumber, vbTab & vbTab & vbTab & "]"
+         Else
+            Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & "},"
+         End If
+      Next oRngCell
+      Print #iFileNumber, vbTab & vbTab & "}"
+      If lCountRanges = oColRanges.Count Then
+         Print #iFileNumber, vbTab & "]"
       Else
-         Print #iFileNumber, vbTab & vbTab & "},"
+         Print #iFileNumber, vbTab & "],"
       End If
-      
    Next oCRange
-
-   Print #iFileNumber, vbTab & "]"
    Print #iFileNumber, "}"
    
    Close #iFileNumber

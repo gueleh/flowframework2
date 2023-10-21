@@ -1,0 +1,44 @@
+{
+	"f_named_rng_VersionControlDemo": [
+		{
+			"name": "Demo entry",
+			"worksheetCodeName": "f_wks_Settings",
+			"rowsCount": "1",
+			"columnsCount": "5",
+			"anchorRow": "2",
+			"anchorColum": "1",
+			"cellContents": [
+				{
+					"rowNumber": "2",
+					"columnNumber": "1",
+					"value2": "Title",
+					"formulaLocal": "Title"
+				},
+				{
+					"rowNumber": "2",
+					"columnNumber": "2",
+					"value2": "Value",
+					"formulaLocal": "Value"
+				},
+				{
+					"rowNumber": "2",
+					"columnNumber": "3",
+					"value2": "ExcelName",
+					"formulaLocal": "ExcelName"
+				},
+				{
+					"rowNumber": "2",
+					"columnNumber": "4",
+					"value2": "NameScope",
+					"formulaLocal": "NameScope"
+				},
+				{
+					"rowNumber": "2",
+					"columnNumber": "5",
+					"value2": "Description",
+					"formulaLocal": "Description"
+				}
+			]
+		}
+	]
+}

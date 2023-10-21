@@ -21,7 +21,7 @@ Public Sub Construct _
 )
    s_m_Name = sName
    s_m_NameOfRange = sNameOfRange
-   oRng_m_TheRange = oRng
+   Set oRng_m_TheRange = oRng
 End Sub
 
 Public Property Get s_prop_r_Name() As String

@@ -1,5 +1,8 @@
 # Version History of Flow Framework 2
 
+## 1.7.0 231021
+* added code for creation of version control data based on range vectors
+
 ## 1.6.0 231020
 * added code for creation of version control data based on range vectors (started)
 
