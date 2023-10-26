@@ -9,4 +9,4 @@ I will add more information here later. Please ask me if you have any questions.
 * Various of functionalities based on the prior, non-public FlowFrameworkSelfcontained - different from the development of this prior version, the approach now is to add new functionality only when it actually is needed for the first time for developing an application, leading to a direct exposure to users rightaway
 
 ## Terms of Usage
-Use freely unless it is not commercial. If you want to use this framework commercially, please get in touch.
+Use freely non-commercially. If you want to use this framework commercially, please get in touch.
