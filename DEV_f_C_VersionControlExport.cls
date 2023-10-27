@@ -116,7 +116,7 @@ Try:
          Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """rowNumber"": """ & oRngCell.Row & ""","
          Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """columnNumber"": """ & oRngCell.Column & ""","
          Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """value2"": """ & oRngCell.Value2 & ""","
-         Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """formulaLocal"": """ & oRngCell.FormulaLocal & """"
+         Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & vbTab & """formulaLocal"": """ & Replace$(oRngCell.FormulaLocal, """", "\""") & """"
          If lCountCells = oCRange.oRng_prop_r_TheRange.CountLarge Then
             Print #iFileNumber, vbTab & vbTab & vbTab & vbTab & "}"
             Print #iFileNumber, vbTab & vbTab & vbTab & "]"
@@ -230,7 +230,7 @@ Try:
          Print #iFileNumber, vbTab & vbTab & """id"": """ & oCSetting.sID & ""","
          Print #iFileNumber, vbTab & vbTab & """name"": """ & oCSetting.sName & ""","
          Print #iFileNumber, vbTab & vbTab & """value2"": """ & oCSetting.sValue & ""","
-         Print #iFileNumber, vbTab & vbTab & """formulaLocal"": """ & oCSetting.sFormulaLocal & """"
+         Print #iFileNumber, vbTab & vbTab & """formulaLocal"": """ & Replace$(oCSetting.sFormulaLocal, """", "\""") & """"
          If lSettingsCount = oColSettings.Count Then
             Print #iFileNumber, vbTab & vbTab & "}"
          Else
