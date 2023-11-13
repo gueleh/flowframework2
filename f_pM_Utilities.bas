@@ -74,3 +74,16 @@ Public Function oRng_f_p_RangeFromWorkbookName(ByVal sName As String) As Variant
    On Error Resume Next
    oRng_f_p_RangeFromWorkbookName = ThisWorkbook.Names(sName).RefersToRange
 End Function
+
+' Purpose: sanitizes a numeric key so that it certainly works with dictionaries
+' 1.8.0    13.11.2023    gueleh    Initially created
+Public Function s_f_p_SanitizedKey(ByVal vKey As Variant) As String
+   s_f_p_SanitizedKey = s_f_p_SPLIT_SEED_SEPARATOR & CStr(vKey)
+End Function
+
+' Purpose: restores the Long value from the string of a sanitized key
+' 1.8.0    13.11.2023    gueleh    Initially created
+Public Function l_f_p_KeyFromSanitizedKey(ByVal sKey As String) As String
+   l_f_p_KeyFromSanitizedKey = CLng(Replace$(sKey, s_f_p_SPLIT_SEED_SEPARATOR, ""))
+End Function
+

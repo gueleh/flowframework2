@@ -1,5 +1,8 @@
 # Version History of Flow Framework 2
 
+## 1.8.0 231113
+* added sanitation and de-sanitation functions for numeric keys (Type Long)
+
 ## 1.7.1 231027
 * added escape char to version control data for settings and range contents to sanitize " chars in JSON file
 
