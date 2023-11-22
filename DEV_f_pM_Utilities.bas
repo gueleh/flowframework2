@@ -34,3 +34,16 @@ Public Sub DEV_Reset_DEV_f_wks_TestCanvas()
    DEV_f_wks_TestCanvas.Cells.Delete
    DEV_f_wks_TestCanvas.Rows.AutoFit
 End Sub
+
+Public Sub DEV_SetName_ScopeWorksheet()
+   On Error Resume Next
+   Dim oWks As Worksheet
+   Set oWks = ActiveSheet
+   oWks.Names.Add ActiveCell.Value2, ActiveCell.Offset(, -1)
+End Sub
+
+Public Sub DEV_SetName_ScopeWorkbook()
+   On Error Resume Next
+   ThisWorkbook.Names.Add ActiveCell.Value2, ActiveCell.Offset(, -1)
+End Sub
+

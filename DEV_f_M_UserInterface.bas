@@ -50,3 +50,22 @@ End Sub
 Public Sub DEV_f_g_ExportVersionControlData()
    DEV_f_p_ExportDataForVersionControl
 End Sub
+
+' Purpose: Shortcut Ctrl + Shift N, adding a worksheet scope name based on active sheet,
+'  value of active cell as name, applied to cell left to active cell
+' 1.9.0    22.11.2023    gueleh    Initially created
+Public Sub DEV_f_g_SetName_ScopeWorksheet()
+Attribute DEV_f_g_SetName_ScopeWorksheet.VB_Description = "For settings sheets: take value of active cell and add a named cell left to it with worksheet scope and the value of active cell as the name."
+Attribute DEV_f_g_SetName_ScopeWorksheet.VB_ProcData.VB_Invoke_Func = "N\n14"
+   DEV_f_pM_Utilities.DEV_SetName_ScopeWorksheet
+End Sub
+
+' Purpose: Shortcut Ctrl + Shift M, adding a workbook scope name,
+'  value of active cell as name, applied to cell left to active cell
+' 1.9.0    22.11.2023    gueleh    Initially created
+Public Sub DEV_f_g_SetName_ScopeWorkbook()
+Attribute DEV_f_g_SetName_ScopeWorkbook.VB_Description = "For settings sheets: take value of active cell and add a named cell left to it with workbook scope and the value of active cell as the name."
+Attribute DEV_f_g_SetName_ScopeWorkbook.VB_ProcData.VB_Invoke_Func = "M\n14"
+   DEV_f_pM_Utilities.DEV_SetName_ScopeWorkbook
+End Sub
+

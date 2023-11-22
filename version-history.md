@@ -1,5 +1,9 @@
 # Version History of Flow Framework 2
 
+## 1.9.0 231122
+* added dev utilities to add workbook and worksheet scope names quickly in Settings Sheets
+* added formulas for faster settings coding to a_Settings
+
 ## 1.8.0 231113
 * added sanitation and de-sanitation functions for numeric keys (Type Long)
 
