@@ -5,10 +5,16 @@
 		"name": "DebugModeIsOn",
 		"value2": "Falsch",
 		"formulaLocal": "FALSCH"
-		},
+		}
 		{
 		"id": "af_named_cell_b_m_DevelopmentModeIsOn",
 		"name": "DevelopmentModeIsOn",
+		"value2": "Wahr",
+		"formulaLocal": "WAHR"
+		},
+		{
+		"id": "af_named_cell_b_m_MaintenanceModeIsOn",
+		"name": "MaintenanceModeIsOn",
 		"value2": "Wahr",
 		"formulaLocal": "WAHR"
 		},

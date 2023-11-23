@@ -43,6 +43,13 @@
 		"macroType": "-4142"
 		},
 		{
+		"name": "af_Settings!af_named_cell_b_m_MaintenanceModeIsOn",
+		"refersTo": "=af_Settings!$B$5",
+		"parentName": "af_Settings",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
 		"name": "f_Settings!f_named_cell_s_m_VERSION_DATE_YYMMDD",
 		"refersTo": "=f_Settings!$B$4",
 		"parentName": "f_Settings",

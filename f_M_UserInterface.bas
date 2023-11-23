@@ -30,3 +30,7 @@ Private Sub click_ToggleDevelopmentMode()
    f_p_ToggleDevelopmentMode
 End Sub
 
+Public Sub click_ToggleMaintenanceMode()
+   f_p_ToggleMaintenanceMode
+End Sub
+

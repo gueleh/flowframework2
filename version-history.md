@@ -1,5 +1,8 @@
 # Version History of Flow Framework 2
 
+## 1.11.0 231123
+* added maintenance mode and switch to development mode (ended)
+
 ## 1.10.0 231123
 * added maintenance mode and switch to development mode (started)
 * added new logic for toggling dev mode

@@ -154,3 +154,50 @@ Catch:
 
 End Function
 
+Public Function bSetMaintenanceModeTo(ByVal bModeIsOn As Boolean) As Boolean
+
+   Dim oC_Me As New f_C_CallParams
+   oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+
+   With oC_Me
+      .s_prop_rw_ProcedureName = "bSetMaintenanceModeTo" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "Setting the maintenance mode failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "Set to: " & bModeIsOn 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+
+Try:
+   On Error GoTo Catch
+   Dim oWks As Worksheet
+   Dim eVisibility As XlSheetVisibility
+   
+   If bModeIsOn Then
+      eVisibility = xlSheetVisible
+   Else
+      eVisibility = xlSheetVeryHidden
+   End If
+   
+   For Each oWks In oCol_m_MaintenanceSheets
+      oWks.Visible = eVisibility
+   Next oWks
+   
+   oC_f_p_FrameworkSettings.SetMaintenanceModeIsOnTo bModeIsOn
+   
+Finally:
+   On Error Resume Next
+   If oC_Me.oC_prop_r_Error Is Nothing Then bSetMaintenanceModeTo = True 'reports execution as successful to caller
+   Exit Function
+   
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing _
+   Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
+   Else
+      f_p_HandleError oC_Me: Resume Finally
+   End If
+
+End Function
+

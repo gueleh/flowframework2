@@ -41,6 +41,7 @@ Private Const s_m_named_cell_s_m_VERSION_NUMBER As String = "f_named_cell_s_m_VE
 Private Const s_m_named_cell_s_m_VERSION_DATE_YYMMDD As String = "f_named_cell_s_m_VERSION_DATE_YYMMDD"
 Private Const s_m_named_cell_b_m_DEBUG_MODE_IS_ON As String = "af_named_cell_b_m_DebugModeIsOn"
 Private Const s_m_named_cell_b_m_DEV_MODE_IS_ON As String = "af_named_cell_b_m_DevelopmentModeIsOn"
+Private Const s_m_named_cell_b_m_MAINTENANCE_MODE_IS_ON As String = "af_named_cell_b_m_MaintenanceModeIsOn"
 
 Private oWks_m_FrameworkSettings As Worksheet
 Private oWks_m_ApplicationSpecificFrameworkSettings As Worksheet
@@ -49,6 +50,7 @@ Private s_m_VersionDateYYMMDD As String
 Private b_m_DebugModeIsOn As Boolean
 Private b_m_ThisIsATestRun As Boolean
 Private b_m_DevelopmentModeIsOn As Boolean
+Private b_m_MaintenanceModeIsOn As Boolean
 
 Public Property Get b_prop_r_DebugModeIsOn() As Boolean
    b_prop_r_DebugModeIsOn = b_m_DebugModeIsOn
@@ -56,6 +58,10 @@ End Property
 
 Public Property Get b_prop_r_DevelopmentModeIsOn() As Boolean
    b_prop_r_DevelopmentModeIsOn = b_m_DevelopmentModeIsOn
+End Property
+
+Public Property Get b_prop_r_MaintenanceModeIsOn() As Boolean
+   b_prop_r_MaintenanceModeIsOn = b_m_MaintenanceModeIsOn
 End Property
 
 Public Property Get b_prop_rw_ThisIsATestRun() As Boolean
@@ -81,6 +87,7 @@ Private Sub Class_Initialize()
    s_m_VersionDateYYMMDD = oWks_m_FrameworkSettings.Names(s_m_named_cell_s_m_VERSION_DATE_YYMMDD).RefersToRange.Value2
    mGetDebugMode
    mGetDevelopmentMode
+   mGetMaintenanceMode
 End Sub
 
 Public Sub SetDebugModeIsOnTo(ByVal bNewValue As Boolean)
@@ -91,6 +98,11 @@ End Sub
 Public Sub SetDevelopmentModeIsOnTo(ByVal bNewValue As Boolean)
    b_m_DevelopmentModeIsOn = bNewValue
    oWks_m_ApplicationSpecificFrameworkSettings.Names(s_m_named_cell_b_m_DEV_MODE_IS_ON).RefersToRange.Value2 = b_m_DevelopmentModeIsOn
+End Sub
+
+Public Sub SetMaintenanceModeIsOnTo(ByVal bNewValue As Boolean)
+   b_m_MaintenanceModeIsOn = bNewValue
+   oWks_m_ApplicationSpecificFrameworkSettings.Names(s_m_named_cell_b_m_MAINTENANCE_MODE_IS_ON).RefersToRange.Value2 = b_m_MaintenanceModeIsOn
 End Sub
 
 ' Purpose: setting the visibility of the Names used in this class
@@ -110,3 +122,8 @@ End Sub
 Private Sub mGetDevelopmentMode()
    b_m_DevelopmentModeIsOn = oWks_m_ApplicationSpecificFrameworkSettings.Names(s_m_named_cell_b_m_DEV_MODE_IS_ON).RefersToRange.Value2
 End Sub
+
+Private Sub mGetMaintenanceMode()
+   b_m_MaintenanceModeIsOn = oWks_m_ApplicationSpecificFrameworkSettings.Names(s_m_named_cell_b_m_MAINTENANCE_MODE_IS_ON).RefersToRange.Value2
+End Sub
+
