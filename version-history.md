@@ -1,5 +1,9 @@
 # Version History of Flow Framework 2
 
+## 1.10.0 231123
+* added maintenance mode and switch to development mode (started)
+* added new logic for toggling dev mode
+
 ## 1.9.0 231122
 * added dev utilities to add workbook and worksheet scope names quickly in Settings Sheets
 * added formulas for faster settings coding to a_Settings

@@ -3,8 +3,8 @@
 		{
 		"id": "af_named_cell_b_m_DebugModeIsOn",
 		"name": "DebugModeIsOn",
-		"value2": "Wahr",
-		"formulaLocal": "WAHR"
+		"value2": "Falsch",
+		"formulaLocal": "FALSCH"
 		},
 		{
 		"id": "af_named_cell_b_m_DevelopmentModeIsOn",
