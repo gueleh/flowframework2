@@ -38,13 +38,21 @@ Private oC_m_CallParams As f_C_CallParams 'stores the call parameters of the tes
 
 ' Purpose: initializes class instance for a unit test
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub InitializeUnitTest(ByRef oC_CallParams As f_C_CallParams)
-   Set oC_m_CallParams = oC_CallParams
+Public Sub InitializeUnitTest _
+( _
+   ByRef oC_arg_CallParams As f_C_CallParams _
+)
+   
+   Set oC_m_CallParams = oC_arg_CallParams
 End Sub
 
 ' Purpose: registers an execution error for a unit test
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub RegisterExecutionError(ByRef oC_CallParams As f_C_CallParams)
+Public Sub RegisterExecutionError _
+( _
+   ByRef oC_arg_CallParams As f_C_CallParams _
+)
+   
    b_m_ExecutionError = True
-   oC_m_CallParams.SetoCError oC_CallParams.oC_prop_r_Error
+   oC_m_CallParams.SetoCError oC_arg_CallParams.oC_prop_r_Error
 End Sub

@@ -96,15 +96,26 @@ Private Sub Class_Initialize()
    Set oCol_m_MaintenanceSheets = oCol_m_GetMaintenanceSheets
 End Sub
 
-Public Function bPasswordDevModeCorrect(ByVal sPassword As String) As Boolean
-   If sPassword = sPASSWORD_DEV_MODE Then bPasswordDevModeCorrect = True
+Public Function bPasswordDevModeCorrect _
+( _
+   ByVal s_arg_Password As String _
+) As Boolean
+   
+   If s_arg_Password = sPASSWORD_DEV_MODE Then bPasswordDevModeCorrect = True
 End Function
 
-Public Function bPasswordMaintenanceModeCorrect(ByVal sPassword As String) As Boolean
-   If sPassword = sPASSWORD_MAINTENANCE_MODE Then bPasswordMaintenanceModeCorrect = True
+Public Function bPasswordMaintenanceModeCorrect _
+( _
+   ByVal s_arg_Password As String _
+) As Boolean
+   
+   If s_arg_Password = sPASSWORD_MAINTENANCE_MODE Then bPasswordMaintenanceModeCorrect = True
 End Function
 
-Public Function bSetDevelopmentModeTo(ByVal bDevModeIsOn As Boolean) As Boolean
+Public Function bSetDevelopmentModeTo _
+( _
+   ByVal b_arg_DevModeIsOn As Boolean _
+) As Boolean
 
    Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
@@ -114,7 +125,7 @@ Public Function bSetDevelopmentModeTo(ByVal bDevModeIsOn As Boolean) As Boolean
       .s_prop_rw_ProcedureName = "bSetDevelopmentModeTo" 'Name of the function
       .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
       .s_prop_rw_ErrorMessage = "Setting the development mode failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
-      .SetCallArgs "Set to: " & bDevModeIsOn 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+      .SetCallArgs "Set to: " & b_arg_DevModeIsOn 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
    End With
 
 Try:
@@ -122,7 +133,7 @@ Try:
    Dim oWks As Worksheet
    Dim eVisibility As XlSheetVisibility
    
-   If bDevModeIsOn Then
+   If b_arg_DevModeIsOn Then
       eVisibility = xlSheetVisible
    Else
       eVisibility = xlSheetVeryHidden
@@ -132,9 +143,9 @@ Try:
       oWks.Visible = eVisibility
    Next oWks
    
-   oC_f_p_FrameworkSettings.SetNamesVisibleTo bDevModeIsOn
-   oC_f_p_FrameworkSettings.SetDevelopmentModeIsOnTo bDevModeIsOn
-   If Not bDevModeIsOn Then oC_f_p_FrameworkSettings.SetDebugModeIsOnTo bDevModeIsOn
+   oC_f_p_FrameworkSettings.SetNamesVisibleTo b_arg_DevModeIsOn
+   oC_f_p_FrameworkSettings.SetDevelopmentModeIsOnTo b_arg_DevModeIsOn
+   If Not b_arg_DevModeIsOn Then oC_f_p_FrameworkSettings.SetDebugModeIsOnTo b_arg_DevModeIsOn
    
 Finally:
    On Error Resume Next
@@ -153,7 +164,10 @@ Catch:
 
 End Function
 
-Public Function bSetMaintenanceModeTo(ByVal bModeIsOn As Boolean) As Boolean
+Public Function bSetMaintenanceModeTo _
+( _
+   ByVal b_arg_ModeIsOn As Boolean _
+) As Boolean
 
    Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
@@ -163,7 +177,7 @@ Public Function bSetMaintenanceModeTo(ByVal bModeIsOn As Boolean) As Boolean
       .s_prop_rw_ProcedureName = "bSetMaintenanceModeTo" 'Name of the function
       .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
       .s_prop_rw_ErrorMessage = "Setting the maintenance mode failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
-      .SetCallArgs "Set to: " & bModeIsOn 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+      .SetCallArgs "Set to: " & b_arg_ModeIsOn 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
    End With
 
 Try:
@@ -171,7 +185,7 @@ Try:
    Dim oWks As Worksheet
    Dim eVisibility As XlSheetVisibility
    
-   If bModeIsOn Then
+   If b_arg_ModeIsOn Then
       eVisibility = xlSheetVisible
    Else
       eVisibility = xlSheetVeryHidden
@@ -181,7 +195,7 @@ Try:
       oWks.Visible = eVisibility
    Next oWks
    
-   oC_f_p_FrameworkSettings.SetMaintenanceModeIsOnTo bModeIsOn
+   oC_f_p_FrameworkSettings.SetMaintenanceModeIsOnTo b_arg_ModeIsOn
    
 Finally:
    On Error Resume Next

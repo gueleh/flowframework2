@@ -40,7 +40,10 @@ End Sub
 
 ' Purpose: setting the development mode to the provided value, see also caller doc in f_pM_EntryLevel
 ' 0.9.0    03.08.2022    gueleh    Initially created
-Public Function b_f_p_SetDevelopmentModeTo(ByVal bDevModeIsOn As Boolean) As Boolean
+Public Function b_f_p_SetDevelopmentModeTo _
+( _
+   ByVal b_arg_DevModeIsOn As Boolean _
+) As Boolean
 
    Dim oC_Me As New f_C_CallParams
    oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
@@ -50,7 +53,7 @@ Public Function b_f_p_SetDevelopmentModeTo(ByVal bDevModeIsOn As Boolean) As Boo
       .s_prop_rw_ProcedureName = "b_f_p_SetDevelopmentModeTo" 'Name of the function
       .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
       .s_prop_rw_ErrorMessage = "Setting the development mode failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
-      .SetCallArgs "Set to: " & bDevModeIsOn 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+      .SetCallArgs "Set to: " & b_arg_DevModeIsOn 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
    End With
 
 Try:
@@ -60,7 +63,7 @@ Try:
    Dim l As Long
    Dim eVisibility As XlSheetVisibility
    
-   If bDevModeIsOn Then
+   If b_arg_DevModeIsOn Then
       eVisibility = xlSheetVisible
    Else
       eVisibility = xlSheetVeryHidden
@@ -75,9 +78,9 @@ Try:
       Next l
    Next oWks
    
-   oC_f_p_FrameworkSettings.SetNamesVisibleTo bDevModeIsOn
-   oC_f_p_FrameworkSettings.SetDevelopmentModeIsOnTo bDevModeIsOn
-   If Not bDevModeIsOn Then oC_f_p_FrameworkSettings.SetDebugModeIsOnTo bDevModeIsOn
+   oC_f_p_FrameworkSettings.SetNamesVisibleTo b_arg_DevModeIsOn
+   oC_f_p_FrameworkSettings.SetDevelopmentModeIsOnTo b_arg_DevModeIsOn
+   If Not b_arg_DevModeIsOn Then oC_f_p_FrameworkSettings.SetDebugModeIsOnTo b_arg_DevModeIsOn
    
 Finally:
    On Error Resume Next
@@ -96,8 +99,14 @@ Catch:
 
 End Function
 
-Public Sub f_p_PrintCallParams(ByRef oC_Me As f_C_CallParams)
+Public Sub f_p_PrintCallParams _
+( _
+   ByRef oC_arg_Me As f_C_CallParams _
+)
+   
    On Error Resume Next
-   Debug.Print "Running " & oC_Me.s_prop_rw_ComponentName & "." & oC_Me.s_prop_rw_ProcedureName & "(" & oC_Me.sArgsAsString() & ")"
+   Debug.Print "Running " & oC_arg_Me.s_prop_rw_ComponentName _
+      & "." & oC_arg_Me.s_prop_rw_ProcedureName _
+      & "(" & oC_arg_Me.sArgsAsString() & ")"
 End Sub
 

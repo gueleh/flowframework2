@@ -29,21 +29,29 @@ Private Const s_m_COMPONENT_NAME As String = "DEV_f_pM_Testing"
 
 ' Purpose: registers a unit test for later execution and evaluation when supposed to be tested
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub DEV_f_p_RegisterUnitTest(ByRef oCCallParams As f_C_CallParams)
+Public Sub DEV_f_p_RegisterUnitTest _
+( _
+   ByRef oC_arg_CallParams As f_C_CallParams _
+)
+   
    If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then
       Dim oCUnitTest As New DEV_f_C_UnitTest
-      oCCallParams.l_prop_rw_UnitTestIndex = oCol_f_p_UnitTests.Count + 1
-      oCUnitTest.InitializeUnitTest oCCallParams
+      oC_arg_CallParams.l_prop_rw_UnitTestIndex = oCol_f_p_UnitTests.Count + 1
+      oCUnitTest.InitializeUnitTest oC_arg_CallParams
       oCol_f_p_UnitTests.Add oCUnitTest
    End If
 End Sub
 
 ' Purpose: registers an execution error when tested
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub DEV_f_p_RegisterExecutionError(ByRef oCCallParams As f_C_CallParams)
-   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun And oCCallParams.l_prop_rw_UnitTestIndex = 0 Then
+Public Sub DEV_f_p_RegisterExecutionError _
+( _
+   ByRef oC_arg_CallParams As f_C_CallParams _
+)
+   
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun And oC_arg_CallParams.l_prop_rw_UnitTestIndex = 0 Then
       Dim oCUnitTest As DEV_f_C_UnitTest
-      Set oCUnitTest = oCol_f_p_UnitTests(oCCallParams.l_prop_rw_UnitTestIndex)
+      Set oCUnitTest = oCol_f_p_UnitTests(oC_arg_CallParams.l_prop_rw_UnitTestIndex)
    End If
 End Sub
 

@@ -98,7 +98,7 @@ Try:
    
    For Each oCRange In oColRanges
       lCountRanges = lCountRanges + 1
-'TODO: [+] bExportRangeContentData:  finish the code
+
       Set oWksParent = oCRange.oRng_prop_r_TheRange.Parent
       Print #iFileNumber, "{"
       Print #iFileNumber, vbTab & """" & oCRange.s_prop_r_NameOfRange & """: ["

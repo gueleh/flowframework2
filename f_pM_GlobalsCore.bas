@@ -48,22 +48,26 @@ Public oCol_f_p_UnitTests As Collection
 
 ' Purpose: starts the processing, to be executed at the very begin of the entry level
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub f_p_StartProcessing( _
-   Optional ByVal e_f_ProcessingMode As e_f_p_ProcessingModes = 0, _
-   Optional ByVal e_af_ProcessingMode As e_af_p_ProcessingModes = 0)
+Public Sub f_p_StartProcessing _
+( _
+   Optional ByVal e_f_arg_ProcessingMode As e_f_p_ProcessingModes = 0, _
+   Optional ByVal e_af_arg_ProcessingMode As e_af_p_ProcessingModes = 0 _
+)
    
    f_p_InitGlobals
-   f_m_StartProcessingMode e_f_ProcessingMode, e_af_ProcessingMode
+   f_m_StartProcessingMode e_f_arg_ProcessingMode, e_af_arg_ProcessingMode
    
 End Sub
 
 ' Purpose: ends the processing, to be executed at the very end of the entry level
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub f_p_EndProcessing( _
-   Optional ByVal e_f_ProcessingMode As e_f_p_ProcessingModes = 0, _
-   Optional ByVal e_af_ProcessingMode As e_af_p_ProcessingModes = 0)
+Public Sub f_p_EndProcessing _
+( _
+   Optional ByVal e_f_arg_ProcessingMode As e_f_p_ProcessingModes = 0, _
+   Optional ByVal e_af_arg_ProcessingMode As e_af_p_ProcessingModes = 0 _
+)
    
-   f_m_EndProcessingMode e_f_ProcessingMode, e_af_ProcessingMode
+   f_m_EndProcessingMode e_f_arg_ProcessingMode, e_af_arg_ProcessingMode
    
 End Sub
 
@@ -82,16 +86,24 @@ End Sub
 
 ' Purpose: registers a unit test if tests are supposed to be run, but only if the required modules are in the project
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub f_p_RegisterUnitTest(ByRef oC_f_Params As f_C_CallParams)
+Public Sub f_p_RegisterUnitTest _
+( _
+   ByRef oC_f_arg_Params As f_C_CallParams _
+)
+   
    On Error Resume Next
-   Application.Run s_f_p_MyProcedureName("DEV_f_p_RegisterUnitTest"), oC_f_Params
+   Application.Run s_f_p_MyProcedureName("DEV_f_p_RegisterUnitTest"), oC_f_arg_Params
 End Sub
 
 ' Purpose: registers an execution error for a unit in a unit test if tests are run, but only if the required modules are in the project
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub f_p_RegisterExecutionError(ByRef oC_f_Params As f_C_CallParams)
+Public Sub f_p_RegisterExecutionError _
+( _
+   ByRef oC_f_arg_Params As f_C_CallParams _
+)
+   
    On Error Resume Next
-   Application.Run s_f_p_MyProcedureName("DEV_f_p_RegisterExecutionError"), oC_f_Params
+   Application.Run s_f_p_MyProcedureName("DEV_f_p_RegisterExecutionError"), oC_f_arg_Params
 End Sub
 
 ' Purpose: reset the globals which should not retain their value
@@ -102,11 +114,13 @@ End Sub
 
 ' Purpose: supports several different modes for starting the processing
 ' 0.1.0    20220709    gueleh    Initially created
-Private Sub f_m_StartProcessingMode( _
-   ByVal e_f_ProcessingMode As e_f_p_ProcessingModes, _
-   ByVal e_af_ProcessingMode As e_af_p_ProcessingModes)
+Private Sub f_m_StartProcessingMode _
+( _
+   ByVal e_f_arg_ProcessingMode As e_f_p_ProcessingModes, _
+   ByVal e_af_arg_ProcessingMode As e_af_p_ProcessingModes _
+)
    
-   Select Case e_f_ProcessingMode
+   Select Case e_f_arg_ProcessingMode
       Case e_f_p_ProcessingMode_AutoCalcOffOnSceenUpdatingOffOn
          With Application
             .ScreenUpdating = False
@@ -115,7 +129,7 @@ Private Sub f_m_StartProcessingMode( _
       Case e_f_p_ProcessingMode_GlobalsOnly
          'Do nothing except for the required initialization
       Case e_f_p_ProcessingMode_AppSpecific
-         af_p_StartProcessingMode e_af_ProcessingMode
+         af_p_StartProcessingMode e_af_arg_ProcessingMode
       Case Else
          'Do nothing except for the required initialization
    End Select
@@ -123,11 +137,13 @@ End Sub
 
 ' Purpose: supports several different modes for ending the processing
 ' 0.1.0    20220709    gueleh    Initially created
-Private Sub f_m_EndProcessingMode( _
-   ByVal e_f_ProcessingMode As e_f_p_ProcessingModes, _
-   ByVal e_af_ProcessingMode As e_af_p_ProcessingModes)
+Private Sub f_m_EndProcessingMode _
+( _
+   ByVal e_f_arg_ProcessingMode As e_f_p_ProcessingModes, _
+   ByVal e_af_arg_ProcessingMode As e_af_p_ProcessingModes _
+)
    
-   Select Case e_f_ProcessingMode
+   Select Case e_f_arg_ProcessingMode
       Case e_f_p_ProcessingMode_AutoCalcOffOnSceenUpdatingOffOn
          With Application
             .ScreenUpdating = True
@@ -137,7 +153,7 @@ Private Sub f_m_EndProcessingMode( _
       Case e_f_p_ProcessingMode_GlobalsOnly
          'Do nothing except for the required initialization
       Case e_f_p_ProcessingMode_AppSpecific
-         af_p_EndProcessingMode e_af_ProcessingMode
+         af_p_EndProcessingMode e_af_arg_ProcessingMode
       Case Else
          'Do nothing except for the required initialization
    End Select

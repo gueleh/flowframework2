@@ -40,8 +40,8 @@ End Enum
 ' should start in a public entry level module, see the template procedure in f_pM_TemplatesCore
 ' Template Versions:
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub af_p_StartProcessingMode(ByVal eafProcessingMode As e_af_p_ProcessingModes)
-   Select Case eafProcessingMode
+Public Sub af_p_StartProcessingMode(ByVal e_arg_ProcessingMode As e_af_p_ProcessingModes)
+   Select Case e_arg_ProcessingMode
       Case e_af_p_ProcessingModeGlobalsOnly
          'Do nothing except for the required initialization
 '>>>>>>> Your cases here
@@ -59,8 +59,8 @@ End Sub
 ' is the last code executed before code execution ends
 ' Template Versions:
 ' 0.1.0    20220709    gueleh    Initially created
-Public Sub af_p_EndProcessingMode(ByVal eafProcessingMode As e_af_p_ProcessingModes)
-   Select Case eafProcessingMode
+Public Sub af_p_EndProcessingMode(ByVal e_arg_ProcessingMode As e_af_p_ProcessingModes)
+   Select Case e_arg_ProcessingMode
       Case e_af_p_ProcessingModeGlobalsOnly
          'Do nothing
 '>>>>>>> Your cases here

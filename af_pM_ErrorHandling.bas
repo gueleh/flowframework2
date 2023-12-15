@@ -38,9 +38,13 @@ End Enum
 ' Purpose: returns the error description based on the provided error number
 ' Template Versions:
 ' 0.1.0    20220709    gueleh    Initially created
-Public Function s_af_p_HandledErrorDescription(ByVal eafHandledError As e_af_p_HandledErrors) As String
+Public Function s_af_p_HandledErrorDescription _
+( _
+   ByVal e_arg_HandledError As e_af_p_HandledErrors _
+) As String
+   
    Dim sDesc As String
-   Select Case eafHandledError
+   Select Case e_arg_HandledError
       Case e_af_p_HandledError_GeneralError
          sDesc = "The app-specific error was not further specified."
 '>>>>>>> Add your error description cases here
@@ -56,7 +60,10 @@ End Function
 ' Purpose: hook performed when entry level sub runs into an error
 ' Template Versions:
 ' 1.1.0    20.07.2023    gueleh    Initially created
-Public Sub af_p_Hook_ErrorHandling_EntryLevel(ParamArray vaArguments() As Variant)
+Public Sub af_p_Hook_ErrorHandling_EntryLevel _
+( _
+   ParamArray va_arg_Arguments() As Variant _
+)
 '>>>>>>> Add your code here
 
 '<<<<<<<
@@ -65,7 +72,10 @@ End Sub
 ' Purpose: hook performed when entry level sub runs into an error
 ' Template Versions:
 ' 1.1.0    20.07.2023    gueleh    Initially created
-Public Sub af_p_Hook_ErrorHandling_LowerLevel(ParamArray vaArguments() As Variant)
+Public Sub af_p_Hook_ErrorHandling_LowerLevel _
+( _
+   ParamArray va_arg_Arguments() As Variant _
+)
 '>>>>>>> Add your code here
 
 '<<<<<<<

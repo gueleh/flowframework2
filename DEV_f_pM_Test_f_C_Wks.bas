@@ -85,7 +85,7 @@ Private Sub mTest_f_C_Wks()
    
 End Sub
 
-Private Sub mOnChangeTest(ByRef Target As Range)
+Private Sub mOnChangeTest(ByRef oRng_arg_Target As Range)
    b_m_ChangeEventInvoked = True
-   Debug.Assert Target.Address = "$L$1"
+   Debug.Assert oRng_arg_Target.Address = "$L$1"
 End Sub

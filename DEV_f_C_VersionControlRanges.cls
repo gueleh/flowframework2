@@ -41,15 +41,15 @@ Private l_m_ColDefinedName As Long
 
 Public Sub Construct _
 ( _
-   ByRef oWksRangeInfos As Worksheet, _
-   ByVal lRowStart As Long, _
-   ByVal lColName As Long, _
-   ByVal lColDefinedName As Long _
+   ByRef oWks_arg_RangeInfos As Worksheet, _
+   ByVal l_arg_RowStart As Long, _
+   ByVal l_arg_ColName As Long, _
+   ByVal l_arg_ColDefinedName As Long _
 )
-   Set oWks_m_RangeInfos = oWksRangeInfos
-   l_m_RowStart = lRowStart
-   l_m_ColDefinedName = lColDefinedName
-   l_m_ColName = lColName
+   Set oWks_m_RangeInfos = oWks_arg_RangeInfos
+   l_m_RowStart = l_arg_RowStart
+   l_m_ColDefinedName = l_arg_ColDefinedName
+   l_m_ColName = l_arg_ColName
 End Sub
 
 Public Property Get oCol_prop_r_VersionControlRanges() As Collection

@@ -18,7 +18,12 @@ Private s_m_PrimaryKey As String
 Private oDict_m_ValuesByFieldName As Scripting.Dictionary
 
 ' Purpose: returns value of a field or false in case of an error
-Private Function f_I_DataRecord_bGetFieldValue(ByVal sFieldName As String, vFieldValue As Variant) As Boolean
+Private Function f_I_DataRecord_bGetFieldValue _
+( _
+   ByVal sFieldName As String, _
+   vFieldValue As Variant _
+) As Boolean
+   
    On Error GoTo Catch
    If Not oDict_m_ValuesByFieldName.Exists(sFieldName) Then Err.Raise 9999, , "Invalid field key"
    vFieldValue = oDict_m_ValuesByFieldName(sFieldName)
@@ -28,7 +33,12 @@ Catch:
 End Function
 
 ' Purpose: sets value of a field and returns false in case of an error, setting values of error object
-Private Function f_I_DataRecord_bSetFieldValue(ByVal sFieldName As String, ByVal vFieldValue As Variant) As Boolean
+Private Function f_I_DataRecord_bSetFieldValue _
+( _
+   ByVal sFieldName As String, _
+   ByVal vFieldValue As Variant _
+) As Boolean
+   
    On Error GoTo Catch
    oDict_m_ValuesByFieldName(sFieldName) = vFieldValue
    f_I_DataRecord_bSetFieldValue = True
@@ -36,7 +46,10 @@ Private Function f_I_DataRecord_bSetFieldValue(ByVal sFieldName As String, ByVal
 Catch:
 End Function
 
-Private Property Set f_I_DataRecord_oDictValuesByFieldName(ByVal oDictValuesByFieldName As Scripting.Dictionary)
+Private Property Set f_I_DataRecord_oDictValuesByFieldName _
+( _
+   ByVal oDictValuesByFieldName As Scripting.Dictionary _
+)
    Set oDict_m_ValuesByFieldName = oDictValuesByFieldName
 End Property
 
