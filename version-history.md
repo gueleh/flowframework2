@@ -1,5 +1,8 @@
 # Version History of Flow Framework 2
 
+## 1.13.0 231215
+* added deploy functionality to save prod copy and remove dev code components
+
 ## 1.12.0 231215
 * removed devlog sheet and respective code
 

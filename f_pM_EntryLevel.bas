@@ -242,4 +242,73 @@ Catch:
    End If
 End Sub
 
+Public Sub f_p_DeployWorkbook()
+'Fixed, don't change
+   Dim oC_Me As New f_C_CallParams: oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+'>>>>>>> Your custom settings here
+   f_p_StartProcessing e_f_p_ProcessingMode_AutoCalcOffOnSceenUpdatingOffOn
+   With oC_Me
+      .s_prop_rw_ProcedureName = "f_p_DeployWorkbook" 'Name of the sub
+      .b_prop_rw_SilentError = False 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "Deployment failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+'Fixed, don't change
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+Try: On Error GoTo Catch
+'>>>>>>> Your code here
+   If Not MsgBox("This will save a copy of this workbook and remove all code components which are only needed in development. Continue?", vbYesNo) = vbYes Then
+      MsgBox "Deployment aborted.", vbInformation
+      GoTo Finally
+   End If
+   
+   Dim oC As New f_C_Deploy
+   
+      If Not _
+   oC.bSaveAsProdAndRemoveDEVModules() _
+      Then Err.Raise _
+         e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+         s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
+   
+   MsgBox "Copy without DEV code saved. Leaving dev and maintenance mode has to be done separately, if applicable.", vbOKOnly
+'End of your code <<<<<<<
+   
+
+'Fixed, don't change
+Finally: On Error Resume Next
+
+
+'>>>>>>> Your code here
+
+
+
+'End of your code <<<<<<<
+
+
+'>>>>>>> Your custom settings here
+   f_p_EndProcessing e_f_p_ProcessingMode_AutoCalcOffOnSceenUpdatingOffOn
+'Fixed, don't change
+   Exit Sub
+HandleError: af_pM_ErrorHandling.af_p_Hook_ErrorHandling_EntryLevel
+
+
+'>>>>>>> Your code here
+
+
+
+'End of your code <<<<<<<
+   
+   
+'Fixed, don't change
+   Resume Finally
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
+   Else
+      f_p_HandleError oC_Me: GoTo HandleError
+   End If
+End Sub
+
 
