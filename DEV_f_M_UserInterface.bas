@@ -27,26 +27,6 @@ Option Explicit
 
 Private Const s_m_COMPONENT_NAME As String = "DEV_f_UserInterface"
 
-' Purpose: write done stamp into active row of devlog
-' 0.2.0    20220711    gueleh    Initially created
-Public Sub DEV_f_g_MarkLineItemAsDoneInAfDevLog()
-Attribute DEV_f_g_MarkLineItemAsDoneInAfDevLog.VB_Description = "Marks the line item with Done"
-Attribute DEV_f_g_MarkLineItemAsDoneInAfDevLog.VB_ProcData.VB_Invoke_Func = "m\n14"
-   Dim oRng As Range
-   Dim oWks As Worksheet
-   Set oRng = Selection
-   Set oWks = oRng.Parent
-   If oWks.Name = DEV_af_wks_DevLog.Name _
-   And oRng.Rows.Count = 1 _
-   And oRng.Row > 2 _
-   And oWks.Cells(oRng.Row, 1).Value2 <> "" Then
-      f_p_InitGlobals
-      oWks.Cells(oRng.Row, 4) = oC_f_p_FrameworkSettings.s_prop_r_VersionNumber
-      oWks.Cells(oRng.Row, 5) = oC_f_p_FrameworkSettings.s_prop_r_VersionDateYYMMDD
-      oWks.Cells(oRng.Row, 6) = "Done"
-   End If
-End Sub
-
 Public Sub DEV_f_g_ExportVersionControlData()
    DEV_f_p_ExportDataForVersionControl
 End Sub

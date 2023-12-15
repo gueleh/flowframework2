@@ -73,7 +73,6 @@ Try:
       .Add a_wks_VersionControlRanges
       .Add af_wks_ErrorLog
       .Add af_wks_Settings
-      .Add DEV_af_wks_DevLog
       .Add DEV_a_wks_TestCanvas
       .Add DEV_f_wks_TestCanvas
       .Add f_wks_Settings

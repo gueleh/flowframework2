@@ -43,12 +43,6 @@
 		"usedRangeColumnsCountLarge": "9"
 		},
 		{
-		"codeName": "DEV_af_wks_DevLog",
-		"name": "DEV_af_DevLog",
-		"usedRangeRowsCountLarge": "3",
-		"usedRangeColumnsCountLarge": "6"
-		},
-		{
 		"codeName": "DEV_a_wks_TestCanvas",
 		"name": "DEV_a_TestCanvas",
 		"usedRangeRowsCountLarge": "1",
