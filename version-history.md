@@ -1,5 +1,8 @@
 # Version History of Flow Framework 2
 
+## 1.15.0 240815
+* added new utilities module regarding file system with getters for workbook object by FullName and worksheet object by CodeName
+
 ## 1.14.0 231215
 * changed arg names to indicate that they are args
 
