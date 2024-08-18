@@ -1,5 +1,9 @@
 # Version History of Flow Framework 2
 
+## 1.16.0 240816
+* added new utilities module regarding ranges with function to check whether size and cell contents of a range are equal
+* added test module for this new functionality
+
 ## 1.15.0 240815
 * added new utilities module regarding file system with getters for workbook object by FullName and worksheet object by CodeName
 
