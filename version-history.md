@@ -1,5 +1,9 @@
 # Version History of Flow Framework 2
 
+## 1.17.0 250409
+* added support for automatically handling https: paths
+* added drive mounter
+
 ## 1.16.0 240816
 * added new utilities module regarding ranges with function to check whether size and cell contents of a range are equal
 * added test module for this new functionality

@@ -65,6 +65,17 @@
 		"major": "1",
 		"minor": "0",
 		"fullPath": "C:\\Windows\\System32\\scrrun.dll"
+		},
+		{
+		"name": "IWshRuntimeLibrary",
+		"description": "Windows Script Host Object Model",
+		"type": "0",
+		"builtIn": "Falsch",
+		"guid": "{F935DC20-1CF0-11D0-ADB9-00C04FD58A0B}",
+		"isBroken": "Falsch",
+		"major": "1",
+		"minor": "0",
+		"fullPath": "C:\\Windows\\System32\\wshom.ocx"
 		}
 	]
 }

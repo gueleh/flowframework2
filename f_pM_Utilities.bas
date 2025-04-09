@@ -122,4 +122,3 @@ Public Function l_f_p_KeyFromSanitizedKey _
    
    l_f_p_KeyFromSanitizedKey = CLng(Replace$(s_arg_Key, s_f_p_SPLIT_SEED_SEPARATOR, ""))
 End Function
-

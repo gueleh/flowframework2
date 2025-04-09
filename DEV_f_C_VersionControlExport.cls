@@ -33,6 +33,18 @@ Attribute VB_Exposed = False
 Option Explicit
 
 Private Const s_m_COMPONENT_NAME As String = "DEV_f_C_VersionControlExport"
+Private s_m_SavePath As String
+Private oC_m_DriverMapper As f_C_DriveMapper
+
+Private Sub Class_Initialize()
+    Set oC_m_DriverMapper = New f_C_DriveMapper
+    s_m_SavePath = oC_m_DriverMapper.sPathSanitized(ThisWorkbook.Path)
+End Sub
+
+Private Sub Class_Terminate()
+    Set oC_m_DriverMapper = Nothing
+End Sub
+
 
 Public Function bExportRangeContentData() As Boolean
 'Fixed, don't change
@@ -88,7 +100,7 @@ Try:
    If oColRanges.Count = 0 Then GoTo Finally
       
    
-   sFileFullPath = ThisWorkbook.Path & "\" & "VersionControlledRangeContent.json"
+   sFileFullPath = s_m_SavePath & "\" & "VersionControlledRangeContent.json"
    On Error Resume Next
    Kill sFileFullPath
    On Error GoTo Catch
@@ -213,7 +225,7 @@ Try:
          Then Err.Raise _
             e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
             s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
-      sFileFullPath = ThisWorkbook.Path & "\" & "SettingsSheet-" _
+      sFileFullPath = s_m_SavePath & "\" & "SettingsSheet-" _
          & oCSettingsSheet.oWks_prop_r_SettingsSheet.CodeName & ".json"
       On Error Resume Next
       Kill sFileFullPath
@@ -306,7 +318,7 @@ Try:
    Dim sReference As String
    Dim lReferenceCount As Long
    
-   sFileFullPath = ThisWorkbook.Path & "\" & "References.json"
+   sFileFullPath = s_m_SavePath & "\" & "References.json"
    On Error Resume Next
    Kill sFileFullPath
    On Error GoTo Catch
@@ -397,7 +409,7 @@ Try:
    Dim sFileFullPath As String
    Dim lCount As Long
    
-   sFileFullPath = ThisWorkbook.Path & "\" & "WorksheetNames.json"
+   sFileFullPath = s_m_SavePath & "\" & "WorksheetNames.json"
    On Error Resume Next
    Kill sFileFullPath
    On Error GoTo Catch
@@ -484,7 +496,7 @@ Try:
    Dim sFileFullPath As String
    Dim lCount As Long
    
-   sFileFullPath = ThisWorkbook.Path & "\" & "Names.json"
+   sFileFullPath = s_m_SavePath & "\" & "Names.json"
    On Error Resume Next
    Kill sFileFullPath
    On Error GoTo Catch
@@ -590,7 +602,7 @@ Try:
       End Select
       
       If bExport Then
-         ocmpComponent.Export ThisWorkbook.Path & "\" & sFileName
+         ocmpComponent.Export s_m_SavePath & "\" & sFileName
       End If
       
    Next ocmpComponent
