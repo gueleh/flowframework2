@@ -35,7 +35,7 @@ End Sub
 '  value of active cell as name, applied to cell left to active cell
 ' 1.9.0    22.11.2023    gueleh    Initially created
 Public Sub DEV_f_g_SetName_ScopeWorksheet()
-Attribute DEV_f_g_SetName_ScopeWorksheet.VB_Description = "For settings sheets: take value of active cell and add a named cell left to it with worksheet scope and the value of active cell as the name."
+Attribute DEV_f_g_SetName_ScopeWorksheet.VB_Description = "For settings sheets: takes values of cells in selection and adds a named cell left to it with worksheet scope and the value of active cell as the name."
 Attribute DEV_f_g_SetName_ScopeWorksheet.VB_ProcData.VB_Invoke_Func = "N\n14"
    DEV_f_pM_Utilities.DEV_SetName_ScopeWorksheet
 End Sub
@@ -44,7 +44,7 @@ End Sub
 '  value of active cell as name, applied to cell left to active cell
 ' 1.9.0    22.11.2023    gueleh    Initially created
 Public Sub DEV_f_g_SetName_ScopeWorkbook()
-Attribute DEV_f_g_SetName_ScopeWorkbook.VB_Description = "For settings sheets: take value of active cell and add a named cell left to it with workbook scope and the value of active cell as the name."
+Attribute DEV_f_g_SetName_ScopeWorkbook.VB_Description = "For settings sheets: takes values of cells in selection and adds a named cell left to it with workbook scope and the value of active cell as the name."
 Attribute DEV_f_g_SetName_ScopeWorkbook.VB_ProcData.VB_Invoke_Func = "M\n14"
    DEV_f_pM_Utilities.DEV_SetName_ScopeWorkbook
 End Sub

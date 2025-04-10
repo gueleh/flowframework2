@@ -38,12 +38,22 @@ End Sub
 Public Sub DEV_SetName_ScopeWorksheet()
    On Error Resume Next
    Dim oWks As Worksheet
+   Dim oRngCell As Range
+   Dim oRng As Range
    Set oWks = ActiveSheet
-   oWks.Names.Add ActiveCell.Value2, ActiveCell.Offset(, -1)
+   Set oRng = Selection
+   For Each oRngCell In oRng
+      oWks.Names.Add oRngCell.Value2, oRngCell.Offset(, -1)
+   Next oRngCell
 End Sub
 
 Public Sub DEV_SetName_ScopeWorkbook()
    On Error Resume Next
-   ThisWorkbook.Names.Add ActiveCell.Value2, ActiveCell.Offset(, -1)
+   Dim oRngCell As Range
+   Dim oRng As Range
+   Set oRng = Selection
+   For Each oRngCell In oRng
+      ThisWorkbook.Names.Add oRngCell.Value2, oRngCell.Offset(, -1)
+   Next oRngCell
 End Sub
 

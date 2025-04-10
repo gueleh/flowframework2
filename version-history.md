@@ -1,5 +1,9 @@
 # Version History of Flow Framework 2
 
+## 1.18.0 250410
+* changed dev helper subs for quick named cell definition to work with a selection of cells
+* added new copy template columns in settings sheet for shorthand let and shorthand get rows (complete)
+
 ## 1.17.0 250409
 * added support for automatically handling https: paths
 * added drive mounter
