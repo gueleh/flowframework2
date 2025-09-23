@@ -30,6 +30,22 @@ Private Const s_m_COMPONENT_NAME As String = "DEV_f_pM_Test_f_C_Wks"
 
 Private b_m_ChangeEventInvoked As Boolean
 
+Private Sub mTest_Ping_Parent()
+   Dim oC As f_C_Wks
+   Dim oWkb As Workbook
+   Dim oWks As Worksheet
+   Set oC = New f_C_Wks
+   oC.Construct a_wks_Main
+   Debug.Assert oC.oWkb_prop_r_ParentWorkbook.Name = ThisWorkbook.Name
+   Set oWkb = Workbooks.Add()
+   Set oWks = oWkb.Worksheets(1)
+   Set oC = New f_C_Wks
+   oC.Construct oWks
+   Debug.Assert oC.oWkb_prop_r_ParentWorkbook.Name = oWkb.Name
+   Set oC = Nothing
+   oWkb.Close False
+End Sub
+
 Private Sub mTest_f_C_Wks()
    Dim oCWks As New f_C_Wks
    Dim oRng As Range

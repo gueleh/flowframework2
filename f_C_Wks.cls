@@ -37,6 +37,7 @@ Private Const s_m_COMPONENT_NAME As String = "f_C_Wks"
 
 Private WithEvents oWks_m_Wks As Worksheet
 Attribute oWks_m_Wks.VB_VarHelpID = -1
+Private oWkb_m_Parent As Workbook
 Private oRng_m_Data As Range
 Private b_m_FirstRowIsHeaderRow As Boolean
 Private oDict_m_ColumnNumbersByHeaderName As Scripting.Dictionary
@@ -87,6 +88,10 @@ Public Property Get l_prop_r_ColumnNumberByHeaderName(ByVal sHeaderName As Strin
    End If
 End Property
 
+Public Property Get oWkb_prop_r_ParentWorkbook() As Workbook
+   Set oWkb_prop_r_ParentWorkbook = oWkb_m_Parent
+End Property
+
 ' Purpose: gets current range under consideration of anchor cell(s), i.e. ignoring potential
 '        cells above, left of and right of the anchor cells(s)
 ' Usage:
@@ -109,6 +114,7 @@ End Property
 
 Public Sub Construct(ByRef oWks As Worksheet)
    Set oWks_m_Wks = oWks
+   Set oWkb_m_Parent = oWks_m_Wks.Parent
 End Sub
 
 Public Sub DeleteAllContents()
@@ -293,5 +299,5 @@ End Function
 Private Sub oWks_m_Wks_Change(ByVal Target As Range)
    If Not b_m_WksChangeEventIsActive Then Exit Sub
    If Len(s_m_NameOfSubToRunOnChange) = 0 Then Exit Sub
-   Application.Run "'" & ThisWorkbook.Name & "'!" & s_m_NameOfSubToRunOnChange, Target
+   Application.Run "'" & oWkb_m_Parent.Name & "'!" & s_m_NameOfSubToRunOnChange, Target
 End Sub

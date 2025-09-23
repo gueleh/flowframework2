@@ -1,5 +1,10 @@
 # Version History of Flow Framework 2
 
+## 1.19.0 250925
+* added workbook object as optional argument to procedures priorly using ThisWorkbook to allow solutions with more than one workbook
+* bugfix: oRng_f_p_RangeFromWorkbookName
+* new utilities: get worksheet object based on CodeName string and its Name
+
 ## 1.18.0 250410
 * changed dev helper subs for quick named cell definition to work with a selection of cells
 * added new copy template columns in settings sheet for shorthand let and shorthand get rows (complete)

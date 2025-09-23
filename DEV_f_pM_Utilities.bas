@@ -35,6 +35,7 @@ Public Sub DEV_Reset_DEV_f_wks_TestCanvas()
    DEV_f_wks_TestCanvas.Rows.AutoFit
 End Sub
 
+'Purpose: easily set names in settings sheets, based on them being provided in the cell right next to the cell which is to get the name
 Public Sub DEV_SetName_ScopeWorksheet()
    On Error Resume Next
    Dim oWks As Worksheet
@@ -47,6 +48,7 @@ Public Sub DEV_SetName_ScopeWorksheet()
    Next oRngCell
 End Sub
 
+'Purpose: easily set names in settings sheets, based on them being provided in the cell right next to the cell which is to get the name
 Public Sub DEV_SetName_ScopeWorkbook()
    On Error Resume Next
    Dim oRngCell As Range

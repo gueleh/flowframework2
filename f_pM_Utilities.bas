@@ -26,14 +26,23 @@ Option Private Module
 
 Private Const s_m_COMPONENT_NAME As String = "f_pM_Utilities"
 
-' Purpose: Return string for Application.Run for procedures in this workbook
+' Purpose: Return string for Application.Run for procedures in this workbook - if required, MyProcedureName with Module Selector, e.g. "MyModule.MyProcedureName"
 ' 0.1.0    20220709    gueleh    Initially created
 Public Function s_f_p_MyProcedureName _
 ( _
-   ByVal s_arg_ProcedureName As String _
+   ByVal s_arg_ProcedureName As String, _
+   Optional ByRef oWkb_arg_Workbook As Workbook _
 ) As String
-  
-  s_f_p_MyProcedureName = "'" & ThisWorkbook.Name & "'!" & s_arg_ProcedureName
+  s_f_p_MyProcedureName = "'" & oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Workbook).Name & "'!" & s_arg_ProcedureName
+End Function
+
+' Purpose: Return provided Workbook object or as a default ThisWorkbook - a helper to facilitate solutions with more than one workbook involved
+Public Function oWkb_f_p_DefaultToThisWorkbook(Optional ByRef oWkb As Workbook)
+   If oWkb Is Nothing Then
+      Set oWkb_f_p_DefaultToThisWorkbook = ThisWorkbook
+   Else
+      Set oWkb_f_p_DefaultToThisWorkbook = oWkb
+   End If
 End Function
 
 ' Purpose: adds ' to all array items starting with 0
@@ -80,15 +89,49 @@ Public Function oRng_f_p_RangeFromWorksheetName _
    Set oRng_f_p_RangeFromWorksheetName = o_arg_Wks.Names(s_arg_Name).RefersToRange
 End Function
 
+' Purpose: provide CodeName of Worksheet as String and optionally Workbook, get Worksheet object
+Public Function oWks_f_p_WorksheetFromCodeNameString(ByVal s_arg_CodeName As String, Optional ByRef oWkb_arg_Workbook As Workbook)
+   Dim oWkb As Workbook
+   Dim oWks As Worksheet
+
+   On Error Resume Next
+   Set oWkb = oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Workbook)
+   For Each oWks In oWkb.Worksheets
+      If oWks.CodeName = s_arg_CodeName Then
+         Set oWks_f_p_WorksheetFromCodeNameString = oWks
+         Exit Function
+      End If
+   Next oWks
+   
+End Function
+
+' Purpose: provide Name of Worksheet as String and optionally Workbook, get Worksheet object
+Public Function oWks_f_p_WorksheetFromName(ByVal s_arg_Name As String, Optional ByRef oWkb_arg_Workbook As Workbook)
+   Dim oWkb As Workbook
+   Dim oWks As Worksheet
+
+   On Error Resume Next
+   Set oWkb = oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Workbook)
+   For Each oWks In oWkb.Worksheets
+      If oWks.Name = s_arg_Name Then
+         Set oWks_f_p_WorksheetFromName = oWks
+         Exit Function
+      End If
+   Next oWks
+   
+End Function
+
+
 ' Purpose: returns value from worksheet-scope named cell (empty if error)
 ' 0.1.0    17.03.2023    gueleh    Initially created
 Public Function v_f_p_ValueFromWorkbookName _
 ( _
-   ByVal s_arg_Name As String _
+   ByVal s_arg_Name As String, _
+   Optional ByRef oWkb_arg_Workbook As Workbook _
 ) As Variant
    
    On Error Resume Next
-   v_f_p_ValueFromWorkbookName = ThisWorkbook.Names(s_arg_Name).RefersToRange.Value2
+   v_f_p_ValueFromWorkbookName = oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Workbook).Names(s_arg_Name).RefersToRange.Value2
    If Err.Number > 0 Then v_f_p_ValueFromWorkbookName = s_f_p_ERROR
 End Function
 
@@ -96,11 +139,12 @@ End Function
 ' 0.1.0    17.03.2023    gueleh     Initially created
 Public Function oRng_f_p_RangeFromWorkbookName _
 ( _
-   ByVal s_arg_Name As String _
+   ByVal s_arg_Name As String, _
+   Optional ByRef oWkb_arg_Workbook As Workbook _
 ) As Range
    
    On Error Resume Next
-   oRng_f_p_RangeFromWorkbookName = ThisWorkbook.Names(s_arg_Name).RefersToRange
+   Set oRng_f_p_RangeFromWorkbookName = oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Workbook).Names(s_arg_Name).RefersToRange
 End Function
 
 ' Purpose: sanitizes a numeric key so that it certainly works with dictionaries
