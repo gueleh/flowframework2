@@ -36,8 +36,12 @@ Public gStyleBorderWeight As Object      ' token -> XlBorderWeight
 '  Token | NumberFormat | HAlign | VAlign | Wrap | Indent | FontName
 '  FontSize | Bold | Italic | FontColor | FillColor | BorderSpec | BorderWeight
 ' ------------------------------------------------------------------
-Public Sub f_p_EnsureStylesFromMeta(metaSheetName As String)
+Public Sub f_p_EnsureStylesFromMeta(metaSheetName As String, Optional ByRef oWkb_arg_Destination As Workbook)
     Dim ws As Worksheet, rng As Range
+    Dim oWkbTarget As Workbook
+    
+    Set oWkbTarget = oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Destination)
+    
     Set ws = ThisWorkbook.Worksheets(metaSheetName)
     
         Dim token As String
@@ -69,9 +73,9 @@ Public Sub f_p_EnsureStylesFromMeta(metaSheetName As String)
         
          Set st = Nothing
         On Error Resume Next
-        Set st = ThisWorkbook.Styles(token)
+        Set st = oWkbTarget.Styles(token)
         On Error GoTo 0
-        If st Is Nothing Then Set st = ThisWorkbook.Styles.Add(token)
+        If st Is Nothing Then Set st = oWkbTarget.Styles.Add(token)
         
         ' Number format
         Dim nf As String: nf = GetText(rng, H, r, "numberformat")
