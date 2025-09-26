@@ -1,5 +1,13 @@
 # Version History of Flow Framework 2
 
+## Known Issues
+
+- code of Template Renderer and Template Renderer Lite not compliant with framework architecture and coding style
+
+## 1.20.1 250926
+
+- bugfix: sheets af_Styles, DEV_f_TemplateLite and DEV_f_Template stayed visible in maintenance and production mode
+
 ## 1.20.0 250926
 
 * added Template Renderer and Template Renderer Lite as new functionalities

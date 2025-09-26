@@ -76,6 +76,9 @@ Try:
       .Add DEV_a_wks_TestCanvas
       .Add DEV_f_wks_TestCanvas
       .Add f_wks_Settings
+      .Add af_wks_Styles
+      .Add DEV_f_wks_Template
+      .Add DEV_f_wks_TemplateLite
       
 '>>>>>>> Your development sheets here
 ' all the sheets which are supposed to be very hidden when app is not in dev mode
