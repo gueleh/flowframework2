@@ -60,7 +60,7 @@ Try:
    On Error GoTo Catch
    Dim saTechWksIdentifiers() As String
    Dim oWks As Worksheet
-   Dim l As Long
+   Dim L As Long
    Dim eVisibility As XlSheetVisibility
    
    If b_arg_DevModeIsOn Then
@@ -71,11 +71,11 @@ Try:
    saTechWksIdentifiers = Split(s_f_p_split_seed_TECH_WKS_IDENTIFIERS, s_f_p_SPLIT_SEED_SEPARATOR)
    
    For Each oWks In ThisWorkbook.Worksheets
-      For l = LBound(saTechWksIdentifiers) To UBound(saTechWksIdentifiers)
-         If Left$(oWks.CodeName, Len(saTechWksIdentifiers(l))) = saTechWksIdentifiers(l) Then
+      For L = LBound(saTechWksIdentifiers) To UBound(saTechWksIdentifiers)
+         If Left$(oWks.CodeName, Len(saTechWksIdentifiers(L))) = saTechWksIdentifiers(L) Then
             oWks.Visible = eVisibility
          End If
-      Next l
+      Next L
    Next oWks
    
    oC_f_p_FrameworkSettings.SetNamesVisibleTo b_arg_DevModeIsOn

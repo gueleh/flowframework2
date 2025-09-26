@@ -59,9 +59,9 @@ Try:
    Dim ocmpComponent As VBIDE.VBComponent
    Dim oColComponentsToRemove As New Collection
    
-   ThisWorkbook.SaveAs "PROD-" & ThisWorkbook.Name
+   ThisWorkbook.SaveAs "PROD-" & ThisWorkbook.name
    
-   If Not Left(ThisWorkbook.Name, 5) = "PROD-" Then
+   If Not Left(ThisWorkbook.name, 5) = "PROD-" Then
       MsgBox "Saving production copy failed, deployment cancelled.", vbInformation
       GoTo Finally
    End If
@@ -69,7 +69,7 @@ Try:
    For Each ocmpComponent In ThisWorkbook.VBProject.VBComponents
       Select Case ocmpComponent.Type
          Case vbext_ct_ClassModule, vbext_ct_MSForm, vbext_ct_StdModule
-            If Left(ocmpComponent.Name, 3) = "DEV" Then
+            If Left(ocmpComponent.name, 3) = "DEV" Then
                oColComponentsToRemove.Add ocmpComponent
             End If
       End Select

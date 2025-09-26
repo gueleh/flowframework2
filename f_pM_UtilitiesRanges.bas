@@ -51,7 +51,7 @@ Try: On Error GoTo Catch
    bTempResult = True
 
    ' Check if ranges are the same size
-   If oRngOne.Rows.Count <> oRngTwo.Rows.Count _
+   If oRngOne.rows.Count <> oRngTwo.rows.Count _
    Or oRngOne.Columns.Count <> oRngTwo.Columns.Count Then
       sTempMessage = "Size is different."
       bTempResult = False
@@ -59,7 +59,7 @@ Try: On Error GoTo Catch
    End If
     
    ' Check if ranges match
-   For lRow = 1 To oRngOne.Rows.Count
+   For lRow = 1 To oRngOne.rows.Count
       For lColumn = 1 To oRngOne.Columns.Count
          If oRngOne.Cells(lRow, lColumn).Value2 <> oRngTwo.Cells(lRow, lColumn).Value2 Then
             bTempResult = False

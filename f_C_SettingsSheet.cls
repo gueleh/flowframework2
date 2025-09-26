@@ -166,7 +166,7 @@ Try: On Error GoTo Catch
    Dim lRow As Long
    Dim sID, sName As String
    
-   For lRow = l_m_RowStart To oWks_m_Settings.UsedRange.Rows.Count + l_m_RowStart
+   For lRow = l_m_RowStart To oWks_m_Settings.UsedRange.rows.Count + l_m_RowStart
       sID = CStr(oWks_m_Settings.Cells(lRow, l_m_ColID).FormulaLocal)
       sName = CStr(oWks_m_Settings.Cells(lRow, l_m_ColName).FormulaLocal)
       If Len(sID) > 0 And Len(sName) > 0 Then

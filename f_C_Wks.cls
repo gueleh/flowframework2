@@ -78,7 +78,7 @@ Public Property Get oRng_prop_r_DataWithoutHeader() As Range
    If b_m_DataRangeIsNotSet() Then Exit Property
    Dim lOffset As Long
    If b_m_FirstRowIsHeaderRow Then lOffset = 1
-   Set oRng_prop_r_DataWithoutHeader = oRng_m_Data.Offset(1).Resize(oRng_m_Data.Rows.Count - lOffset)
+   Set oRng_prop_r_DataWithoutHeader = oRng_m_Data.Offset(1).Resize(oRng_m_Data.rows.Count - lOffset)
 End Property
 
 Public Property Get l_prop_r_ColumnNumberByHeaderName(ByVal sHeaderName As String) As Long
@@ -119,7 +119,7 @@ End Sub
 
 Public Sub DeleteAllContents()
    If b_m_WksIsNotSet() Then Exit Sub
-   oWks_m_Wks.UsedRange.Rows.Delete
+   oWks_m_Wks.UsedRange.rows.Delete
 End Sub
 
 ' Purpose: sets the data range based on anchor cell(s)
@@ -193,10 +193,10 @@ Private Function b_m_HeaderCannotBeSet(ByVal lRow As Long) As Boolean
       bCannotBeSet = True
    ElseIf lRow > 0 _
    And lRow >= oRng_m_Data.Row _
-   And lRow <= (oRng_m_Data.Row + oRng_m_Data.Rows.Count - 1) _
+   And lRow <= (oRng_m_Data.Row + oRng_m_Data.rows.Count - 1) _
    Then
       bCannotBeSet = True
-   ElseIf lRow >= (oWks_m_Wks.UsedRange.Row + oWks_m_Wks.UsedRange.Rows.Count - 1) _
+   ElseIf lRow >= (oWks_m_Wks.UsedRange.Row + oWks_m_Wks.UsedRange.rows.Count - 1) _
    Then
       bCannotBeSet = True
    End If
@@ -227,7 +227,7 @@ Public Sub SanitizeUsedRange(Optional ByVal bFailSilentlyInCaseOfMergedCells = F
           DeleteAllContents
       Else
           .Range(.Cells(lLastRow + 1, 1), _
-                 .Cells(.Rows.Count, 1)).EntireRow.Delete
+                 .Cells(.rows.Count, 1)).EntireRow.Delete
           .Range(.Cells(1, lLastColumn + 1), _
                  .Cells(1, .Columns.Count)).EntireColumn.Delete
       End If
@@ -236,7 +236,7 @@ End Sub
 
 Private Function b_m_UsedRangeHasMergedCells(ByVal bFailSilently As Boolean) As Boolean
    If oWks_m_Wks.UsedRange.MergeCells Then
-      MsgBox "The worksheet " & oWks_m_Wks.Name & " has merged cells. Please unmerge all cells and try again.", vbCritical
+      MsgBox "The worksheet " & oWks_m_Wks.name & " has merged cells. Please unmerge all cells and try again.", vbCritical
       b_m_UsedRangeHasMergedCells = True
    End If
 End Function
@@ -284,7 +284,7 @@ Private Function oRng_m_SanitizedCurrentRegion(ByRef oRngAnchorCellTopLeft As Ra
    Set oRngCurrent = oRngAnchorCellTopLeft.CurrentRegion
    lRowOffset = oRngAnchorCellTopLeft.Row - oRngCurrent.Row
    lColumnOffset = oRngAnchorCellTopLeft.Column - oRngCurrent.Column
-   lRowSize = oRngCurrent.Rows.Count - lRowOffset
+   lRowSize = oRngCurrent.rows.Count - lRowOffset
    If oRngAnchorCellTopRight Is Nothing Then
       lColumnSize = oRngCurrent.Columns.Count - lColumnOffset
    Else
@@ -296,8 +296,8 @@ Private Function oRng_m_SanitizedCurrentRegion(ByRef oRngAnchorCellTopLeft As Ra
 
 End Function
 
-Private Sub oWks_m_Wks_Change(ByVal Target As Range)
+Private Sub oWks_m_Wks_Change(ByVal target As Range)
    If Not b_m_WksChangeEventIsActive Then Exit Sub
    If Len(s_m_NameOfSubToRunOnChange) = 0 Then Exit Sub
-   Application.Run "'" & oWkb_m_Parent.Name & "'!" & s_m_NameOfSubToRunOnChange, Target
+   Application.Run "'" & oWkb_m_Parent.name & "'!" & s_m_NameOfSubToRunOnChange, target
 End Sub

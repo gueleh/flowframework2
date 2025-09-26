@@ -33,7 +33,7 @@ Public Function s_f_p_MyProcedureName _
    ByVal s_arg_ProcedureName As String, _
    Optional ByRef oWkb_arg_Workbook As Workbook _
 ) As String
-  s_f_p_MyProcedureName = "'" & oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Workbook).Name & "'!" & s_arg_ProcedureName
+  s_f_p_MyProcedureName = "'" & oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Workbook).name & "'!" & s_arg_ProcedureName
 End Function
 
 ' Purpose: Return provided Workbook object or as a default ThisWorkbook - a helper to facilitate solutions with more than one workbook involved
@@ -113,7 +113,7 @@ Public Function oWks_f_p_WorksheetFromName(ByVal s_arg_Name As String, Optional 
    On Error Resume Next
    Set oWkb = oWkb_f_p_DefaultToThisWorkbook(oWkb_arg_Workbook)
    For Each oWks In oWkb.Worksheets
-      If oWks.Name = s_arg_Name Then
+      If oWks.name = s_arg_Name Then
          Set oWks_f_p_WorksheetFromName = oWks
          Exit Function
       End If

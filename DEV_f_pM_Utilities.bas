@@ -32,7 +32,7 @@ Private Const s_m_COMPONENT_NAME As String = "DEV_f_pM_Utilities"
 
 Public Sub DEV_Reset_DEV_f_wks_TestCanvas()
    DEV_f_wks_TestCanvas.Cells.Delete
-   DEV_f_wks_TestCanvas.Rows.AutoFit
+   DEV_f_wks_TestCanvas.rows.AutoFit
 End Sub
 
 'Purpose: easily set names in settings sheets, based on them being provided in the cell right next to the cell which is to get the name

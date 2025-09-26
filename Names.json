@@ -50,6 +50,34 @@
 		"macroType": "-4142"
 		},
 		{
+		"name": "af_rng_Styles",
+		"refersTo": "=af_Styles!$A$1:$N$39",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "blk_Invoice",
+		"refersTo": "=DEV_f_TemplateLite!$A$1:$D$8",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "blk_Invoice2",
+		"refersTo": "=DEV_f_Template!$A$8:$D$13",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "blk_Panel",
+		"refersTo": "=DEV_f_Template!$A$3:$F$6",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
 		"name": "f_Settings!f_named_cell_s_m_VERSION_DATE_YYMMDD",
 		"refersTo": "=f_Settings!$B$4",
 		"parentName": "f_Settings",
@@ -66,6 +94,55 @@
 		{
 		"name": "f_named_rng_VersionControlDemo",
 		"refersTo": "=f_Settings!$A$2:$E$2",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "fix_Invoice2_Header",
+		"refersTo": "=DEV_f_Template!$A$8:$D$9",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "fix_Panel_Left",
+		"refersTo": "=DEV_f_Template!$A$3:$C$5",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "rel_Invoice2_Footer",
+		"refersTo": "=DEV_f_Template!$A$12:$D$13",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "rel_Panel_Footer",
+		"refersTo": "=DEV_f_Template!$A$6:$C$6",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "rep_Invoice2_Items",
+		"refersTo": "=DEV_f_Template!$A$10:$D$10",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "rep_Items",
+		"refersTo": "=DEV_f_TemplateLite!$A$6:$D$6",
+		"parentName": "FlowFramework2.xlsb",
+		"comment": "",
+		"macroType": "-4142"
+		},
+		{
+		"name": "rep_Panel_Items",
+		"refersTo": "=DEV_f_Template!$D$3:$F$3",
 		"parentName": "FlowFramework2.xlsb",
 		"comment": "",
 		"macroType": "-4142"

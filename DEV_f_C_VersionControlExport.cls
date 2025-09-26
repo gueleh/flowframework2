@@ -117,7 +117,7 @@ Try:
       Print #iFileNumber, vbTab & vbTab & "{"
       Print #iFileNumber, vbTab & vbTab & vbTab & """name"": """ & oCRange.s_prop_r_Name & ""","
       Print #iFileNumber, vbTab & vbTab & vbTab & """worksheetCodeName"": """ & oWksParent.CodeName & ""","
-      Print #iFileNumber, vbTab & vbTab & vbTab & """rowsCount"": """ & oCRange.oRng_prop_r_TheRange.Rows.CountLarge & ""","
+      Print #iFileNumber, vbTab & vbTab & vbTab & """rowsCount"": """ & oCRange.oRng_prop_r_TheRange.rows.CountLarge & ""","
       Print #iFileNumber, vbTab & vbTab & vbTab & """columnsCount"": """ & oCRange.oRng_prop_r_TheRange.Columns.CountLarge & ""","
       Print #iFileNumber, vbTab & vbTab & vbTab & """anchorRow"": """ & oCRange.oRng_prop_r_TheRange.Row & ""","
       Print #iFileNumber, vbTab & vbTab & vbTab & """anchorColum"": """ & oCRange.oRng_prop_r_TheRange.Column & ""","
@@ -331,7 +331,7 @@ Try:
    For Each oC In ThisWorkbook.VBProject.References
       lReferenceCount = lReferenceCount + 1
       Print #iFileNumber, vbTab & vbTab & "{"
-      Print #iFileNumber, vbTab & vbTab & """name"": """ & oC.Name & ""","
+      Print #iFileNumber, vbTab & vbTab & """name"": """ & oC.name & ""","
       Print #iFileNumber, vbTab & vbTab & """description"": """ & oC.Description & ""","
       Print #iFileNumber, vbTab & vbTab & """type"": """ & oC.Type & ""","
       Print #iFileNumber, vbTab & vbTab & """builtIn"": """ & oC.BuiltIn & ""","
@@ -423,8 +423,8 @@ Try:
       lCount = lCount + 1
       Print #iFileNumber, vbTab & vbTab & "{"
       Print #iFileNumber, vbTab & vbTab & """codeName"": """ & oWks.CodeName & ""","
-      Print #iFileNumber, vbTab & vbTab & """name"": """ & oWks.Name & ""","
-      Print #iFileNumber, vbTab & vbTab & """usedRangeRowsCountLarge"": """ & oWks.UsedRange.Rows.CountLarge & ""","
+      Print #iFileNumber, vbTab & vbTab & """name"": """ & oWks.name & ""","
+      Print #iFileNumber, vbTab & vbTab & """usedRangeRowsCountLarge"": """ & oWks.UsedRange.rows.CountLarge & ""","
       Print #iFileNumber, vbTab & vbTab & """usedRangeColumnsCountLarge"": """ & oWks.UsedRange.Columns.CountLarge & """"
       If lCount = ThisWorkbook.Worksheets.Count Then
          Print #iFileNumber, vbTab & vbTab & "}"
@@ -491,7 +491,7 @@ Try:
    On Error GoTo Catch
 
 '>>>>>>> Your code here
-   Dim oName As Name
+   Dim oName As name
    Dim iFileNumber As Integer
    Dim sFileFullPath As String
    Dim lCount As Long
@@ -510,13 +510,13 @@ Try:
       lCount = lCount + 1
       Print #iFileNumber, vbTab & vbTab & "{"
       
-      Print #iFileNumber, vbTab & vbTab & """name"": """ & oName.Name & ""","
+      Print #iFileNumber, vbTab & vbTab & """name"": """ & oName.name & ""","
       If oName.MacroType <> xlNone Then
          Print #iFileNumber, vbTab & vbTab & """category"": """ & oName.Category & ""","
       Else
          Print #iFileNumber, vbTab & vbTab & """refersTo"": """ & oName.RefersTo & ""","
       End If
-      Print #iFileNumber, vbTab & vbTab & """parentName"": """ & oName.Parent.Name & ""","
+      Print #iFileNumber, vbTab & vbTab & """parentName"": """ & oName.Parent.name & ""","
       Print #iFileNumber, vbTab & vbTab & """comment"": """ & oName.Comment & ""","
       Print #iFileNumber, vbTab & vbTab & """macroType"": """ & oName.MacroType & """"
       
@@ -589,7 +589,7 @@ Try:
    
    For Each ocmpComponent In ThisWorkbook.VBProject.VBComponents
       bExport = True
-      sFileName = ocmpComponent.Name
+      sFileName = ocmpComponent.name
       Select Case ocmpComponent.Type
          Case vbext_ct_ClassModule, 100 '100 is a worksheet
             sFileName = sFileName & ".cls"

@@ -91,7 +91,7 @@ Try:
    End If
       
    With oWks_m_RangeInfos
-      For lRow = l_m_RowStart To .UsedRange.Rows.Count + l_m_RowStart
+      For lRow = l_m_RowStart To .UsedRange.rows.Count + l_m_RowStart
          sDefinedName = .Cells(lRow, l_m_ColDefinedName).Value2
          If Len(sDefinedName) > 0 Then
             On Error Resume Next

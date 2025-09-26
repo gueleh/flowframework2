@@ -13,6 +13,12 @@
 		"usedRangeColumnsCountLarge": "1"
 		},
 		{
+		"codeName": "af_wks_Styles",
+		"name": "af_Styles",
+		"usedRangeRowsCountLarge": "39",
+		"usedRangeColumnsCountLarge": "16"
+		},
+		{
 		"codeName": "a_wks_VersionControlRanges",
 		"name": "a_RangesVersionControl",
 		"usedRangeRowsCountLarge": "3",
@@ -49,10 +55,22 @@
 		"usedRangeColumnsCountLarge": "1"
 		},
 		{
+		"codeName": "DEV_f_wks_TemplateLite",
+		"name": "DEV_f_TemplateLite",
+		"usedRangeRowsCountLarge": "8",
+		"usedRangeColumnsCountLarge": "4"
+		},
+		{
+		"codeName": "DEV_f_wks_Template",
+		"name": "DEV_f_Template",
+		"usedRangeRowsCountLarge": "10",
+		"usedRangeColumnsCountLarge": "6"
+		},
+		{
 		"codeName": "DEV_f_wks_TestCanvas",
 		"name": "DEV_f_TestCanvas",
-		"usedRangeRowsCountLarge": "2",
-		"usedRangeColumnsCountLarge": "1"
+		"usedRangeRowsCountLarge": "19",
+		"usedRangeColumnsCountLarge": "6"
 		}
 	]
 }

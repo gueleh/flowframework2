@@ -80,19 +80,19 @@ Public Property Get va_prop_r_Args() As Variant(): va_prop_r_Args = va_m_Args: E
 ' Purpose: returns the args as list with comma separation, for non-printable args the type is provided
 ' 0.1.0    20220709    gueleh    Initially created
 Public Function sArgsAsString() As String
-   Dim l As Long
+   Dim L As Long
    Dim sResult As String
    Dim sElement As String
    If Not IsEmpty(va_m_Args) Then
-      For l = LBound(va_m_Args) To UBound(va_m_Args)
+      For L = LBound(va_m_Args) To UBound(va_m_Args)
          On Error Resume Next
-         sElement = va_m_Args(l)
+         sElement = va_m_Args(L)
          If Err.Number > 0 Then
-            sElement = "Not prinable, type: " & TypeName(va_m_Args(l))
+            sElement = "Not prinable, type: " & TypeName(va_m_Args(L))
             Err.Clear
          End If
          sResult = sElement & ", "
-      Next l
+      Next L
       sResult = Left$(sResult, Len(sResult) - 2)
    End If
    sArgsAsString = sResult

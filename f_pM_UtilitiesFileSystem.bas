@@ -99,7 +99,7 @@ Public Function b_f_p_GetWorksheetFromCodeName( _
       .s_prop_rw_ProcedureName = "b_f_p_GetWorksheetFromCodeName" 'Name of the function
       .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
       .s_prop_rw_ErrorMessage = "Worksheet not found." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
-      .SetCallArgs "sCodeName:=" & sCodeName, "oWkb.Name:=" & oWkb.Name 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+      .SetCallArgs "sCodeName:=" & sCodeName, "oWkb.Name:=" & oWkb.name 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
    End With
 
 'Fixed, don't change

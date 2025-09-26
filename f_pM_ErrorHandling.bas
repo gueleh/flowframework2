@@ -106,7 +106,7 @@ Private Sub mLogError _
    Dim lRow As Long
    Const sANCHOR_ADDRESS As String = "A2"
    With af_wks_ErrorLog
-      lRow = .Range(sANCHOR_ADDRESS).CurrentRegion.Rows.Count + .Range(sANCHOR_ADDRESS).Row - 1
+      lRow = .Range(sANCHOR_ADDRESS).CurrentRegion.rows.Count + .Range(sANCHOR_ADDRESS).Row - 1
       .Cells(lRow, 1).Value2 = Format(Now(), "YYMMDD hh:mm:ss")
       .Cells(lRow, 2).Value2 = Environ("Username")
       .Cells(lRow, 3).Value2 = oC_f_arg_Params.s_prop_rw_ComponentName
