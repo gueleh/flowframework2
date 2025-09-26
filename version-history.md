@@ -3,6 +3,7 @@
 ## Known Issues
 
 - code of Template Renderer and Template Renderer Lite not compliant with framework architecture and coding style
+- definition of styles for Template Renderer and Template Renderer Lite currently only in ThisWorkbook
 
 ## 1.20.1 250926
 
