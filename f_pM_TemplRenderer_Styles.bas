@@ -37,6 +37,7 @@ Public gStyleBorderWeight As Object      ' token -> XlBorderWeight
 '  FontSize | Bold | Italic | FontColor | FillColor | BorderSpec | BorderWeight
 ' ------------------------------------------------------------------
 Public Sub f_p_EnsureStylesFromMeta(metaSheetName As String, Optional ByRef oWkb_arg_Destination As Workbook)
+' TODO: Refactor for framework compliance
     Dim ws As Worksheet, rng As Range
     Dim oWkbTarget As Workbook
     
@@ -135,7 +136,7 @@ End Sub
 Public Sub ApplyBordersForToken(ByVal target As Range, ByVal token As String)
     If gStyleBorderSpec Is Nothing Then Exit Sub
     If Not gStyleBorderSpec.Exists(token) Then Exit Sub
-    
+' TODO: Refactor for framework compliance
     Dim w As Long: w = xlThin
     If Not gStyleBorderWeight Is Nothing Then
         If gStyleBorderWeight.Exists(token) Then w = gStyleBorderWeight(token)
@@ -165,6 +166,7 @@ Public Sub ApplyBordersForToken(ByVal target As Range, ByVal token As String)
 End Sub
 
 Private Sub ClearManagedBorders(ByVal rng As Range)
+' TODO: Refactor for framework compliance
     Dim idx As Variant
     For Each idx In Array(xlEdgeTop, xlEdgeBottom, xlEdgeLeft, xlEdgeRight, xlInsideHorizontal, xlInsideVertical)
         With rng.Borders(idx)
@@ -174,6 +176,7 @@ Private Sub ClearManagedBorders(ByVal rng As Range)
 End Sub
 
 Private Sub ApplyEdge(ByVal rng As Range, ByVal edge As XlBordersIndex, ByVal weight As XlBorderWeight)
+' TODO: Refactor for framework compliance
     With rng.Borders(edge)
         .LineStyle = xlContinuous
         .weight = weight
@@ -183,6 +186,7 @@ Private Sub ApplyEdge(ByVal rng As Range, ByVal edge As XlBordersIndex, ByVal we
 End Sub
 
 Private Sub ApplyInside(ByVal rng As Range, ByVal horizontal As Boolean, ByVal weight As XlBorderWeight)
+' TODO: Refactor for framework compliance
     Dim idx As XlBordersIndex
     If horizontal Then idx = xlInsideHorizontal Else idx = xlInsideVertical
     With rng.Borders(idx)
@@ -201,6 +205,7 @@ Public Sub ApplyOutlineBorderToCell(ByVal target As Range)
 End Sub
 
 Private Function MapBorderWeight(ByVal s As String) As Long
+' TODO: Refactor for framework compliance
     s = UCase$(Trim$(s))
     Select Case s
         Case "", "THIN", "XLTHIN": MapBorderWeight = xlThin
@@ -212,6 +217,7 @@ Private Function MapBorderWeight(ByVal s As String) As Long
 End Function
 
 Private Function MapHAlign(ByVal s As String) As Variant
+' TODO: Refactor for framework compliance
     s = UCase$(Trim$(s))
     Select Case s
         Case "LEFT": MapHAlign = xlHAlignLeft
@@ -222,6 +228,7 @@ Private Function MapHAlign(ByVal s As String) As Variant
 End Function
 
 Private Function MapVAlign(ByVal s As String) As Variant
+' TODO: Refactor for framework compliance
     s = UCase$(Trim$(s))
     Select Case s
         Case "TOP": MapVAlign = xlVAlignTop
@@ -232,12 +239,14 @@ Private Function MapVAlign(ByVal s As String) As Variant
 End Function
 
 Private Function GetText(rng As Range, H As Object, rowIdx As Long, key As String) As String
+' TODO: Refactor for framework compliance
     key = LCase$(key)
     If Not H.Exists(key) Then Exit Function
     GetText = Trim$(CStr(rng.Cells(rowIdx, H(key)).Value))
 End Function
 
 Private Function GetBool(rng As Range, H As Object, rowIdx As Long, key As String) As Variant
+' TODO: Refactor for framework compliance
     key = LCase$(key)
     If Not H.Exists(key) Then Exit Function
     Dim v As Variant: v = rng.Cells(rowIdx, H(key)).Value
@@ -249,6 +258,7 @@ Private Function GetBool(rng As Range, H As Object, rowIdx As Long, key As Strin
 End Function
 
 Private Function GetLong(rng As Range, H As Object, rowIdx As Long, key As String) As Variant
+' TODO: Refactor for framework compliance
     key = LCase$(key)
     If Not H.Exists(key) Then Exit Function
     Dim v As Variant: v = rng.Cells(rowIdx, H(key)).Value
@@ -256,6 +266,7 @@ Private Function GetLong(rng As Range, H As Object, rowIdx As Long, key As Strin
 End Function
 
 Private Function GetDouble(rng As Range, H As Object, rowIdx As Long, key As String) As Variant
+' TODO: Refactor for framework compliance
     key = LCase$(key)
     If Not H.Exists(key) Then Exit Function
     Dim v As Variant: v = rng.Cells(rowIdx, H(key)).Value
@@ -284,5 +295,6 @@ Private Function ParseColor(ByVal s As String) As Variant
         ParseColor = RGB(val(parts(0)), val(parts(1)), val(parts(2)))
     End If
 End Function
+
 
 

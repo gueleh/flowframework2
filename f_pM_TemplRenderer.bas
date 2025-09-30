@@ -10,7 +10,7 @@ Attribute VB_Name = "f_pM_TemplRenderer"
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
-'   Usage:
+'   Usage: please refer to DEV_f_pM_Test_TemplRenderer to see how this is used
 '--------------------------------------------------------------------------------------------
 '   VERSION HISTORY
 '   Version    Date    Developer    Changes
@@ -19,136 +19,243 @@ Attribute VB_Name = "f_pM_TemplRenderer"
 '   BACKLOG
 '   ''''''''''''''''''''
 ' TODO: [+] Integrate into framework
+' TODO: PadAfter does not work for rel_ lanes
 '============================================================================================
 Option Explicit
 Option Private Module
 
 Private Const s_m_COMPONENT_NAME As String = "f_pM_TemplRenderer"
 
-' ############################################
-' # PARSER: BLÖCKE + LANES                    #
-' ############################################
-Public Function ParseAllBlocks(wsTpl As Worksheet) As BlockSpec2()
-    Dim namedRefs() As NamedRangeRef
-    namedRefs = CollectNamedRangesInSheet(wsTpl)
-    If Not HasElementsNR(namedRefs) Then Err.Raise 5, , "Keine Named Ranges auf '" & wsTpl.name & "'."
-    
-    ' --- Block-Indices sammeln ---
-    Dim blkIdx() As Long
-    Dim i As Long
-    If HasElementsNR(namedRefs) Then
-        For i = LBound(namedRefs) To UBound(namedRefs)
-            If LCase$(Left$(namedRefs(i).name, 4)) = "blk_" Then
-                AppendIndex blkIdx, i
-            End If
-        Next i
-    End If
-    If CountLong(blkIdx) = 0 Then Err.Raise 5, , "Keine blk_* Bereiche gefunden (Template2)."
-    
-      ' --- Blöcke anlegen ---
-      Dim arr() As BlockSpec2
-      ReDim arr(1 To CountLong(blkIdx))
-      Dim b As Long, idx As Long: idx = 0
-      For b = LBound(blkIdx) To UBound(blkIdx)
-          Dim br As NamedRangeRef: br = namedRefs(blkIdx(b))
-          idx = idx + 1
-          With arr(idx)
-              .blockKey = Mid$(br.name, 5)   ' nach "blk_"
-              Set .ws = br.ws
-              .Top = br.rng.Row
-              .Left = br.rng.Column
-              .RowsCount = br.rng.rows.Count
-              .ColsCount = br.rng.Columns.Count
-              ' Wichtig: KEIN ReDim (0 To -1) hier!
-              ' Optional explizit "leeren": Erase .Lanes
-          End With
-      Next b
+Private Const s_m_BLOCK_PREFIX As String = "blk_"
+Private Const s_m_FIXED_LANE_PREFIX As String = "fix_"
+Private Const s_m_REPEATER_LANE_PREFIX As String = "rep_"
+Private Const s_m_RELATIVE_LANE_PREFIX As String = "rel_"
+Private Const s_m_LANE_TAG_FIX As String = "FIX"
+Private Const s_m_LANE_TAG_REPEATABLE As String = "REP"
+Private Const s_m_LANE_TAG_RELATIVE As String = "REL"
+Private Const s_m_KEY_HEADER As String = "header"
+Private Const s_m_KEY_REPEATERS As String = "repeaters"
+Private Const s_m_KEY_TOTALS As String = "totals"
+Private Const s_m_SEPARATOR As String = "|"
 
-    
-    ' --- Blöcke nach Top sortieren ---
-    Dim changed As Boolean
-    Do
-        changed = False
-        For b = LBound(arr) To UBound(arr) - 1
-            If arr(b).Top > arr(b + 1).Top Then
-                Dim t As BlockSpec2: t = arr(b): arr(b) = arr(b + 1): arr(b + 1) = t
-                changed = True
-            End If
-        Next b
-    Loop While changed
-    
-    ' --- Lane-Indices sammeln ---
-    Dim laneIdx() As Long
-    If HasElementsNR(namedRefs) Then
-        For i = LBound(namedRefs) To UBound(namedRefs)
-            Dim nm As String: nm = namedRefs(i).name
-            If Left$(LCase$(nm), 4) = "fix_" Or Left$(LCase$(nm), 4) = "rep_" Or Left$(LCase$(nm), 4) = "rel_" Then
-                AppendIndex laneIdx, i
-            End If
-        Next i
-    End If
-    
-    ' --- Lanes je Block zuordnen ---
-    If CountLong(laneIdx) > 0 Then
-        Dim j As Long
-        For j = LBound(laneIdx) To UBound(laneIdx)
-            Dim lr As NamedRangeRef: lr = namedRefs(laneIdx(j))
-            Dim parts() As String: parts = Split(lr.name, "_")
-            If UBound(parts) < 2 Then GoTo NextLane
-            
-            Dim laneType As String: laneType = UCase$(parts(0))          ' FIX | REP | REL
-            Dim blockKey As String: blockKey = parts(1)
-            Dim laneKey As String: laneKey = JoinMid(parts, 2, "_")
-            
-            Dim bi As Long: bi = FindBlockIndex(arr, blockKey)
-            If bi = 0 Then GoTo NextLane
-            
-            If Not RangeWithin(arr(bi).ws, lr.rng, arr(bi).Top, arr(bi).Left, arr(bi).RowsCount, arr(bi).ColsCount) Then
-                Err.Raise 5, , lr.name & " liegt nicht innerhalb von blk_" & blockKey
-            End If
-            
-            Dim ls As LaneSpec
-            ls.laneType = laneType
-            ls.key = laneKey
-            ls.TopRel = lr.rng.Row - arr(bi).Top + 1
-            ls.LeftRel = lr.rng.Column - arr(bi).Left + 1
-            ls.RowsCount = lr.rng.rows.Count
-            ls.ColsCount = lr.rng.Columns.Count
-            ls.Cells = ReadLaneCells(lr.rng)
-            ls.PadAfterRows = ExtractPadAfterFromComment(lr.rng.Cells(1, 1)) ' optional
-            
-            AppendLane arr(bi), ls
-NextLane:
-        Next j
-    End If
-    
-    ParseAllBlocks = arr
+' Purpose: sets up top level dictionary for template structure
+Public Function oDict_f_p_BuildEmptyContext() As Scripting.Dictionary
+    Dim oDictContext As Scripting.Dictionary
+    Set oDictContext = New Scripting.Dictionary
+    Set oDictContext(s_m_KEY_HEADER) = New Scripting.Dictionary
+    Set oDictContext(s_m_KEY_TOTALS) = New Scripting.Dictionary
+    Set oDictContext(s_m_KEY_REPEATERS) = New Scripting.Dictionary
+    Set oDict_f_p_BuildEmptyContext = oDictContext
 End Function
 
+' Purpose: parse template from provided sheet and return block specs and in them all other relevant specs for the renderer
+Public Function b_f_p_GetAllParsedBlockSpecs( _
+   ByRef ua_arg_ParsedBlockSpecs() As u_f_BlockSpecRenderer, _
+   ByRef oWksTemplate As Worksheet _
+) As Boolean
+
+'Fixed, don't change
+   Dim oC_Me As New f_C_CallParams: oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME: If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+'>>>>>>> Your custom settings here
+   With oC_Me
+      .s_prop_rw_ProcedureName = "b_f_p_GetAllParsedBlockSpecs" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "Parsing of BlockSpecs from Template failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+'Fixed, don't change
+Try: On Error GoTo Catch
+
+
+'>>>>>>> Your code here
+   Dim uaNamedRefs() As u_f_NamedRangeRefRenderer
+   Dim laBlockIndex() As Long
+   Dim lIndex As Long
+   Dim uaBlockSpecs() As u_f_BlockSpecRenderer
+   Dim lBlockIndex As Long
+   Dim lIndexBlockSpec As Long
+   Dim laLaneIndex() As Long
+   Dim bChanged As Boolean
+   Dim sRngName As String
+   Dim lLaneIndex As Long
+   Dim saParts() As String
+   Dim sLaneType As String
+   Dim sBlockKey As String
+   Dim sLaneKey As String
+    
+   uaNamedRefs = ua_m_CollectNamedRangesSpecsFromSheet(oWksTemplate)
+   If Not b_m_HasElementsNR(uaNamedRefs) Then Err.Raise 5, , "Keine Named Ranges auf '" & oWksTemplate.name & "'."
+   
+   ' --- Block-Indices sammeln ---
+   If b_m_HasElementsNR(uaNamedRefs) Then
+      For lIndex = LBound(uaNamedRefs) To UBound(uaNamedRefs)
+         If LCase$(Left$(uaNamedRefs(lIndex).sName, 4)) = s_m_BLOCK_PREFIX Then
+            mAppendIndex laBlockIndex, lIndex
+         End If
+      Next lIndex
+   End If
+   If l_m_CountLong(laBlockIndex) = 0 Then Err.Raise 5, , "Keine blk_* Bereiche gefunden (Template2)."
+    
+   ' --- Blöcke anlegen ---
+   ReDim uaBlockSpecs(1 To l_m_CountLong(laBlockIndex))
+   lIndexBlockSpec = 0
+   For lBlockIndex = LBound(laBlockIndex) To UBound(laBlockIndex)
+      Dim uNamedRangeSpec As u_f_NamedRangeRefRenderer
+      uNamedRangeSpec = uaNamedRefs(laBlockIndex(lBlockIndex))
+      lIndexBlockSpec = lIndexBlockSpec + 1
+      With uaBlockSpecs(lIndexBlockSpec)
+         .sBlockKey = Mid$(uNamedRangeSpec.sName, 5)   ' nach "blk_"
+         Set .oWks = uNamedRangeSpec.oWks
+         .lTop = uNamedRangeSpec.oRng.Row
+         .lLeft = uNamedRangeSpec.oRng.Column
+         .lRowsCount = uNamedRangeSpec.oRng.rows.Count
+         .lColsCount = uNamedRangeSpec.oRng.Columns.Count
+      End With
+   Next lBlockIndex
+
+    
+   ' --- Blöcke nach Top sortieren ---
+   Do
+      bChanged = False
+      For lBlockIndex = LBound(uaBlockSpecs) To UBound(uaBlockSpecs) - 1
+         If uaBlockSpecs(lBlockIndex).lTop > uaBlockSpecs(lBlockIndex + 1).lTop Then
+            Dim uTemp As u_f_BlockSpecRenderer
+            uTemp = uaBlockSpecs(lBlockIndex)
+            uaBlockSpecs(lBlockIndex) = uaBlockSpecs(lBlockIndex + 1)
+            uaBlockSpecs(lBlockIndex + 1) = uTemp
+            bChanged = True
+         End If
+      Next lBlockIndex
+   Loop While bChanged
+    
+   ' --- Lane-Indices sammeln ---
+   If b_m_HasElementsNR(uaNamedRefs) Then
+      For lIndex = LBound(uaNamedRefs) To UBound(uaNamedRefs)
+         sRngName = uaNamedRefs(lIndex).sName
+         If Left$(LCase$(sRngName), 4) = s_m_FIXED_LANE_PREFIX _
+         Or Left$(LCase$(sRngName), 4) = s_m_REPEATER_LANE_PREFIX _
+         Or Left$(LCase$(sRngName), 4) = s_m_RELATIVE_LANE_PREFIX _
+         Then
+            mAppendIndex laLaneIndex, lIndex
+         End If
+      Next lIndex
+   End If
+    
+   ' --- Lanes je Block zuordnen ---
+   If l_m_CountLong(laLaneIndex) > 0 Then
+      For lLaneIndex = LBound(laLaneIndex) To UBound(laLaneIndex)
+         Dim uLaneRangeSpec As u_f_NamedRangeRefRenderer
+         uLaneRangeSpec = uaNamedRefs(laLaneIndex(lLaneIndex))
+         saParts = Split(uLaneRangeSpec.sName, "_")
+         If UBound(saParts) < 2 Then GoTo NextLane
+         
+         sLaneType = UCase$(saParts(0))          ' FIX | REP | REL
+         sBlockKey = saParts(1)
+         sLaneKey = s_m_JoinMid(saParts, 2, "_")
+         
+         lBlockIndex = l_m_FindBlockIndex(uaBlockSpecs, sBlockKey)
+         If lBlockIndex = 0 Then GoTo NextLane
+         
+         If Not b_m_RangeWithin( _
+               uaBlockSpecs(lBlockIndex).oWks, _
+               uLaneRangeSpec.oRng, _
+               uaBlockSpecs(lBlockIndex).lTop, _
+               uaBlockSpecs(lBlockIndex).lLeft, _
+               uaBlockSpecs(lBlockIndex).lRowsCount, _
+               uaBlockSpecs(lBlockIndex).lColsCount _
+            ) _
+         Then
+            Err.Raise 5, , uLaneRangeSpec.sName & " liegt nicht innerhalb von blk_" & sBlockKey
+         End If
+          
+         Dim uLaneSpec As u_f_LaneSpecRenderer
+         With uLaneSpec
+            .sLaneType = sLaneType
+            .sKey = sLaneKey
+            .lTopRel = uLaneRangeSpec.oRng.Row - uaBlockSpecs(lBlockIndex).lTop
+            .lLeftRel = uLaneRangeSpec.oRng.Column - uaBlockSpecs(lBlockIndex).lLeft
+            .lRowsCount = uLaneRangeSpec.oRng.rows.Count
+            .lColsCount = uLaneRangeSpec.oRng.Columns.Count
+            .uaCells = ua_m_ReadLaneCellSpecs(uLaneRangeSpec.oRng)
+            .lPadAfterRows = l_m_ExtractPadAfterFromComment(uLaneRangeSpec.oRng.Cells(1, 1)) ' optional
+         End With
+         mAppendLane uaBlockSpecs(lBlockIndex), uLaneSpec
+NextLane:
+      Next lLaneIndex
+   End If 'If CountLong(laLaneIndex) > 0 Then
+    
+   ua_arg_ParsedBlockSpecs = uaBlockSpecs
+
+
+
+'End of your code <<<<<<<
+
+
+'Fixed, don't change
+Finally: On Error Resume Next
+
+
+'>>>>>>> Your code here
+
+
+
+'End of your code <<<<<<<
+
+
+'>>>>>>> Your custom settings here
+   If oC_Me.oC_prop_r_Error Is Nothing Then b_f_p_GetAllParsedBlockSpecs = True 'reports execution as successful to caller
+'Fixed, don't change
+   Exit Function
+HandleError: af_pM_ErrorHandling.af_p_Hook_ErrorHandling_LowerLevel
+
+
+'>>>>>>> Your code here
+
+
+
+'End of your code <<<<<<<
+
+
+'Fixed, don't change
+   Resume Finally
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
+   Else
+      f_p_HandleError oC_Me: GoTo HandleError
+   End If
+End Function
+
+
 ' ---- Named Ranges im Blatt sammeln (Array, kein Collection) ----
-Private Function CollectNamedRangesInSheet(ws As Worksheet) As NamedRangeRef()
-    Dim tmp() As NamedRangeRef          ' <-- uninitialisiert lassen!
-    Dim n As name
-    For Each n In ThisWorkbook.Names
-        On Error Resume Next
-        Dim r As Range: Set r = n.RefersToRange
-        On Error GoTo 0
-        If Not r Is Nothing Then
-            If r.Worksheet Is ws Then
-                Dim nr As NamedRangeRef
-                nr.name = n.name
-                Set nr.ws = ws
-                Set nr.rng = r
-                AppendNamedRef tmp, nr      ' AppendNamedRef dimensioniert bei Bedarf
-            End If
-        End If
-    Next n
-    CollectNamedRangesInSheet = tmp
+Private Function ua_m_CollectNamedRangesSpecsFromSheet(ByRef oWks As Worksheet) As u_f_NamedRangeRefRenderer()
+   Dim uaTmpNamdRangeSpec() As u_f_NamedRangeRefRenderer          ' <-- uninitialisiert lassen!
+   Dim oName As name
+   Dim oRng As Range
+   
+   For Each oName In ThisWorkbook.Names
+      On Error Resume Next
+      Set oRng = oName.RefersToRange
+      On Error GoTo 0
+      If Not oRng Is Nothing Then
+         If oRng.Worksheet Is oWks Then
+            Dim uNamedRangeSpec As u_f_NamedRangeRefRenderer
+            uNamedRangeSpec.sName = oName.name
+            Set uNamedRangeSpec.oWks = oWks
+            Set uNamedRangeSpec.oRng = oRng
+            mAppendNamedRef uaTmpNamdRangeSpec, uNamedRangeSpec      ' AppendNamedRef dimensioniert bei Bedarf
+         End If
+      End If
+   Next oName
+   ua_m_CollectNamedRangesSpecsFromSheet = uaTmpNamdRangeSpec
 End Function
 
 
 ' ---- Array-Append-Helfer ----
-Private Sub AppendNamedRef(ByRef arr() As NamedRangeRef, ByRef x As NamedRangeRef)
+Private Sub mAppendNamedRef(ByRef arr() As u_f_NamedRangeRefRenderer, ByRef x As u_f_NamedRangeRefRenderer)
+' TODO: refactor for coding style compliance
     Dim L As Long
     On Error Resume Next: L = UBound(arr) + 1: On Error GoTo 0
     If L < 0 Then L = 0
@@ -156,15 +263,18 @@ Private Sub AppendNamedRef(ByRef arr() As NamedRangeRef, ByRef x As NamedRangeRe
     arr(L) = x
 End Sub
 
-Private Sub AppendLane(ByRef blk As BlockSpec2, ByRef ls As LaneSpec)
-    Dim L As Long
-    On Error Resume Next: L = UBound(blk.lanes) + 1: On Error GoTo 0
-    If L < 0 Then L = 0
-    ReDim Preserve blk.lanes(0 To L)
-    blk.lanes(L) = ls
+Private Sub mAppendLane(ByRef uBlockSpec As u_f_BlockSpecRenderer, ByRef uLaneSpec As u_f_LaneSpecRenderer)
+    Dim lIndex As Long
+    On Error Resume Next
+    lIndex = UBound(uBlockSpec.uaLanes) + 1
+    On Error GoTo 0
+    If lIndex < 0 Then lIndex = 0
+    ReDim Preserve uBlockSpec.uaLanes(0 To lIndex)
+    uBlockSpec.uaLanes(lIndex) = uLaneSpec
 End Sub
 
-Private Sub AppendIndex(ByRef arr() As Long, ByVal idx As Long)
+Private Sub mAppendIndex(ByRef arr() As Long, ByVal idx As Long)
+' TODO: refactor for coding style compliance
     Dim L As Long
     On Error Resume Next: L = UBound(arr) + 1: On Error GoTo 0
     If L < 0 Then L = 0
@@ -172,77 +282,83 @@ Private Sub AppendIndex(ByRef arr() As Long, ByVal idx As Long)
     arr(L) = idx
 End Sub
 
-Private Function CountLong(ByRef arr() As Long) As Long
+Private Function l_m_CountLong(ByRef arr() As Long) As Long
+' TODO: refactor for coding style compliance
     On Error Resume Next
-    CountLong = UBound(arr) - LBound(arr) + 1
-    If Err.Number <> 0 Then CountLong = 0: Err.Clear
+    l_m_CountLong = UBound(arr) - LBound(arr) + 1
+    If Err.Number <> 0 Then l_m_CountLong = 0: Err.Clear
 End Function
 
-Private Function HasElementsNR(ByRef arr() As NamedRangeRef) As Boolean
+Private Function b_m_HasElementsNR(ByRef arr() As u_f_NamedRangeRefRenderer) As Boolean
+' TODO: refactor for coding style compliance
     On Error Resume Next
-    HasElementsNR = (UBound(arr) >= LBound(arr))
-    If Err.Number <> 0 Then HasElementsNR = False: Err.Clear
+    b_m_HasElementsNR = (UBound(arr) >= LBound(arr))
+    If Err.Number <> 0 Then b_m_HasElementsNR = False: Err.Clear
 End Function
 
 ' ---- Utilities ----
-Private Function FindBlockIndex(ByRef blocks() As BlockSpec2, ByVal key As String) As Long
+Private Function l_m_FindBlockIndex(ByRef blocks() As u_f_BlockSpecRenderer, ByVal key As String) As Long
+' TODO: refactor for coding style compliance
     Dim i As Long
     For i = LBound(blocks) To UBound(blocks)
-        If StrComp(blocks(i).blockKey, key, vbTextCompare) = 0 Then
-            FindBlockIndex = i
+        If StrComp(blocks(i).sBlockKey, key, vbTextCompare) = 0 Then
+            l_m_FindBlockIndex = i
             Exit Function
         End If
     Next i
 End Function
 
-Private Function RangeWithin(ws As Worksheet, inner As Range, topAbs As Long, leftAbs As Long, rows As Long, cols As Long) As Boolean
-    RangeWithin = Not (inner.Row < topAbs _
+Private Function b_m_RangeWithin(ws As Worksheet, inner As Range, topAbs As Long, leftAbs As Long, rows As Long, cols As Long) As Boolean
+    b_m_RangeWithin = Not (inner.Row < topAbs _
                     Or inner.Column < leftAbs _
                     Or inner.Row + inner.rows.Count - 1 > topAbs + rows - 1 _
                     Or inner.Column + inner.Columns.Count - 1 > topAbs + cols - 1)
 End Function
 
-Private Function ReadLaneCells(rng As Range) As CellSpec2()
-    Dim arr() As CellSpec2
+Private Function ua_m_ReadLaneCellSpecs(rng As Range) As u_f_CellSpecRenderer()
+' TODO: refactor for coding style compliance
+    Dim arr() As u_f_CellSpecRenderer
     ReDim arr(1 To rng.rows.Count * rng.Columns.Count)
     Dim idx As Long: idx = 0
     Dim r As Long, c As Long
     For r = 1 To rng.rows.Count
         For c = 1 To rng.Columns.Count
             idx = idx + 1
-            Dim cs As CellSpec2
+            Dim cs As u_f_CellSpecRenderer
             Dim cell As Range: Set cell = rng.Cells(r, c)
-            cs.templateText = CStr(cell.Value)
-            cs.PlaceholderList = ExtractPlaceholdersList2(cs.templateText)
-            cs.StyleToken = ExtractStyleToken2(cell)
-            cs.relRow = r
-            cs.relCol = c
+            cs.sTemplateText = CStr(cell.Value)
+            cs.sPlaceholderList = s_m_ExtractPlaceholdersList(cs.sTemplateText)
+            cs.sStyleToken = s_m_ExtractStyleToken(cell)
+            cs.lRelRow = r
+            cs.lRelCol = c
             arr(idx) = cs
         Next c
     Next r
-    ReadLaneCells = arr
+    ua_m_ReadLaneCellSpecs = arr
 End Function
 
-Private Function ExtractStyleToken2(cell As Range) As String
+Private Function s_m_ExtractStyleToken(cell As Range) As String
+' TODO: refactor for coding style compliance
     On Error Resume Next
     Dim cmt As Comment: Set cmt = cell.Comment
     On Error GoTo 0
     If Not cmt Is Nothing Then
         Dim s As String: s = Trim$(cmt.Text)
         If LCase$(Left$(s, 6)) = "style:" Then
-            ExtractStyleToken2 = Trim$(Mid$(s, 7))
+            s_m_ExtractStyleToken = Trim$(Mid$(s, 7))
         Else
             Dim p As Long: p = InStr(1, LCase$(s), "style:", vbTextCompare)
             If p > 0 Then
                 Dim tail As String: tail = Mid$(s, p + 6)
                 tail = Split(Split(tail, ";")(0), vbCr)(0)
-                ExtractStyleToken2 = Trim$(tail)
+                s_m_ExtractStyleToken = Trim$(tail)
             End If
         End If
     End If
 End Function
 
-Private Function ExtractPlaceholdersList2(ByVal s As String) As String
+Private Function s_m_ExtractPlaceholdersList(ByVal s As String) As String
+' TODO: refactor for coding style compliance
     Dim out As String, pos As Long, p1 As Long, p2 As Long
     pos = 1
     Do
@@ -257,10 +373,11 @@ Private Function ExtractPlaceholdersList2(ByVal s As String) As String
         End If
         pos = p2 + 2
     Loop
-    ExtractPlaceholdersList2 = out
+    s_m_ExtractPlaceholdersList = out
 End Function
 
-Private Function ExtractPadAfterFromComment(cell As Range) As Long
+Private Function l_m_ExtractPadAfterFromComment(cell As Range) As Long
+' TODO: refactor for coding style compliance
     On Error Resume Next
     Dim cmt As Comment: Set cmt = cell.Comment
     If cmt Is Nothing Then Exit Function
@@ -279,327 +396,492 @@ Private Function ExtractPadAfterFromComment(cell As Range) As Long
                 Exit For
             End If
         Next i
-        If Len(num) > 0 Then ExtractPadAfterFromComment = CLng(num)
+        If Len(num) > 0 Then l_m_ExtractPadAfterFromComment = CLng(num)
     End If
 End Function
 
-Private Function JoinMid(parts() As String, startIdx As Long, sep As String) As String
-    Dim i As Long, s As String
-    For i = startIdx To UBound(parts)
-        If i > startIdx Then s = s & sep
-        s = s & parts(i)
-    Next i
-    JoinMid = s
+Private Function s_m_JoinMid(ByRef saParts() As String, ByVal lStartIndex As Long, ByVal sSeparator As String) As String
+   Dim lIndex As Long, sTemp As String
+   For lIndex = lStartIndex To UBound(saParts)
+      If lIndex > lStartIndex Then sTemp = sTemp & sSeparator
+      sTemp = sTemp & saParts(lIndex)
+   Next lIndex
+   s_m_JoinMid = sTemp
 End Function
 
-' ############################################
-' # RENDERING                                 #
-' ############################################
-Public Sub RenderBlocks(wsOut As Worksheet, ByRef blocks() As BlockSpec2, ByVal data As Object, _
-                         ByVal startRowOut As Long, ByVal startColOut As Long)
-    Dim outRow As Long: outRow = startRowOut
-    Dim outCol As Long: outCol = startColOut
-    
-    Dim b As Long
-    For b = LBound(blocks) To UBound(blocks)
-        Dim blk As BlockSpec2: blk = blocks(b)
-        Dim ctx As Object
-        If data.Exists(blk.blockKey) Then
-            Set ctx = data(blk.blockKey)
-        Else
-            Set ctx = BuildEmptyContext()
-        End If
-        Dim blockHeight As Long
-        blockHeight = RenderOneBlock(wsOut, blk, ctx, outRow, outCol)
-        outRow = outRow + blockHeight
-    Next b
-End Sub
+' Purpose: renders the blocks in the provided output sheet from the provided position, based on block specs and data to replace the tags in it
+Public Function b_f_p_RenderBlocks( _
+   ByRef oWksOut As Worksheet, _
+   ByRef uaBlockSpecs() As u_f_BlockSpecRenderer, _
+   ByVal oDictBlocksData As Scripting.Dictionary, _
+   ByVal lStartRowOut As Long, _
+   ByVal lStartColOut As Long, _
+   Optional ByRef lNextStartRow As Long _
+) As Boolean
 
-Private Function RenderOneBlock(wsOut As Worksheet, ByRef blk As BlockSpec2, ByVal ctx As Object, _
-                                ByVal outTop As Long, ByVal outLeft As Long) As Long
-    
-      ValidateRepeaters blk, ctx
-    
-    
-    Dim maxBottom As Long: maxBottom = 0
-    Dim i As Long
-    
-    ' 1) FIX zuerst (Template-Position)
-    If HasElementsLanes(blk.lanes) Then
-        For i = LBound(blk.lanes) To UBound(blk.lanes)
-            If UCase$(blk.lanes(i).laneType) = "FIX" Then
-                Dim botF As Long
-                botF = WriteFixLane(wsOut, blk, blk.lanes(i), ctx, outTop, outLeft)
-                If botF > maxBottom Then maxBottom = botF
-            End If
-        Next i
-    End If
-    
-    ' 2) REP danach (expandiert)
-    If HasElementsLanes(blk.lanes) Then
-        For i = LBound(blk.lanes) To UBound(blk.lanes)
-            If UCase$(blk.lanes(i).laneType) = "REP" Then
-                Dim botR As Long
-                botR = WriteRepLane(wsOut, blk, blk.lanes(i), ctx, outTop, outLeft)
-                If botR > maxBottom Then maxBottom = botR
-            End If
-        Next i
-    End If
-    
-    ' 3) REL zum Schluss (verschieben, wenn nötig)
-    Dim rels() As LaneSpec
-    rels = SortRelLanesByTopRel(blk.lanes)
-    If HasElementsLanes(rels) Then
-        Dim k As Long
-        For k = LBound(rels) To UBound(rels)
-            Dim botRel As Long
-            botRel = WriteRelLane(wsOut, blk, rels(k), ctx, outTop, outLeft, maxBottom)
-            If botRel > maxBottom Then maxBottom = botRel
-        Next k
-    End If
-    
-    If maxBottom = 0 Then maxBottom = blk.RowsCount
-    RenderOneBlock = maxBottom
-End Function
+'Fixed, don't change
+   Dim oC_Me As New f_C_CallParams: oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME: If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+'>>>>>>> Your custom settings here
+   With oC_Me
+      .s_prop_rw_ProcedureName = "b_f_p_RenderBlocks" 'Name of the function
+      .b_prop_rw_SilentError = True 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "Rendering the blocks failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+'Fixed, don't change
+Try: On Error GoTo Catch
 
-Private Function SortRelLanesByTopRel(ByRef lanes() As LaneSpec) As LaneSpec()
-    Dim buf() As LaneSpec
-    Dim i As Long, n As Long: n = -1
-    If HasElementsLanes(lanes) Then
-        For i = LBound(lanes) To UBound(lanes)
-            If UCase$(lanes(i).laneType) = "REL" Then
-                n = n + 1
-                ReDim Preserve buf(0 To n)
-                buf(n) = lanes(i)
-            End If
-        Next i
-    End If
-      If n < 0 Then
-          SortRelLanesByTopRel = buf  ' buf ist uninitialisiert ? ok
-          Exit Function
+
+'>>>>>>> Your code here
+
+   Dim lOutRow As Long
+   Dim lOutCol As Long
+   Dim lBlockIndex As Long
+   Dim uBlockSpec As u_f_BlockSpecRenderer
+   Dim oDictContext As Scripting.Dictionary
+   Dim lBlockRowHeight As Long
+    
+   lOutRow = lStartRowOut
+   lOutCol = lStartColOut
+   
+   For lBlockIndex = LBound(uaBlockSpecs) To UBound(uaBlockSpecs)
+      uBlockSpec = uaBlockSpecs(lBlockIndex)
+      If oDictBlocksData.Exists(uBlockSpec.sBlockKey) Then
+         Set oDictContext = oDictBlocksData(uBlockSpec.sBlockKey)
+      Else
+         Set oDictContext = oDict_f_p_BuildEmptyContext()
       End If
+      lBlockRowHeight = l_m_RenderOneBlock(oWksOut, uBlockSpec, oDictContext, lOutRow, lOutCol)
+      lOutRow = lOutRow + lBlockRowHeight
+   Next lBlockIndex
 
-    
-    ' sortieren nach TopRel
-    If HasElementsLanes(buf) Then
-        Dim swapped As Boolean
-        Do
-            swapped = False
-            For i = LBound(buf) To UBound(buf) - 1
-                If buf(i).TopRel > buf(i + 1).TopRel Then
-                    Dim t As LaneSpec: t = buf(i): buf(i) = buf(i + 1): buf(i + 1) = t
-                    swapped = True
-                End If
-            Next i
-        Loop While swapped
-    End If
-    SortRelLanesByTopRel = buf
-End Function
+'End of your code <<<<<<<
 
-Private Function HasElementsLanes(ByRef lanes() As LaneSpec) As Boolean
-    On Error Resume Next
-    HasElementsLanes = (UBound(lanes) >= LBound(lanes))
-    If Err.Number <> 0 Then HasElementsLanes = False: Err.Clear
-End Function
 
-Private Function WriteFixLane(wsOut As Worksheet, ByRef blk As BlockSpec2, ByRef ln As LaneSpec, _
-                              ByVal ctx As Object, ByVal outTop As Long, ByVal outLeft As Long) As Long
-    Dim r As Long, c As Long
-    For r = 1 To ln.RowsCount
-        Dim vals() As Variant: ReDim vals(1 To 1, 1 To ln.ColsCount)
-        Dim toks() As String: ReDim toks(1 To ln.ColsCount)
-        For c = 1 To ln.ColsCount
-            Dim cs As CellSpec2: cs = FindCellInLane(ln, r, c)
-            vals(1, c) = ReplaceAll2(cs.templateText, cs.PlaceholderList, ctx, Nothing)
-            toks(c) = cs.StyleToken
-        Next c
-        With wsOut.Range( _
-            wsOut.Cells(outTop + ln.TopRel + r - 1, outLeft + ln.LeftRel), _
-            wsOut.Cells(outTop + ln.TopRel + r - 1, outLeft + ln.LeftRel + ln.ColsCount - 1))
-            .Value = vals
-            ApplyStylesRow2 .Cells, toks
-        End With
-    Next r
-    Dim bottomRel As Long: bottomRel = ln.TopRel + ln.RowsCount - 1
-    If ln.PadAfterRows > 0 Then
-        bottomRel = WritePadRows(wsOut, outTop, outLeft, ln, bottomRel)
-    End If
-    WriteFixLane = bottomRel
-End Function
+'Fixed, don't change
+Finally: On Error Resume Next
 
-Private Function WriteRepLane(wsOut As Worksheet, ByRef blk As BlockSpec2, ByRef ln As LaneSpec, _
-                              ByVal ctx As Object, ByVal outTop As Long, ByVal outLeft As Long) As Long
-    Dim items As Collection: Set items = ResolveRepCollection(ctx, ln.key)
-    Dim n As Long
-    If items Is Nothing Then
-      n = 0
+
+'>>>>>>> Your code here
+   lNextStartRow = lOutRow
+
+
+'End of your code <<<<<<<
+
+
+'>>>>>>> Your custom settings here
+   If oC_Me.oC_prop_r_Error Is Nothing Then b_f_p_RenderBlocks = True 'reports execution as successful to caller
+'Fixed, don't change
+   Exit Function
+HandleError: af_pM_ErrorHandling.af_p_Hook_ErrorHandling_LowerLevel
+
+
+'>>>>>>> Your code here
+
+
+
+'End of your code <<<<<<<
+
+
+'Fixed, don't change
+   Resume Finally
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
    Else
-      n = items.Count
+      f_p_HandleError oC_Me: GoTo HandleError
    End If
-    'n = IIf(items Is Nothing, 0, items.Count)
+End Function
+
+
+Private Function l_m_RenderOneBlock( _
+   ByRef oWksOut As Worksheet, _
+   ByRef uBlockSpec As u_f_BlockSpecRenderer, _
+   ByVal oDictContext As Scripting.Dictionary, _
+   ByVal lOutTopRow As Long, _
+   ByVal lOutLeftColumn As Long _
+) As Long
     
-    Dim k As Long, r As Long, c As Long
-    For k = 1 To n
-        For r = 1 To ln.RowsCount
-            Dim vals() As Variant: ReDim vals(1 To 1, 1 To ln.ColsCount)
-            Dim toks() As String: ReDim toks(1 To ln.ColsCount)
-            For c = 1 To ln.ColsCount
-                Dim cs As CellSpec2: cs = FindCellInLane(ln, r, c)
-                vals(1, c) = ReplaceAll2(cs.templateText, cs.PlaceholderList, ctx, items(k))
-                toks(c) = cs.StyleToken
-            Next c
-            With wsOut.Range( _
-                wsOut.Cells(outTop + ln.TopRel + (k - 1) * ln.RowsCount + r - 1, outLeft + ln.LeftRel), _
-                wsOut.Cells(outTop + ln.TopRel + (k - 1) * ln.RowsCount + r - 1, outLeft + ln.LeftRel + ln.ColsCount - 1))
-                .Value = vals
-                ApplyStylesRow2 .Cells, toks
-            End With
-        Next r
-    Next k
+   Dim lMaxBottomRow As Long
+   Dim lIndex As Long
+   Dim lBottomRowFixLane As Long
+   Dim lBottomRowRepeatableLane As Long
+   Dim uaRelsLaneSpec() As u_f_LaneSpecRenderer
+   Dim lBottomRowRelativeLanes As Long
+   
+   mValidateRepeaters uBlockSpec, oDictContext
     
-    Dim bottomRel As Long
-    bottomRel = ln.TopRel + Application.Max(n * ln.RowsCount, ln.RowsCount) - 1
-    If ln.PadAfterRows > 0 Then
-        bottomRel = WritePadRows(wsOut, outTop, outLeft, ln, bottomRel)
-    End If
-    WriteRepLane = bottomRel
-End Function
-
-Private Function WriteRelLane(wsOut As Worksheet, ByRef blk As BlockSpec2, ByRef ln As LaneSpec, _
-                              ByVal ctx As Object, ByVal outTop As Long, ByVal outLeft As Long, _
-                              ByVal currentMaxBottom As Long) As Long
-    Dim effectiveTopRel As Long
-    effectiveTopRel = ln.TopRel
-    If currentMaxBottom >= effectiveTopRel Then
-        effectiveTopRel = currentMaxBottom + 1
-    End If
+   lMaxBottomRow = 0
     
-    Dim r As Long, c As Long
-    For r = 1 To ln.RowsCount
-        Dim vals() As Variant: ReDim vals(1 To 1, 1 To ln.ColsCount)
-        Dim toks() As String: ReDim toks(1 To ln.ColsCount)
-        For c = 1 To ln.ColsCount
-            Dim cs As CellSpec2: cs = FindCellInLane(ln, r, c)
-            vals(1, c) = ReplaceAll2(cs.templateText, cs.PlaceholderList, ctx, Nothing)
-            toks(c) = cs.StyleToken
-        Next c
-        With wsOut.Range( _
-            wsOut.Cells(outTop + effectiveTopRel + r - 1, outLeft + ln.LeftRel), _
-            wsOut.Cells(outTop + effectiveTopRel + r - 1, outLeft + ln.LeftRel + ln.ColsCount - 1))
-            .Value = vals
-            ApplyStylesRow2 .Cells, toks
-        End With
-    Next r
+   ' 1) FIX zuerst (Template-Position)
+   If b_m_HasElementsLanes(uBlockSpec.uaLanes) Then
+      For lIndex = LBound(uBlockSpec.uaLanes) To UBound(uBlockSpec.uaLanes)
+         If UCase$(uBlockSpec.uaLanes(lIndex).sLaneType) = s_m_LANE_TAG_FIX Then
+            lBottomRowFixLane = l_m_WriteFixLane(oWksOut, uBlockSpec, uBlockSpec.uaLanes(lIndex), oDictContext, lOutTopRow, lOutLeftColumn)
+            If lBottomRowFixLane > lMaxBottomRow Then lMaxBottomRow = lBottomRowFixLane
+         End If
+      Next lIndex
+   End If
     
-    Dim bottomRel As Long: bottomRel = effectiveTopRel + ln.RowsCount - 1
-    If ln.PadAfterRows > 0 Then
-        bottomRel = WritePadRowsAt(wsOut, outTop, outLeft, ln, bottomRel + 1, ln.LeftRel)
-    End If
-    WriteRelLane = bottomRel
+   ' 2) REP danach (expandiert)
+   If b_m_HasElementsLanes(uBlockSpec.uaLanes) Then
+      For lIndex = LBound(uBlockSpec.uaLanes) To UBound(uBlockSpec.uaLanes)
+         If UCase$(uBlockSpec.uaLanes(lIndex).sLaneType) = s_m_LANE_TAG_REPEATABLE Then
+            lBottomRowRepeatableLane = l_m_WriteRepLane(oWksOut, uBlockSpec, uBlockSpec.uaLanes(lIndex), oDictContext, lOutTopRow, lOutLeftColumn)
+            If lBottomRowRepeatableLane > lMaxBottomRow Then lMaxBottomRow = lBottomRowRepeatableLane
+         End If
+      Next lIndex
+   End If
+    
+   ' 3) REL zum Schluss (verschieben, wenn nötig)
+   uaRelsLaneSpec = ua_m_SortRelLanesByTopRel(uBlockSpec.uaLanes)
+   If b_m_HasElementsLanes(uaRelsLaneSpec) Then
+      For lIndex = LBound(uaRelsLaneSpec) To UBound(uaRelsLaneSpec)
+         lBottomRowRelativeLanes = l_m_WriteRelLane(oWksOut, uBlockSpec, uaRelsLaneSpec(lIndex), oDictContext, lOutTopRow, lOutLeftColumn, lMaxBottomRow)
+         If lBottomRowRelativeLanes > lMaxBottomRow Then lMaxBottomRow = lBottomRowRelativeLanes
+      Next lIndex
+   End If
+    
+   If lMaxBottomRow = 0 Then lMaxBottomRow = uBlockSpec.lRowsCount
+   l_m_RenderOneBlock = lMaxBottomRow
 End Function
 
-Private Function WritePadRows(wsOut As Worksheet, ByVal outTop As Long, ByVal outLeft As Long, ByRef ln As LaneSpec, _
-                              ByVal currentBottomRel As Long) As Long
-    Dim nextRowRel As Long: nextRowRel = currentBottomRel + 1
-    WritePadRows = WritePadRowsAt(wsOut, outTop, outLeft, ln, nextRowRel, ln.LeftRel)
-End Function
+Private Function ua_m_SortRelLanesByTopRel(ByRef uaLaneSpecs() As u_f_LaneSpecRenderer) As u_f_LaneSpecRenderer()
+   Dim uaLaneSpecsBuffer() As u_f_LaneSpecRenderer
+   Dim lIndex As Long, lRelLaneCount As Long
+   Dim uTempLaneSpec As u_f_LaneSpecRenderer
+   Dim bSwapped As Boolean
+   
+   lRelLaneCount = -1
+   If b_m_HasElementsLanes(uaLaneSpecs) Then
+      For lIndex = LBound(uaLaneSpecs) To UBound(uaLaneSpecs)
+         If UCase$(uaLaneSpecs(lIndex).sLaneType) = s_m_LANE_TAG_RELATIVE Then
+            lRelLaneCount = lRelLaneCount + 1
+            ReDim Preserve uaLaneSpecsBuffer(0 To lRelLaneCount)
+            uaLaneSpecsBuffer(lRelLaneCount) = uaLaneSpecs(lIndex)
+         End If
+      Next lIndex
+   End If
+   If lRelLaneCount < 0 Then
+      ua_m_SortRelLanesByTopRel = uaLaneSpecsBuffer  ' uaLaneSpecsBuffer ist uninitialisiert ? ok
+      Exit Function
+   End If
 
-Private Function WritePadRowsAt(wsOut As Worksheet, ByVal outTop As Long, ByVal outLeft As Long, ByRef ln As LaneSpec, _
-                                ByVal startRowRel As Long, ByVal startColRel As Long) As Long
-    Dim s As Long
-    For s = 1 To ln.PadAfterRows
-        Dim vals() As Variant: ReDim vals(1 To 1, 1 To ln.ColsCount)
-        Dim toks() As String: ReDim toks(1 To ln.ColsCount)
-        With wsOut.Range( _
-            wsOut.Cells(outTop + startRowRel + s - 1, outLeft + startColRel), _
-            wsOut.Cells(outTop + startRowRel + s - 1, outLeft + startColRel + ln.ColsCount - 1))
-            .Value = vals
-            ApplyStylesRow2 .Cells, toks
-        End With
-    Next s
-    WritePadRowsAt = startRowRel + ln.PadAfterRows - 1
-End Function
-
-Private Function FindCellInLane(ByRef ln As LaneSpec, ByVal relRow As Long, ByVal relCol As Long) As CellSpec2
-    Dim idx As Long: idx = (relRow - 1) * ln.ColsCount + relCol
-    FindCellInLane = ln.Cells(idx)
-End Function
-
-Private Sub ApplyStylesRow2(rngRow As Range, ByRef styleTokens() As String)
-    Dim c As Long
-    For c = 1 To rngRow.Columns.Count
-        Dim tok As String: tok = styleTokens(c)
-        If Len(tok) > 0 Then
-            On Error Resume Next
-            rngRow.Cells(1, c).Style = tok
-            On Error GoTo 0
-            ' Rahmen nach Token aus _meta
-            ApplyBordersForToken rngRow.Cells(1, c), tok
-        End If
-    Next c
-End Sub
-
-
-' ############################################
-' # PLATZHALTER / DATEN-KONTEXT               #
-' ############################################
-Private Function ReplaceAll2(ByVal templateText As String, ByVal listKeys As String, _
-                             ByVal ctx As Object, ByVal item As Variant) As String
-    Dim out As String: out = templateText
-    If Len(listKeys) = 0 Then ReplaceAll2 = out: Exit Function
-    Dim arr() As String: arr = Split(listKeys, "|")
-    Dim i As Long
-    For i = LBound(arr) To UBound(arr)
-        Dim k As String: k = arr(i)
-        Dim v As String: v = ResolveValue2(k, ctx, item)
-        out = Replace(out, "{{" & k & "}}", v)
-    Next i
-    ReplaceAll2 = out
-End Function
-
-Private Function ResolveValue2(ByVal key As String, ByVal ctx As Object, ByVal item As Variant) As String
-    On Error Resume Next
-    If InStr(1, key, "[i].", vbTextCompare) > 0 Then
-        If Not IsEmpty(item) Then
-            If item.Exists(key) Then ResolveValue2 = CStr(item(key)) Else ResolveValue2 = ""
-        Else
-            ResolveValue2 = ""
-        End If
-    ElseIf Left$(key, 7) = "Totals." Then
-        If ctx("totals").Exists(key) Then ResolveValue2 = CStr(ctx("totals")(key)) Else ResolveValue2 = ""
-    Else
-        If ctx("header").Exists(key) Then ResolveValue2 = CStr(ctx("header")(key)) Else ResolveValue2 = ""
-    End If
-    On Error GoTo 0
-End Function
-
-Private Function ResolveRepCollection(ByVal ctx As Object, ByVal laneKey As String) As Collection
-    On Error Resume Next
-    Dim reps As Object: Set reps = ctx("repeaters")
-    If Not reps Is Nothing Then
-        If reps.Exists(laneKey) Then Set ResolveRepCollection = reps(laneKey)
-    End If
-    On Error GoTo 0
-End Function
-
-Public Function BuildEmptyContext() As Object
-    Dim ctx As Object: Set ctx = CreateObject("Scripting.Dictionary")
-    Set ctx("header") = CreateObject("Scripting.Dictionary")
-    Set ctx("totals") = CreateObject("Scripting.Dictionary")
-    Set ctx("repeaters") = CreateObject("Scripting.Dictionary")
-    Set BuildEmptyContext = ctx
-End Function
-
-Private Sub ValidateRepeaters(ByRef blk As BlockSpec2, ByVal ctx As Object)
-    Dim i As Long
-    For i = LBound(blk.lanes) To UBound(blk.lanes)
-        If UCase$(blk.lanes(i).laneType) = "REP" Then
-            If Not ctx("repeaters").Exists(blk.lanes(i).key) Then
-                Err.Raise 5, , "Fehlende Repeater-Daten: blk_" & blk.blockKey & _
-                               " ? rep key '" & blk.lanes(i).key & "'"
+   
+   ' sortieren nach TopRel
+   If b_m_HasElementsLanes(uaLaneSpecsBuffer) Then
+      Do
+         bSwapped = False
+         For lIndex = LBound(uaLaneSpecsBuffer) To UBound(uaLaneSpecsBuffer) - 1
+            If uaLaneSpecsBuffer(lIndex).lTopRel > uaLaneSpecsBuffer(lIndex + 1).lTopRel Then
+               uTempLaneSpec = uaLaneSpecsBuffer(lIndex): uaLaneSpecsBuffer(lIndex) = uaLaneSpecsBuffer(lIndex + 1): uaLaneSpecsBuffer(lIndex + 1) = uTempLaneSpec
+               bSwapped = True
             End If
-        End If
-    Next i
+         Next lIndex
+      Loop While bSwapped
+   End If
+   ua_m_SortRelLanesByTopRel = uaLaneSpecsBuffer
+
+End Function
+
+Private Function b_m_HasElementsLanes(ByRef uLaneSpecs() As u_f_LaneSpecRenderer) As Boolean
+   On Error Resume Next
+   b_m_HasElementsLanes = (UBound(uLaneSpecs) >= LBound(uLaneSpecs))
+   If Err.Number <> 0 Then
+      b_m_HasElementsLanes = False
+      Err.Clear
+   End If
+End Function
+
+Private Function l_m_WriteFixLane( _
+   ByRef oWksOut As Worksheet, _
+   ByRef uBlockSpec As u_f_BlockSpecRenderer, _
+   ByRef uLaneSpec As u_f_LaneSpecRenderer, _
+   ByVal oDictContext As Scripting.Dictionary, _
+   ByVal lOutTopRow As Long, _
+   ByVal lOutLeftCol As Long _
+) As Long
+    
+   Dim lRow As Long, lCol As Long
+   Dim vaValues() As Variant
+   Dim saTokens() As String
+   Dim uCellSpec As u_f_CellSpecRenderer
+   Dim lBottomRelRow As Long
+   
+   For lRow = 1 To uLaneSpec.lRowsCount
+      ReDim vaValues(1 To 1, 1 To uLaneSpec.lColsCount)
+      ReDim saTokens(1 To uLaneSpec.lColsCount)
+      For lCol = 1 To uLaneSpec.lColsCount
+         uCellSpec = u_m_GetCellSpecFromLane(uLaneSpec, lRow, lCol)
+         vaValues(1, lCol) = s_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, Nothing)
+         saTokens(lCol) = uCellSpec.sStyleToken
+      Next lCol
+      With oWksOut.Range( _
+      oWksOut.Cells(lOutTopRow + uLaneSpec.lTopRel + lRow - 1, lOutLeftCol + uLaneSpec.lLeftRel), _
+      oWksOut.Cells(lOutTopRow + uLaneSpec.lTopRel + lRow - 1, lOutLeftCol + uLaneSpec.lLeftRel + uLaneSpec.lColsCount - 1))
+         .Value = vaValues
+         mApplyStylesRow .Cells, saTokens
+      End With
+   Next lRow
+   lBottomRelRow = uLaneSpec.lTopRel + uLaneSpec.lRowsCount - 1
+   If uLaneSpec.lPadAfterRows > 0 Then
+      lBottomRelRow = l_m_WritePadRows(oWksOut, lOutTopRow, lOutLeftCol, uLaneSpec, lBottomRelRow)
+   End If
+   l_m_WriteFixLane = lBottomRelRow
+End Function
+
+Private Function l_m_WriteRepLane( _
+   ByRef oWksOut As Worksheet, _
+   ByRef uBlockSpec As u_f_BlockSpecRenderer, _
+   ByRef uLaneSpec As u_f_LaneSpecRenderer, _
+   ByVal oDictContext As Scripting.Dictionary, _
+   ByVal lOutTopRow As Long, _
+   ByVal lOutLeftCol As Long) As Long
+   
+   Dim oColItems As Collection
+   Dim lItemCount As Long
+   Dim lIndex As Long, lRow As Long, lCol As Long
+   Dim vaValues() As Variant
+   Dim saTokens() As String
+   Dim uCellSpec As u_f_CellSpecRenderer
+   Dim lBottomRelRow As Long
+   
+   Set oColItems = oCol_m_ResolveRepCollection(oDictContext, uLaneSpec.sKey)
+   
+   If oColItems Is Nothing Then
+      lItemCount = 0
+   Else
+      lItemCount = oColItems.Count
+   End If
+    
+   For lIndex = 1 To lItemCount
+      For lRow = 1 To uLaneSpec.lRowsCount
+         ReDim vaValues(1 To 1, 1 To uLaneSpec.lColsCount)
+         ReDim saTokens(1 To uLaneSpec.lColsCount)
+         For lCol = 1 To uLaneSpec.lColsCount
+            uCellSpec = u_m_GetCellSpecFromLane(uLaneSpec, lRow, lCol)
+            vaValues(1, lCol) = s_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, oColItems(lIndex))
+            saTokens(lCol) = uCellSpec.sStyleToken
+         Next lCol
+         With oWksOut.Range( _
+         oWksOut.Cells(lOutTopRow + uLaneSpec.lTopRel + (lIndex - 1) * uLaneSpec.lRowsCount + lRow - 1, lOutLeftCol + uLaneSpec.lLeftRel), _
+         oWksOut.Cells(lOutTopRow + uLaneSpec.lTopRel + (lIndex - 1) * uLaneSpec.lRowsCount + lRow - 1, lOutLeftCol + uLaneSpec.lLeftRel + uLaneSpec.lColsCount - 1))
+            .Value = vaValues
+            mApplyStylesRow .Cells, saTokens
+         End With
+      Next lRow
+   Next lIndex
+    
+   lBottomRelRow = uLaneSpec.lTopRel + Application.Max(lItemCount * uLaneSpec.lRowsCount, uLaneSpec.lRowsCount) - 1
+   If uLaneSpec.lPadAfterRows > 0 Then
+      lBottomRelRow = l_m_WritePadRows(oWksOut, lOutTopRow, lOutLeftCol, uLaneSpec, lBottomRelRow)
+   End If
+   l_m_WriteRepLane = lBottomRelRow
+
+End Function
+
+Private Function l_m_WriteRelLane( _
+   ByRef oWksOut As Worksheet, _
+   ByRef uBlockSpec As u_f_BlockSpecRenderer, _
+   ByRef uLaneSpec As u_f_LaneSpecRenderer, _
+   ByVal oDictContext As Scripting.Dictionary, _
+   ByVal lOutTopRow As Long, _
+   ByVal lOutLeftCol As Long, _
+   ByVal lCurrentMaxBottomRow As Long _
+) As Long
+    
+   Dim lEffectiveTopRel As Long
+   Dim vaValues() As Variant
+   Dim lRow As Long, lCol As Long
+   Dim saTokens() As String
+   Dim uCellSpec As u_f_CellSpecRenderer
+   Dim lBottomRelRow As Long
+   
+   lEffectiveTopRel = uLaneSpec.lTopRel
+   If lCurrentMaxBottomRow >= lEffectiveTopRel Then
+      lEffectiveTopRel = lCurrentMaxBottomRow + 1
+   End If
+   
+   For lRow = 1 To uLaneSpec.lRowsCount
+      ReDim vaValues(1 To 1, 1 To uLaneSpec.lColsCount)
+      ReDim saTokens(1 To uLaneSpec.lColsCount)
+      For lCol = 1 To uLaneSpec.lColsCount
+         uCellSpec = u_m_GetCellSpecFromLane(uLaneSpec, lRow, lCol)
+         vaValues(1, lCol) = s_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, Nothing)
+         saTokens(lCol) = uCellSpec.sStyleToken
+      Next lCol
+      With oWksOut.Range( _
+         oWksOut.Cells(lOutTopRow + lEffectiveTopRel + lRow - 1, lOutLeftCol + uLaneSpec.lLeftRel), _
+         oWksOut.Cells(lOutTopRow + lEffectiveTopRel + lRow - 1, lOutLeftCol + uLaneSpec.lLeftRel + uLaneSpec.lColsCount - 1))
+         .Value = vaValues
+         mApplyStylesRow .Cells, saTokens
+      End With
+   Next lRow
+   
+   lBottomRelRow = lEffectiveTopRel + uLaneSpec.lRowsCount - 1
+   If uLaneSpec.lPadAfterRows > 0 Then
+      lBottomRelRow = l_m_WritePadRowsAt(oWksOut, lOutTopRow, lOutLeftCol, uLaneSpec, lBottomRelRow + 1, uLaneSpec.lLeftRel)
+   End If
+   l_m_WriteRelLane = lBottomRelRow
+
+End Function
+
+Private Function l_m_WritePadRows( _
+   ByRef oWksOut As Worksheet, _
+   ByVal lOutTopRow As Long, _
+   ByVal lOutLeftCol As Long, _
+   ByRef uLaneSpec As u_f_LaneSpecRenderer, _
+   ByVal lCurrentBottomRowRel As Long _
+) As Long
+    
+    Dim lNextRowRel As Long
+    lNextRowRel = lCurrentBottomRowRel + 1
+    
+    l_m_WritePadRows = l_m_WritePadRowsAt(oWksOut, lOutTopRow, lOutLeftCol, uLaneSpec, lNextRowRel, uLaneSpec.lLeftRel)
+End Function
+
+Private Function l_m_WritePadRowsAt( _
+   ByRef oWksOut As Worksheet, _
+   ByVal lOutTopRow As Long, _
+   ByVal lOutLeftCol As Long, _
+   ByRef uLaneSpec As u_f_LaneSpecRenderer, _
+   ByVal lStartRowRel As Long, _
+   ByVal lStartColRel As Long _
+) As Long
+    
+   Dim i As Long
+   Dim vaValues() As Variant
+   Dim saTokens() As String
+    
+   For i = 1 To uLaneSpec.lPadAfterRows
+      ReDim vaValues(1 To 1, 1 To uLaneSpec.lColsCount)
+      ReDim saTokens(1 To uLaneSpec.lColsCount)
+      With oWksOut.Range( _
+         oWksOut.Cells(lOutTopRow + lStartRowRel + i - 1, lOutLeftCol + lStartColRel), _
+         oWksOut.Cells(lOutTopRow + lStartRowRel + i - 1, lOutLeftCol + lStartColRel + uLaneSpec.lColsCount - 1) _
+      )
+         .Value2 = vaValues
+         mApplyStylesRow .Cells, saTokens
+      End With
+   Next i
+   l_m_WritePadRowsAt = lStartRowRel + uLaneSpec.lPadAfterRows - 1
+
+End Function
+
+Private Function u_m_GetCellSpecFromLane( _
+   ByRef uLaneSpec As u_f_LaneSpecRenderer, _
+   ByVal lRelRow As Long, _
+   ByVal lRelCol As Long _
+) As u_f_CellSpecRenderer
+   
+   Dim lIndex As Long
+   lIndex = (lRelRow - 1) * uLaneSpec.lColsCount + lRelCol
+   u_m_GetCellSpecFromLane = uLaneSpec.uaCells(lIndex)
+
+End Function
+
+Private Sub mApplyStylesRow(ByRef oRngRow As Range, ByRef saStyleTokens() As String)
+   Dim i As Long
+   Dim sToken As String
+   For i = 1 To oRngRow.Columns.Count
+      sToken = saStyleTokens(i)
+      If Len(sToken) > 0 Then
+         On Error Resume Next
+         oRngRow.Cells(1, i).Style = sToken
+         On Error GoTo 0
+         ApplyBordersForToken oRngRow.Cells(1, i), sToken
+      End If
+   Next i
 End Sub
+
+
+' Purpose: replaces template tags with actual values
+Private Function s_m_ReplaceAllTemplateTags( _
+   ByVal sTemplateText As String, _
+   ByVal sListKeys As String, _
+   ByVal oDictContext As Scripting.Dictionary, _
+   ByVal vItem As Variant _
+) As String
+    
+   Dim sOutput As String
+   Dim saKeys() As String
+   Dim i As Long
+   Dim sKey As String
+   Dim sValue As String
+   
+   sOutput = sTemplateText
+   If Len(sListKeys) = 0 Then
+      s_m_ReplaceAllTemplateTags = sOutput
+      Exit Function
+   End If
+   
+   saKeys = Split(sListKeys, s_m_SEPARATOR)
+   
+   For i = LBound(saKeys) To UBound(saKeys)
+      sKey = saKeys(i)
+      sValue = s_m_ResolveValue(sKey, oDictContext, vItem)
+      sOutput = Replace(sOutput, "{{" & sKey & "}}", sValue)
+   Next i
+   
+   s_m_ReplaceAllTemplateTags = sOutput
+   
+End Function
+
+' Purpose: replaces value tag with actual value
+Private Function s_m_ResolveValue(ByVal sKey As String, ByVal oDictContext As Scripting.Dictionary, ByVal vItem As Variant) As String
+   On Error Resume Next
+   If InStr(1, sKey, "[i].", vbTextCompare) > 0 Then
+      If Not IsEmpty(vItem) Then
+         If vItem.Exists(sKey) Then
+            s_m_ResolveValue = CStr(vItem(sKey))
+         Else
+            s_m_ResolveValue = ""
+         End If
+      Else
+         s_m_ResolveValue = ""
+      End If
+   ElseIf Left$(sKey, 7) = "Totals." Then
+      If oDictContext(s_m_KEY_TOTALS).Exists(sKey) Then
+         s_m_ResolveValue = CStr(oDictContext(s_m_KEY_TOTALS)(sKey))
+      Else
+         s_m_ResolveValue = ""
+      End If
+   Else
+       If oDictContext(s_m_KEY_HEADER).Exists(sKey) Then
+         s_m_ResolveValue = CStr(oDictContext(s_m_KEY_HEADER)(sKey))
+      Else
+         s_m_ResolveValue = ""
+      End If
+   End If
+   On Error GoTo 0
+End Function
+
+' Purpose: gets the collection with repeatable items for the provided lane key
+Private Function oCol_m_ResolveRepCollection(ByVal oDictContext As Scripting.Dictionary, ByVal sLaneKey As String) As Collection
+    On Error Resume Next
+    Dim oDictRepeaters As Scripting.Dictionary
+    Set oDictRepeaters = oDictContext(s_m_KEY_REPEATERS)
+    If Not oDictRepeaters Is Nothing Then
+        If oDictRepeaters.Exists(sLaneKey) Then Set oCol_m_ResolveRepCollection = oDictRepeaters(sLaneKey)
+    End If
+    On Error GoTo 0
+End Function
+
+Private Sub mValidateRepeaters(ByRef uBlockSpec As u_f_BlockSpecRenderer, ByVal oDictBlockData As Scripting.Dictionary)
+   Dim lIndex As Long
+' TODO: [+] Refactor error handling to framework logic
+   For lIndex = LBound(uBlockSpec.uaLanes) To UBound(uBlockSpec.uaLanes)
+      If UCase$(uBlockSpec.uaLanes(lIndex).sLaneType) = s_m_LANE_TAG_REPEATABLE Then
+         If Not oDictBlockData(s_m_KEY_REPEATERS).Exists(uBlockSpec.uaLanes(lIndex).sKey) Then
+            Err.Raise 5, , "Fehlende Repeater-Daten: blk_" & uBlockSpec.sBlockKey & _
+                           " ? rep key '" & uBlockSpec.uaLanes(lIndex).sKey & "'"
+         End If
+      End If
+   Next lIndex
+End Sub
+
+
 
 

@@ -77,46 +77,108 @@ CleanFail:
     Resume CleanUp
 End Sub
 
-Public Sub DEV_f_p_TR_RenderInvoiceExample_Legacy()
-    f_p_EnsureStylesFromMeta af_wks_Styles.name
+Public Sub DEV_f_p_TR_RenderInvoiceExample()
+'Fixed, don't change
+   Dim oC_Me As New f_C_CallParams: oC_Me.s_prop_rw_ComponentName = s_m_COMPONENT_NAME
+'>>>>>>> Your custom settings here
+   f_p_StartProcessing e_f_p_ProcessingMode_AutoCalcOffOnSceenUpdatingOffOn
+   With oC_Me
+      .s_prop_rw_ProcedureName = "DEV_f_p_TR_RenderInvoiceExample" 'Name of the sub
+      .b_prop_rw_SilentError = False 'False will display a message box - you should only do this on entry level
+      .s_prop_rw_ErrorMessage = "Test of Template Renderer failed." 'A message that properly informs the user and the devs (silent errors will be logged nonetheless)
+      .SetCallArgs "No args" 'If the sub takes args put the here like ("sExample:=" & sExample, "lExample:=" & lExample)
+   End With
+'Fixed, don't change
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterUnitTest oC_Me
+Try: On Error GoTo Catch
+
+
+'>>>>>>> Your code here
     
-    Application.ScreenUpdating = False
-    Application.EnableEvents = False
-    Application.Calculation = xlCalculationManual
-    On Error GoTo CleanFail
+   f_p_EnsureStylesFromMeta af_wks_Styles.name
+   
+   
+   Dim wsTpl As Worksheet, wsOut As Worksheet
+   Dim uaBlockSpecs() As u_f_BlockSpecRenderer
+   Dim data As Object
+   Dim lNextStartRow As Long
+   
+   Set wsTpl = DEV_f_wks_Template
+   Set wsOut = DEV_f_wks_TestCanvas
+   wsOut.Cells.Delete
+      
+      If Not _
+   b_f_p_GetAllParsedBlockSpecs(uaBlockSpecs, wsTpl) _
+      Then Err.Raise _
+         e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+         s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
     
-    Dim wsTpl As Worksheet, wsOut As Worksheet
-    Set wsTpl = DEV_f_wks_Template
-    Set wsOut = DEV_f_wks_TestCanvas
-    wsOut.Cells.Clear
     
-    Dim blocks() As BlockSpec2
-    blocks = ParseAllBlocks(wsTpl)
-    
-    Dim data As Object
-    Set data = BuildDemoDataForRenderer2()
-    
-    RenderBlocks wsOut, blocks, data, 1, 1
-    
-    wsOut.Columns.AutoFit
-    
-CleanExit:
-    Application.ScreenUpdating = True
-    Application.EnableEvents = True
-    Application.Calculation = xlCalculationAutomatic
-    Exit Sub
-CleanFail:
-   Stop
-   Resume
-    MsgBox "Renderer2 failed: " & Err.Description, vbCritical
-    Resume CleanExit
+   Set data = BuildDemoDataForRenderer2()
+   
+   lNextStartRow = 1
+   
+      If Not _
+   b_f_p_RenderBlocks(wsOut, uaBlockSpecs, data, lNextStartRow, 1, lNextStartRow) _
+      Then Err.Raise _
+         e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+         s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
+   
+      If Not _
+   b_f_p_RenderBlocks(wsOut, uaBlockSpecs, data, (lNextStartRow + 1), 1) _
+      Then Err.Raise _
+         e_f_p_HandledError_ExecutionOfLowerLevelFunction, , _
+         s_f_p_HandledErrorDescription(e_f_p_HandledError_ExecutionOfLowerLevelFunction)
+   
+   wsOut.Columns.AutoFit
+       
+   
+'End of your code <<<<<<<
+   
+
+'Fixed, don't change
+Finally: On Error Resume Next
+
+
+'>>>>>>> Your code here
+
+
+
+'End of your code <<<<<<<
+
+
+'>>>>>>> Your custom settings here
+   f_p_EndProcessing e_f_p_ProcessingMode_AutoCalcOffOnSceenUpdatingOffOn
+'Fixed, don't change
+   Exit Sub
+HandleError: af_pM_ErrorHandling.af_p_Hook_ErrorHandling_EntryLevel
+
+
+'>>>>>>> Your code here
+
+
+
+'End of your code <<<<<<<
+   
+   
+'Fixed, don't change
+   Resume Finally
+Catch:
+   If oC_Me.oC_prop_r_Error Is Nothing Then f_p_RegisterError oC_Me, Err.Number, Err.Description
+   If oC_f_p_FrameworkSettings.b_prop_rw_ThisIsATestRun Then f_p_RegisterExecutionError oC_Me
+   If oC_f_p_FrameworkSettings.b_prop_r_DebugModeIsOn And Not oC_Me.b_prop_rw_ResumedOnce Then
+      oC_Me.b_prop_rw_ResumedOnce = True: Stop: Resume
+   Else
+      f_p_HandleError oC_Me: GoTo HandleError
+   End If
 End Sub
+
 
 Private Function BuildDemoDataForRenderer2() As Object
     Dim root As Object: Set root = CreateObject("Scripting.Dictionary")
     
     ' Block: Panel (links fix, rechts rep)
-    Dim ctxPanel As Object: Set ctxPanel = BuildEmptyContext()
+    Dim ctxPanel As Object: Set ctxPanel = oDict_f_p_BuildEmptyContext()
     ctxPanel("header")("Customer.Name") = "Acme GmbH"
     ctxPanel("header")("Customer.City") = "Berlin"
     ctxPanel("header")("Customer.Country") = "DE"
@@ -135,7 +197,7 @@ Private Function BuildDemoDataForRenderer2() As Object
     Set root("Panel") = ctxPanel
     
     ' Block: Invoice2 (klassischer Repeater)
-    Dim ctxInv As Object: Set ctxInv = BuildEmptyContext()
+    Dim ctxInv As Object: Set ctxInv = oDict_f_p_BuildEmptyContext()
     ctxInv("header")("Invoice.Number") = "INV-2025-092"
     ctxInv("header")("Invoice.Date") = "2025-09-25"
     
@@ -189,4 +251,6 @@ Private Function SumItems(ByVal coll As Collection) As Double
     Next
     SumItems = s
 End Function
+
+
 

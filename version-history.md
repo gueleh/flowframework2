@@ -4,6 +4,14 @@
 
 - code of Template Renderer and Template Renderer Lite not compliant with framework architecture and coding style
 
+## 1.22.0 250929
+
+- revised Template Renderer for compliance with framework architecture and coding style (started)
+- f_pM_TemplRenderer
+- f_M_TemplRenderer_Types
+- DEV_f_pM_Test_TemplRenderer
+- f_pM_TemplRenderer_Styles
+
 ## 1.21.0 250926
 
 - definition of styles for Template Renderer and Template Renderer Lite optionally in other workbook
