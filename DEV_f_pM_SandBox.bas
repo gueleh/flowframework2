@@ -25,6 +25,53 @@ Option Private Module
 
 Private Const s_m_COMPONENT_NAME As String = "DEV_f_pM_SandBox"
 
+Private Sub mTestReadingWorkbookMarker()
+   Debug.Print b_f_p_WorkbookHasFlowFrameworkMarker()
+End Sub
+
+Private Sub mSetAndCheckFlowFrameworkMarkerForSelectedWorkbook()
+   Dim fd As FileDialog
+   Dim filePath As Variant
+   Dim wb As Workbook
+   Dim added As Boolean
+   Dim hasMarker As Boolean
+
+   On Error GoTo CleanFail
+
+   Set fd = Application.FileDialog(msoFileDialogFilePicker)
+   With fd
+      .Title = "Workbook auswählen"
+      .AllowMultiSelect = False
+      .Filters.Clear
+      .Filters.Add "Excel-Arbeitsmappen", "*.xlsx;*.xlsm;*.xlsb;*.xls"
+      If .Show <> -1 Then
+         Debug.Print "Aktion abgebrochen."
+         Exit Sub
+      End If
+      filePath = .SelectedItems(1)
+   End With
+
+   Set wb = Workbooks.Open(CStr(filePath), ReadOnly:=False)
+
+   added = b_f_p_AddFlowFrameworkMarker(wb)               ' Marker setzen (nur wenn noch nicht vorhanden)
+   hasMarker = b_f_p_WorkbookHasFlowFrameworkMarker(wb)   ' Marker prüfen
+
+   Debug.Print "Datei: "; wb.FullName
+   Debug.Print "Marker neu gesetzt: "; added
+   Debug.Print "Marker vorhanden: "; hasMarker
+
+   If added Then
+      wb.Save
+      Debug.Print "Workbook gespeichert (Marker persistiert)."
+   End If
+
+   Exit Sub
+
+CleanFail:
+   Debug.Print "Fehler (" & Err.Number & "): " & Err.Description
+End Sub
+
+
 ' Purpose: tests zero sanitation manually, if the code executes without stopping the tests were successful
 ' 0.11.0    05.08.2022    gueleh    Initially created
 Private Sub mManualTest_RangeArrayProcessorZeroSanitation()

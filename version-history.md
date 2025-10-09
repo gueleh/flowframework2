@@ -5,6 +5,15 @@
 - code of Template Renderer and Template Renderer Lite not compliant with framework architecture and coding style
 - Setting of styles does not work reliably
 
+## Up Next
+- add version number of framework and of app to custom xml, add updating this to the version control data creation logic
+- add function to read version numbers from custom xml
+
+## 1.23.0 251009
+
+- added a custom xml marker to workbook
+- added utility to read and write this marker
+
 ## 1.22.1 251001
 
 - bugfix Template Renderer
