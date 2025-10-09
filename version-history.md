@@ -8,6 +8,7 @@
 ## Up Next
 - add version number of framework and of app to custom xml, add updating this to the version control data creation logic
 - add function to read version numbers from custom xml
+- add custom custom xml workbook marker, to identify app workbooks - read and write
 
 ## 1.23.0 251009
 
