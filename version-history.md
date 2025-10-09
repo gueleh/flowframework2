@@ -3,6 +3,13 @@
 ## Known Issues
 
 - code of Template Renderer and Template Renderer Lite not compliant with framework architecture and coding style
+- Setting of styles does not work reliably
+
+## 1.22.1 251001
+
+- bugfix Template Renderer
+- f_pM_TemplRenderer
+- f_C_RangeArrayProcessor
 
 ## 1.22.0 250929
 

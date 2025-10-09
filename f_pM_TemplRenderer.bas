@@ -452,7 +452,7 @@ Try: On Error GoTo Catch
          Set oDictContext = oDict_f_p_BuildEmptyContext()
       End If
       lBlockRowHeight = l_m_RenderOneBlock(oWksOut, uBlockSpec, oDictContext, lOutRow, lOutCol)
-      lOutRow = lOutRow + lBlockRowHeight
+      lOutRow = lOutRow + lBlockRowHeight + 1
    Next lBlockIndex
 
 'End of your code <<<<<<<
@@ -615,7 +615,7 @@ Private Function l_m_WriteFixLane( _
       ReDim saTokens(1 To uLaneSpec.lColsCount)
       For lCol = 1 To uLaneSpec.lColsCount
          uCellSpec = u_m_GetCellSpecFromLane(uLaneSpec, lRow, lCol)
-         vaValues(1, lCol) = s_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, Nothing)
+         vaValues(1, lCol) = v_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, Nothing)
          saTokens(lCol) = uCellSpec.sStyleToken
       Next lCol
       With oWksOut.Range( _
@@ -662,7 +662,7 @@ Private Function l_m_WriteRepLane( _
          ReDim saTokens(1 To uLaneSpec.lColsCount)
          For lCol = 1 To uLaneSpec.lColsCount
             uCellSpec = u_m_GetCellSpecFromLane(uLaneSpec, lRow, lCol)
-            vaValues(1, lCol) = s_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, oColItems(lIndex))
+            vaValues(1, lCol) = v_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, oColItems(lIndex))
             saTokens(lCol) = uCellSpec.sStyleToken
          Next lCol
          With oWksOut.Range( _
@@ -709,7 +709,7 @@ Private Function l_m_WriteRelLane( _
       ReDim saTokens(1 To uLaneSpec.lColsCount)
       For lCol = 1 To uLaneSpec.lColsCount
          uCellSpec = u_m_GetCellSpecFromLane(uLaneSpec, lRow, lCol)
-         vaValues(1, lCol) = s_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, Nothing)
+         vaValues(1, lCol) = v_m_ReplaceAllTemplateTags(uCellSpec.sTemplateText, uCellSpec.sPlaceholderList, oDictContext, Nothing)
          saTokens(lCol) = uCellSpec.sStyleToken
       Next lCol
       With oWksOut.Range( _
@@ -798,61 +798,96 @@ End Sub
 
 
 ' Purpose: replaces template tags with actual values
-Private Function s_m_ReplaceAllTemplateTags( _
+Private Function v_m_ReplaceAllTemplateTags( _
    ByVal sTemplateText As String, _
    ByVal sListKeys As String, _
    ByVal oDictContext As Scripting.Dictionary, _
    ByVal vItem As Variant _
-) As String
+) As Variant
     
    Dim sOutput As String
+   Dim vOutput As Variant
    Dim saKeys() As String
    Dim i As Long
    Dim sKey As String
    Dim sValue As String
+   Dim sTypeName As String
+   Dim sKeyWithMarker As String
+   Dim bCheckForType As Boolean
    
    sOutput = sTemplateText
    If Len(sListKeys) = 0 Then
-      s_m_ReplaceAllTemplateTags = sOutput
+      v_m_ReplaceAllTemplateTags = sOutput
       Exit Function
    End If
    
    saKeys = Split(sListKeys, s_m_SEPARATOR)
    
    For i = LBound(saKeys) To UBound(saKeys)
+      bCheckForType = False
       sKey = saKeys(i)
-      sValue = s_m_ResolveValue(sKey, oDictContext, vItem)
-      sOutput = Replace(sOutput, "{{" & sKey & "}}", sValue)
+      sKeyWithMarker = "{{" & sKey & "}}"
+      If sKeyWithMarker = sOutput _
+      And LBound(saKeys) = UBound(saKeys) _
+      Then bCheckForType = True
+      sValue = s_m_ResolveValue(sKey, oDictContext, vItem, sTypeName)
+      sOutput = Replace(sOutput, sKeyWithMarker, sValue)
    Next i
    
-   s_m_ReplaceAllTemplateTags = sOutput
+   If bCheckForType Then
+      If sTypeName = "Currency" Then
+         vOutput = CCur(sOutput)
+      ElseIf sTypeName = "Double" Then
+         vOutput = CDbl(sOutput)
+      ElseIf sTypeName = "Long" Then
+         vOutput = CLng(sOutput)
+      Else
+         vOutput = sOutput
+      End If
+   Else
+      vOutput = sOutput
+   End If
+   v_m_ReplaceAllTemplateTags = vOutput
    
 End Function
 
 ' Purpose: replaces value tag with actual value
-Private Function s_m_ResolveValue(ByVal sKey As String, ByVal oDictContext As Scripting.Dictionary, ByVal vItem As Variant) As String
+Private Function s_m_ResolveValue( _
+   ByVal sKey As String, _
+   ByVal oDictContext As Scripting.Dictionary, _
+   ByVal vItem As Variant, _
+   ByRef sTypeName As String _
+) As String
+   
    On Error Resume Next
    If InStr(1, sKey, "[i].", vbTextCompare) > 0 Then
       If Not IsEmpty(vItem) Then
          If vItem.Exists(sKey) Then
             s_m_ResolveValue = CStr(vItem(sKey))
+            sTypeName = TypeName(vItem(sKey))
          Else
             s_m_ResolveValue = ""
+            sTypeName = TypeName(sKey)
          End If
       Else
          s_m_ResolveValue = ""
+         sTypeName = TypeName(sKey)
       End If
    ElseIf Left$(sKey, 7) = "Totals." Then
       If oDictContext(s_m_KEY_TOTALS).Exists(sKey) Then
          s_m_ResolveValue = CStr(oDictContext(s_m_KEY_TOTALS)(sKey))
+         sTypeName = TypeName(oDictContext(s_m_KEY_TOTALS)(sKey))
       Else
          s_m_ResolveValue = ""
+         sTypeName = TypeName(sKey)
       End If
    Else
        If oDictContext(s_m_KEY_HEADER).Exists(sKey) Then
          s_m_ResolveValue = CStr(oDictContext(s_m_KEY_HEADER)(sKey))
+         sTypeName = TypeName(oDictContext(s_m_KEY_HEADER)(sKey))
       Else
          s_m_ResolveValue = ""
+         sTypeName = TypeName(sKey)
       End If
    End If
    On Error GoTo 0
