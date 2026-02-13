@@ -1,4 +1,6 @@
 # Developer Manual for Flow Framework 2
+> Hinweis: Für die zusammengeführte Gesamtdokumentation siehe auch `developer-manual-unified.md`.
+
 The purpose of the framework is to provide a powerful structure for developing and maintaining applications in Excel VBA, which is designed for both clean architecture and clean code.
 
 Much of the documentation you can find directly in the code.
