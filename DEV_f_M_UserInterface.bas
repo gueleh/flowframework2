@@ -6,7 +6,7 @@ Attribute VB_Name = "DEV_f_M_UserInterface"
 '   Purpose:  directly accessible dev helpers
 '   Access:   Public
 '   Type:     Module
-'   Author:   Gï¿½nther Lehner
+'   Author:   Günther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -60,4 +60,5 @@ End Sub
 Public Sub DEV_f_g_RunAllTestsToWorksheet()
    DEV_f_p_RunAllTestsToWorksheet
 End Sub
+
 

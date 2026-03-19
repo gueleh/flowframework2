@@ -10,6 +10,11 @@
 - add function to read version numbers from custom xml
 - add custom custom xml workbook marker, to identify app workbooks - read and write
 
+## 1.24.0 261119
+
+- added unit test functionality
+- changed manual tests to work with unit test functionality
+
 ## 1.23.0 251009
 
 - added a custom xml marker to workbook
