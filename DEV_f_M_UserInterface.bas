@@ -6,7 +6,7 @@ Attribute VB_Name = "DEV_f_M_UserInterface"
 '   Purpose:  directly accessible dev helpers
 '   Access:   Public
 '   Type:     Module
-'   Author:   Günther Lehner
+'   Author:   Gï¿½nther Lehner
 '   Contact:  guenther.lehner@protonmail.com
 '   GitHubID: gueleh
 '   Required:
@@ -47,5 +47,17 @@ Public Sub DEV_f_g_SetName_ScopeWorkbook()
 Attribute DEV_f_g_SetName_ScopeWorkbook.VB_Description = "For settings sheets: takes values of cells in selection and adds a named cell left to it with workbook scope and the value of active cell as the name."
 Attribute DEV_f_g_SetName_ScopeWorkbook.VB_ProcData.VB_Invoke_Func = "M\n14"
    DEV_f_pM_Utilities.DEV_SetName_ScopeWorkbook
+End Sub
+
+' Purpose: runs all unit tests and outputs results to Immediate Window
+' 0.2.0    19.03.2026    Claude Code    Initially created
+Public Sub DEV_f_g_RunAllTests()
+   DEV_f_p_RunAllTests
+End Sub
+
+' Purpose: runs all unit tests and outputs results to test canvas worksheet
+' 0.2.0    19.03.2026    Claude Code    Initially created
+Public Sub DEV_f_g_RunAllTestsToWorksheet()
+   DEV_f_p_RunAllTestsToWorksheet
 End Sub
 
