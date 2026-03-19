@@ -49,3 +49,16 @@ Attribute DEV_f_g_SetName_ScopeWorkbook.VB_ProcData.VB_Invoke_Func = "M\n14"
    DEV_f_pM_Utilities.DEV_SetName_ScopeWorkbook
 End Sub
 
+' Purpose: runs all unit tests and outputs results to Immediate Window
+' 0.2.0    19.03.2026    Claude Code    Initially created
+Public Sub DEV_f_g_RunAllTests()
+   DEV_f_p_RunAllTests
+End Sub
+
+' Purpose: runs all unit tests and outputs results to test canvas worksheet
+' 0.2.0    19.03.2026    Claude Code    Initially created
+Public Sub DEV_f_g_RunAllTestsToWorksheet()
+   DEV_f_p_RunAllTestsToWorksheet
+End Sub
+
+
