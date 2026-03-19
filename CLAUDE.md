@@ -589,6 +589,7 @@ High-level modules should not depend on low-level modules; both should depend on
 - Declare variables as interface types (`Dim oC_Record As f_I_DataRecord`) rather than concrete classes where possible.
 - Pass dependencies as parameters instead of creating them inside the procedure.
 - Use `f_C_Wks` (the framework's worksheet abstraction) instead of directly manipulating `Worksheet` objects where possible.
+- A very common practice is to create an instance of a_C_AppSettings in the entry level sub and then pass it as parameter to non-trivial lower level subs
 
 ### 9. Code Smells to Avoid
 
