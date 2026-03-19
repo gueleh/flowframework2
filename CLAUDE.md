@@ -2,9 +2,9 @@
 
 ## Overview
 
-FlowFramework 2 (FF2) is a VBA framework for building Excel applications (.xlsb). Code is exported from Excel as `.bas` (modules) and `.cls` (classes) files. Claude Code works only with these exported code files — the export/reimport cycle into Excel is handled by the user.
+FlowFramework 2 (FF2) is a VBA framework for building Excel applications (.xlsb). Code is exported from Excel as `.bas` (modules), `.cls` (classes) and `.frm` (forms) files. Claude Code works only with these exported code files — the export/reimport cycle into Excel is handled by the user.
 
-**Never modify files marked `' CORE, do not change`** — these are framework internals. Only modify files belonging to the application layer (`a_` prefix) or the customizable app-framework layer (`af_` prefix, where marked with `>>>>>>> Your code/cases here`).
+**Never modify files marked `' CORE, do not change`** — these are framework internals. Only modify files belonging to the application layer (`a_` prefix) or the customizable app-framework layer (`af_` prefix, where marked with `>>>>>>> Your code/cases here`). The only exception: the user specifies explicitly that the framework itself is supposed to be changed.
 
 ## Architecture & Layers
 
@@ -13,7 +13,7 @@ The framework has three layers, identified by file name prefixes:
 | Prefix | Layer | Purpose | Editable? |
 |--------|-------|---------|-----------|
 | `f_` | Framework Core | Core framework functionality | NO (CORE) |
-| `af_` | App-Framework | Customizable framework parts (error handling, globals, modes) | Only within `>>>>>>>` markers |
+| `af_` | App-Framework | Customizable framework parts (error handling, globals, modes) | Only within `>>>>>>>` and `<<<<<<<` markers |
 | `a_` | Application | Application-specific code (your code lives here) | YES |
 | `DEV_f_` | Dev Framework | Development/testing tools, removed on deployment | NO (CORE-DEV) |
 | `DEV_a_` | Dev Application | Application dev/test code | YES |
@@ -118,7 +118,7 @@ Every non-trivial procedure MUST follow one of these templates. The templates ex
 
 ### Entry-Level Sub (Compact Template)
 
-Entry-level Subs are the top-level procedures triggered by user actions (buttons, menus). They are the ONLY place where `b_prop_rw_SilentError = False` should be used.
+Entry-level Subs are the top-level procedures triggered by user actions (buttons, menus). They are the ONLY place where `b_prop_rw_SilentError = False` should be used. These always are supposed to be placed in a module such as a_pM_EntryLevel.bas - i.e. a private Module specified as entry level. Thus a button cannot call such a sub, for this purpose a trival user facing sub is used in a public module such as a_M_UserInterface.bas, only containing one line of code which calls the entry level sub. The block after "Finally:" must be executed, regardless of what happens during execution - the "Try:", "Finally:", "HandleError:" ,"Catch:" logic simulates Try-Catch-Finally of other, higher programming languages - with "HandleError:" as additional block, which is required in case of error specific stuff to be done before "Finally:", but after "Catch:".
 
 ```vba
 Public Sub a_p_MyEntryLevelSub()
@@ -187,7 +187,7 @@ End Sub
 
 ### Lower-Level Function (Compact Template)
 
-Lower-level functions return `Boolean` — `True` means success, `False` (default) means failure. Return values are passed via `ByRef` parameters, assigned in the `Finally` block.
+Lower-level functions return `Boolean` — `True` means success, `False` (default) means failure. Return values are passed via `ByRef` parameters, assigned in the `Finally` block. The block after "Finally:" must be executed, regardless of what happens during execution - the "Try:", "Finally:", "HandleError:" ,"Catch:" logic simulates Try-Catch-Finally of other, higher programming languages - with "HandleError:" as additional block, which is required in case of error specific stuff to be done before "Finally:", but after "Catch:". These functions must be called either by a Entry Level sub as shown above or by another Lower-Level Function using this structure - otherwise the framework logic would not works, especially regarding error handling and logging.
 
 ```vba
 Public Function b_a_p_MyLowerLevelFunction(ByRef sOutput As String, ByVal sInput As String) As Boolean
