@@ -508,3 +508,117 @@ Settings sheets follow a structured format documented in `SettingsSheet-*.json` 
 14. **Use the existing framework utilities** (`f_pM_Utilities`, `f_pM_UtilitiesRanges`, etc.) rather than reimplementing
 15. **New app modules** should use the `a_pM_` or `a_C_` prefix
 16. **The folders `ff2s-little-sis-DEPRECATED` and `independent-features-DEPRECATED` should be ignored**
+
+## Clean Code & Clean Architecture Principles (adapted for VBA / FF2)
+
+The following principles are derived from Robert C. Martin's *Clean Code* and *Clean Architecture*, adapted to the realities of Excel VBA and FlowFramework 2. They complement — and never override — the framework patterns and naming conventions defined above.
+
+### 1. Meaningful Names
+
+- **Intention-revealing names.** A name should tell *why* something exists, *what* it does, and *how* it is used. Hungarian prefixes already encode the type; the rest of the name must encode the *meaning*. `lRow` is acceptable for a generic loop counter, but `lFirstDataRow` or `lCustomerRow` is better when context matters.
+- **Avoid disinformation.** Do not call a `Collection` variable `oDict_...` or a `Dictionary` variable `oCol_...`. The prefix must match the actual type.
+- **Use pronounceable, searchable names.** Prefer `sCustomerName` over `sCNm`. Single-letter names (`l`, `s`) are acceptable only in tiny scopes (loop counters, lambda-like helpers).
+- **One word per concept.** Pick one term for each abstract concept and stick with it across the entire application layer. If you call it `Fetch` in one module, don't call it `Get` or `Retrieve` in another for the same semantic operation.
+
+### 2. Functions / Procedures
+
+- **Small.** Every procedure should do one thing and do it well. If a procedure needs a comment to explain *what* it does (beyond the `Purpose:` header), it is probably too long or doing too much.
+- **Do one thing (Single Responsibility at the procedure level).** A function that validates input should not also format output. Split these into separate lower-level functions.
+- **One level of abstraction per function.** An entry-level Sub should read like a high-level description of the workflow: call `b_a_p_ValidateInput`, then `b_a_p_ProcessData`, then `b_a_p_WriteOutput`. Low-level details (cell manipulation, string parsing) belong in the called functions, not in the caller.
+- **Descriptive names.** A long descriptive name is better than a short cryptic one. `b_a_p_BuildHeaderDictionaryFromRange` is better than `b_a_p_BuildDict`.
+- **Few arguments.** Aim for zero to three parameters. When more are needed, consider grouping related values into a UDT (`Type`) or a class. VBA does not support passing structured literals, so a dedicated parameter class or UDT is the idiomatic alternative.
+- **No side effects.** A function named `b_a_p_ValidateInput` should not silently modify a worksheet. If it must change state, the name should reflect that (e.g., `b_a_p_ValidateAndMarkInput`), or the mutation should be performed by the caller based on the function's return value.
+- **Command-Query Separation.** A function should either return information (query) or change state (command), not both. In FF2 terms: lower-level functions return `Boolean` + `ByRef` outputs (query-like), while Subs perform actions (commands). Keep this distinction sharp.
+
+### 3. Comments
+
+- **Code should be self-explanatory.** Good names and small functions reduce the need for comments. The FF2 procedure header (`Purpose:`, version history) is mandatory; additional inline comments should explain *why*, never *what*.
+- **Don't comment bad code — rewrite it.** If you need a comment to explain convoluted logic, simplify the logic instead.
+- **Avoid redundant comments.** Do not write `' Increment counter` above `lCounter = lCounter + 1`.
+- **Acceptable comments:** Legal/license headers, `Purpose:` headers, `TODO:` / `BACKLOG:` items, warnings of consequences (e.g., `' This clears the entire output range`), clarification of obscure VBA/COM behaviour.
+- **Avoid commented-out code.** Delete it. Version control preserves history.
+
+### 4. Formatting
+
+- **Vertical openness between concepts.** Separate logically distinct blocks with blank lines. Related statements should stay together.
+- **Vertical ordering.** Higher-level procedures should appear before the lower-level functions they call (caller above callee). Within a module, organise: constants → module-level variables → public entry-level Subs → public lower-level functions → private helpers.
+- **Keep lines reasonably short.** VBA's line continuation (`_`) is unwieldy; if a statement needs many continuations, consider intermediate variables. Exception: the `If Not ... Then Err.Raise` call pattern is deliberately multi-line and should follow the prescribed indentation exactly.
+- **Consistent indentation.** Use three spaces for indentation (FF2 convention). Never mix tabs and spaces.
+
+### 5. Error Handling
+
+FF2 already provides a robust error handling framework. The Clean Code additions:
+
+- **Don't return error codes — use the framework pattern.** Every non-trivial function uses the `Try/Finally/HandleError/Catch` template. Never invent alternative error signalling (e.g., returning `""` or `-1` to indicate failure).
+- **Write informative error messages.** `s_prop_rw_ErrorMessage` should contain enough context for a user or developer to understand what failed. Include relevant parameter values or state descriptions. Example: `"Failed to read customer data from sheet '" & sSheetName & "'."` instead of `"Error reading data."`.
+- **Don't suppress errors silently.** Within the `HandleError` block, you may add error-specific cleanup, but never swallow errors by doing nothing. The framework handles propagation — trust it.
+- **Define error cases at the right level.** Use `e_af_p_HandledError_...` enums for application-specific errors. Keep descriptions user-friendly in entry-level contexts and developer-friendly in lower-level contexts.
+
+### 6. Classes and Modules — Cohesion and Coupling
+
+- **High cohesion.** Every module or class should have a single, clearly defined responsibility. A module named `a_pM_CustomerImport` should contain only procedures related to importing customer data, not unrelated utility functions.
+- **Low coupling.** Modules should depend on abstractions (interfaces like `f_I_DataRecord`), not on concrete implementations. Pass required data as parameters rather than relying on shared global state beyond the framework-provided globals.
+- **Keep classes small.** A class with 20+ properties or methods probably has more than one responsibility. Consider splitting it.
+- **Encapsulation.** In VBA, use `Private` member variables with `Property Get`/`Let`/`Set` accessors. Never expose module-level variables as `Public` when a property would work. Use `Option Private Module` on all private modules (enforced by the `pM_` naming convention).
+
+### 7. The Dependency Rule (Clean Architecture)
+
+FF2's three-layer architecture (`f_` → `af_` → `a_`) embodies the Dependency Rule:
+
+- **Dependencies point inward.** Application code (`a_`) may call framework code (`f_`), but framework code must never reference application code. The `af_` layer is the designated boundary for customization.
+- **The framework is a detail, not the centre.** Application logic should not be shaped by VBA/Excel limitations. Isolate Excel-specific operations (Range reads, worksheet access) in dedicated modules. Business logic modules should receive data as arrays, dictionaries or class instances — not as Range objects.
+- **Boundaries are explicit.** The `>>>>>>>` / `<<<<<<<` markers in `af_` files are architectural boundaries. Respect them: inject application-specific behaviour only at these extension points.
+- **Worksheets are I/O.** Think of worksheets as external interfaces (like a database or API). Read data from worksheets into VBA data structures at the boundary, process it in pure VBA logic, then write results back. This keeps business logic testable and independent of the worksheet layout.
+
+### 8. The SOLID Principles in VBA
+
+#### S — Single Responsibility Principle (SRP)
+Every module and class should have exactly one reason to change. If `a_pM_CustomerImport.bas` handles both data validation and database writing, split it into `a_pM_CustomerValidation.bas` and `a_pM_CustomerPersistence.bas`.
+
+#### O — Open/Closed Principle (OCP)
+Design modules to be *open for extension, closed for modification*. FF2's `af_` layer with `>>>>>>>` markers is a direct application of OCP: the framework is closed for modification, but open for extension at defined points. In application code, prefer adding new procedures or modules over modifying existing, stable ones.
+
+#### L — Liskov Substitution Principle (LSP)
+When implementing interfaces (`f_I_DataRecord`, custom `a_I_...` interfaces), every implementation must be usable wherever the interface is expected without breaking behaviour. A `a_C_CustomerRecord` implementing `f_I_DataRecord` must honour the contract: `bGetFieldValue` returns `True` and a valid value for known fields, `False` for unknown ones.
+
+#### I — Interface Segregation Principle (ISP)
+Keep interfaces small and focused. If a class only needs to read data, don't force it to implement write methods. Create separate interfaces for distinct capabilities (e.g., `a_I_Readable`, `a_I_Writable`) rather than one monolithic interface.
+
+#### D — Dependency Inversion Principle (DIP)
+High-level modules should not depend on low-level modules; both should depend on abstractions. In VBA, this means:
+- Declare variables as interface types (`Dim oC_Record As f_I_DataRecord`) rather than concrete classes where possible.
+- Pass dependencies as parameters instead of creating them inside the procedure.
+- Use `f_C_Wks` (the framework's worksheet abstraction) instead of directly manipulating `Worksheet` objects where possible.
+
+### 9. Code Smells to Avoid
+
+| Smell | VBA / FF2 Context | Remedy |
+|-------|-------------------|--------|
+| **Long procedure** | A function exceeding ~40 lines of business logic (excluding template boilerplate) | Extract into multiple lower-level functions |
+| **Large module** | A `.bas` file with 10+ unrelated procedures | Split by responsibility into separate modules |
+| **Duplicate code** | Same Range-reading logic in multiple modules | Extract to a shared `a_pM_...` utility module or parameterised function |
+| **Magic numbers/strings** | Hard-coded row numbers, column letters, sheet names | Use named ranges (`Names.json`), constants, or `f_C_SettingsSheet` |
+| **Global mutable state** | Application-level variables modified from everywhere | Minimise globals; pass data explicitly. Use `a_pM_Globals.bas` sparingly |
+| **Feature envy** | A procedure in module A that mostly accesses data from class B | Move the procedure to class B or pass the needed data as parameters |
+| **Dead code** | Commented-out blocks, unreachable procedures | Delete. Git keeps the history |
+| **Inconsistent abstraction level** | A procedure that mixes `Range.Value` reads with business logic | Separate I/O (worksheet access) from computation |
+
+### 10. The Boy Scout Rule
+
+> *Leave the code cleaner than you found it.*
+
+When modifying a module, improve small things in passing: fix a misleading variable name, remove a dead variable, clarify a comment. Keep such cleanups minimal and confined to the module you are already changing — do not refactor unrelated code without explicit instruction.
+
+### 11. Testing (in FF2 Context)
+
+- **Write testable functions.** Functions that take input parameters and return results via `ByRef` / `Boolean` are inherently testable. Avoid procedures that can only be tested by inspecting worksheet state.
+- **Use the framework's test infrastructure.** `f_p_RegisterUnitTest` and `b_prop_rw_ThisIsATestRun` exist for a reason. New lower-level functions should be callable during test runs.
+- **Test edge cases.** Empty ranges, missing sheets, zero-length strings, uninitialised variants — VBA has many ways to fail silently. Validate inputs at the boundary.
+
+### 12. Successive Refinement
+
+First make it work, then make it clean:
+
+1. **Make it work** — Write the procedure following the FF2 template. Get the logic correct.
+2. **Make it right** — Refactor: extract sub-functions, rename variables for clarity, remove duplication.
+3. **Make it small** — Each procedure should be as short as possible while remaining readable. If the `Try` block of a lower-level function exceeds ~30 lines of business logic, look for extraction opportunities.
